@@ -1,0 +1,208 @@
+.container-fluid.p-0
+    .row
+        .col-12.col-md-6.col-xl-4
+            button.filter-database-handler.btn.btn-outline-primary.px-5.mb-3.d-md-none Filter
+            form.filter-database
+                fieldset
+                    .field-label.mb-2 Your Active Jobs:
+                    .ys-select.ys-select-bordered(data-select)
+                        span(data-select-value) No jobs found
+                        ul
+                            li(data-select-item) Type 1
+                            li(data-select-item) Type 2
+                            li(data-select-item) Type 3
+                        input(type="text").d-none
+                fieldset.field-skills.mt-4
+                    .field-label.mb-2 Keywords:
+                    ul.field-skills-list
+                        li
+                            span Adobe Photoshop
+                            span.field-skills-close
+                        li
+                            span Figma
+                            span.field-skills-close
+                    .field-skills-panel.mt-2
+                        label.d-block
+                            input(type="text" placeholder="Skills or other words").field-text
+                        button(type="button").btn.btn-primary Add
+                fieldset.mt-4
+                    .field-label.mb-2 Location:
+                    .ys-select.ys-select-bordered(data-select)
+                        span(data-select-value) City, state or zip code
+                        ul
+                            li(data-select-item) Type 1
+                            li(data-select-item) Type 2
+                            li(data-select-item) Type 3
+                        input(type="text").d-none
+                fieldset.mt-4
+                    .field-label.mb-3 Radius: within <span data-noui-value="miles">0</span> miles
+                    div(data-noui-slider="miles" data-noui-step="1" data-noui-start="0" data-noui-end="50" )
+                fieldset.mt-4
+                    label(for="resumes-job").field-label.mb-2 Job Title:
+                    input(type="text" id="resumes-job" placeholder="Past or present job titles").field-text
+                fieldset.mt-4
+                    label(for="resumes-company").field-label.mb-2 Previous Companies:
+                    input(type="text" id="resumes-company" placeholder="Past or current employers").field-text
+                fieldset.mt-4
+                    .field-label.mb-3 Freshness: posted <span data-noui-value="posted">0</span> days ago
+                    div(data-noui-slider="posted" data-noui-step="1" data-noui-start="0" data-noui-end="30" )
+                fieldset.mt-4
+                    .field-label Minimum Education:
+                    .mt-2
+                        input(type="radio" name="resume-education" id="resume-education-1")
+                        label(for="resume-education-1") Any
+                    .mt-2
+                        input(type="radio" name="resume-education" id="resume-education-2")
+                        label(for="resume-education-2") High School
+                    .mt-2
+                        input(type="radio" name="resume-education" id="resume-education-3")
+                        label(for="resume-education-3") Some College
+                    .mt-2
+                        input(type="radio" name="resume-education" id="resume-education-4")
+                        label(for="resume-education-4") Bachelors Degree
+                    .mt-2
+                        input(type="radio" name="resume-education" id="resume-education-5")
+                        label(for="resume-education-5") Masters Degree
+                    .mt-2
+                        input(type="radio" name="resume-education" id="resume-education-6")
+                        label(for="resume-education-6") Doctorate or Higher
+                fieldset.mt-4
+                    .field-label Industry:
+                    .mt-2
+                        input(type="checkbox" name="resume-industry" id="resume-industry-1")
+                        label(for="resume-industry-1") Accounting/Finance
+                    .mt-2
+                        input(type="checkbox" name="resume-industry" id="resume-industry-2")
+                        label(for="resume-industry-2") Admin/Secretarial
+                    .mt-2
+                        input(type="checkbox" name="resume-industry" id="resume-industry-3")
+                        label(for="resume-industry-3") Architect/Design
+                    .mt-2
+                        input(type="checkbox" name="resume-industry" id="resume-industry-4")
+                        label(for="resume-industry-4") Art/Media/Writers
+                    .mt-2
+                        input(type="checkbox" name="resume-industry" id="resume-industry-5")
+                        label(for="resume-industry-5") Biotech/Pharmaceutical
+                    .mt-2.see-more-hidden
+                        input(type="checkbox" name="resume-industry" id="resume-industry-6")
+                        label(for="resume-industry-6") some text
+                    .mt-2.see-more-hidden
+                        input(type="checkbox" name="resume-industry" id="resume-industry-7")
+                        label(for="resume-industry-7") some text
+                    .mt-2.see-more-hidden
+                        input(type="checkbox" name="resume-industry" id="resume-industry-8")
+                        label(for="resume-industry-8") some text
+                    .mt-2.see-more-hidden
+                        input(type="checkbox" name="resume-industry" id="resume-industry-9")
+                        label(for="resume-industry-9") some text
+                    .see-more.color-primary
+                        span + See more
+                        span.see-more-hidden - See top
+                fieldset.mt-4
+                    .field-label.mb-2 Veteran Status:
+                    input(type="checkbox" id="resume-veteran")
+                    label(for="resume-veteran") Self-identified as Veteran
+                button(type="submit").btn.btn-primary.btn-full.mt-4 Apply
+        .col-12.col-md-6.col-xl-8.mt-4
+            .results-item
+                .container-fluid
+                    .row
+                        .col.d-none.d-md-block.col-md-3.col-xl-2
+                            .results-image
+                                img(src="images/customer-photo-1.jpg" alt="photo")
+                        .col-12.col-md-9.col-xl-10.d-flex.flex-wrap
+                            h4.color-primary Ann Fuller
+                            span.results-country.color-secondary London
+                            ul
+                                li
+                                    span.color-secondary $50000 p.a minimum
+            .results-item
+                .container-fluid
+                    .row
+                        .col.d-none.d-md-block.col-md-3.col-xl-2
+                            .results-image
+                                img(src="images/customer-photo-2.jpg" alt="photo")
+                        .col-12.col-md-9.col-xl-10.d-flex.flex-wrap
+                            h4.color-primary Annasmith
+                            ul
+                                li
+                                    span.color-secondary Last Activity 12 months ago
+                                li
+                                    span.color-secondary Automotive
+            .results-item
+                .container-fluid
+                    .row
+                        .col.d-none.d-md-block.col-md-3.col-xl-2
+                            .results-image
+                                img(src="images/customer-photo-3.jpg" alt="photo")
+                        .col-12.col-md-9.col-xl-10.d-flex.flex-wrap
+                            h4.color-primary Annette Cox
+                            span.results-country.color-secondary Greenford
+                            ul
+                                li
+                                    span.color-secondary $50000 p.a minimum
+                                li
+                                    span.color-secondaryLast Activity 4 years ago
+            .results-item
+                .container-fluid
+                    .row
+                        .col.d-none.d-md-block.col-md-3.col-xl-2
+                            .results-image
+                                img(src="images/customer-photo-4.jpg" alt="photo")
+                        .col-12.col-md-9.col-xl-10.d-flex.flex-wrap
+                            h4.color-primary Barry Burns
+                            span.results-country.color-secondary London
+                            ul
+                                li
+                                    span.color-secondary $50000 p.a minimum
+            .results-item
+                .container-fluid
+                    .row
+                        .col.d-none.d-md-block.col-md-3.col-xl-2
+                            .results-image
+                                img(src="images/customer-photo-5.jpg" alt="photo")
+                        .col-12.col-md-9.col-xl-10.d-flex.flex-wrap
+                            h4.color-primary Betty Stanley
+                            span.results-country.color-secondary London
+                            ul
+                                li
+                                    span.color-secondary $50000 p.a minimum
+            .results-item
+                .container-fluid
+                    .row
+                        .col.d-none.d-md-block.col-md-3.col-xl-2
+                            .results-image
+                                img(src="images/customer-photo-6.jpg" alt="photo")
+                        .col-12.col-md-9.col-xl-10.d-flex.flex-wrap
+                            h4.color-primary Billy Reed
+                            span.results-country.color-secondary London
+                            ul
+                                li
+                                    span.color-secondary $50000 p.a minimum
+            .results-item
+                .container-fluid
+                    .row
+                        .col.d-none.d-md-block.col-md-3.col-xl-2
+                            .results-image
+                                img(src="images/customer-photo-1.jpg" alt="photo")
+                        .col-12.col-md-9.col-xl-10.d-flex.flex-wrap
+                            h4.color-primary Annasmith
+                            ul
+                                li
+                                    span.color-secondary Last Activity 12 months ago
+                                li
+                                    span.color-secondary Automotive
+            .results-item
+                .container-fluid
+                    .row
+                        .col.d-none.d-md-block.col-md-3.col-xl-2
+                            .results-image
+                                img(src="images/customer-photo-2.jpg" alt="photo")
+                        .col-12.col-md-9.col-xl-10.d-flex.flex-wrap
+                            h4.color-primary Annette Cox
+                            span.results-country.color-secondary Greenford
+                            ul
+                                li
+                                    span.color-secondary $50000 p.a minimum
+                                li
+                                    span.color-secondary Last Activity 4 years ago

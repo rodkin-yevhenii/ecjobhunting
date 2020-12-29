@@ -1,0 +1,144 @@
+form.container-fluid.p-0
+    .row.mt-md-4
+        .col-12.col-md-5.col-xl-3
+            label(for="post-job-title").field-label.mb-2.mb-md-0.mt-md-3 Job Title <span class="color-primary">*</span>
+        .col-12.col-md-7
+            input(type="text" id="post-job-title" required).field-text
+    .row.mt-3.mt-md-4
+        .col-12.col-md-5.col-xl-3
+            label(for="post-job-location").field-label.mb-2.mb-md-0.mt-md-3 Job Location <span class="color-primary">*</span>
+        .col-12.col-md-7
+            input(type="text" id="post-job-location" required).field-text
+    .row.mt-3.mt-md-4
+        .col-12.col-md-5.col-xl-3
+            div.field-label.mb-2.mb-md-0.mt-md-3 Employment Type <span class="color-primary">*</span>
+        .col-12.col-md-7
+            .ys-select.ys-select-bordered(data-select)
+                span(data-select-value) Select employment type
+                ul
+                    li(data-select-item) Type 1
+                    li(data-select-item) Type 2
+                    li(data-select-item) Type 3
+                input(type="text").d-none
+    .row.mt-3.mt-md-4
+        .col-12.col-md-5.col-xl-3
+            label(for="post-job-description").field-label.mb-2.mb-md-0.mt-md-3 Job Description <span class="color-primary">*</span>
+        .col-12.col-md-7
+            textarea(id="post-job-description").field-textarea
+    .row.mt-3.mt-md-5
+        .col-12.col-md-5.col-xl-3
+            .field-label.mb-2.mb-md-0 Benefits <span class="color-primary">*</span>
+        .col-12.col-md-4
+            fieldset
+                input(type="checkbox" name="post-job-benefits" id="post-job-benefits-1")
+                label(for="post-job-benefits-1") Medical Insurance
+            fieldset
+                input(type="checkbox" name="post-job-benefits" id="post-job-benefits-2")
+                label(for="post-job-benefits-2") Dental Insurance
+            fieldset
+                input(type="checkbox" name="post-job-benefits" id="post-job-benefits-3")
+                label(for="post-job-benefits-3") Vision Insurance
+        .col-12.col-md-3
+            fieldset
+                input(type="checkbox" name="post-job-benefits" id="post-job-benefits-4")
+                label(for="post-job-benefits-4") 401K
+            fieldset
+                input(type="checkbox" name="post-job-benefits" id="post-job-benefits-5")
+                label(for="post-job-benefits-5") Life Insurance
+            fieldset
+                input(type="checkbox" name="post-job-benefits" id="post-job-benefits-6")
+                label(for="post-job-benefits-6") None of These
+    .row.mt-3.mt-md-5
+        .col-12.col-md-5.col-xl-3
+            .field-label.mb-2.mb-md-0.mt-md-3 Compensation Range <span class="color-primary">*</span>
+            p Job postings with compensation data receive maximum visibility.
+        .col-12.col-md-7
+            .field-prices
+                label
+                    span $
+                    input(type="text").field-text
+                span to
+                label
+                    span $
+                    input(type="text").field-text
+            .d-md-flex.justify-content-md-between.mt-3.mt-md-4.align-items-start.flex-wrap
+                .ys-select.ys-select-bordered.mt-3.mt-md-0.mr-md-4(data-select)
+                    span(data-select-value) USD
+                    ul
+                        li(data-select-item).active USD
+                        li(data-select-item) EURO
+                    input(type="text").d-none
+                .ys-select.ys-select-bordered.mt-3.mt-md-0.flex-md-grow-1.mr-lg-4(data-select)
+                    span(data-select-value) Annualy
+                    ul
+                        li(data-select-item).active Annualy
+                        li(data-select-item) another item
+                    input(type="text").d-none
+                .mt-3.mt-md-4.mt-lg-3
+                    input(type="checkbox" name="post-job-commission" id="post-job-commission")
+                    label(for="post-job-commission") Plus commission
+    .row.mt-3.mt-md-5
+        .col-12.col-md-5.col-xl-3
+            label(for="post-job-address").field-label.m-0.mt-md-3 Street Address <span class="color-primary">*</span>
+            p Some job boards allow users to search with a map. Enter your full street address for better visibility.
+        .col-12.col-md-7
+            input(type="text" id="post-job-address" required).field-text
+    .row.mt-3.mt-md-5
+        .col-12.col-md-5.col-xl-3
+            .field-label.mb-2.mb-md-0.mt-md-2 Skills <span class="color-primary">*</span>
+            p Target the exact job seekers you need by adding skill keywords below.
+        .col-12.col-md-7.field-skills
+            ul.field-skills-list.mb-md-4
+                li
+                    span Adobe Photoshop
+                    span.field-skills-close
+                li
+                    span Figma
+                    span.field-skills-close
+            .field-skills-panel.d-flex.flex-column.flex-md-row
+                label.d-block.mb-0.mt-3.mt-md-0.flex-md-grow-1.mr-md-4
+                    input(type="text").field-text
+                button(type="button").btn.btn-primary.mt-3.m-md-0.px-md-4 Add
+    .row.mt-3.mt-md-5
+        .col-12.col-md-5.col-xl-3
+            label(for="post-job-company").field-label.mb-2.mb-md-0.mt-md-3 Hiring Company <span class="color-primary">*</span>
+        .col-12.col-md-7
+            input(type="text" id="post-job-company" required).field-text
+    .row.mt-3.mt-md-4
+        .col-12.col-md-5.col-xl-3
+            label(for="post-job-why").field-label.mb-2.mb-md-0.mt-md-3 Why Work at This Company
+        .col-12.col-md-7
+            input(type="text" id="post-job-why" required).field-text
+    .row.mt-3.mt-md-4
+        .col-12.col-md-5.col-xl-3
+            label(for="post-job-company-description").field-label.mb-2.mb-md-0.mt-md-3 Hiring Company Description
+            p Please note: editing this description will affect all jobs at this hiring company.
+        .col-12.col-md-7
+            textarea(id="post-job-company-description").field-textarea
+    .row.mt-3.mt-md-5
+        .col-12.col-md-5.col-xl-3
+            label(for="post-job-company-description").field-label.mb-2.mb-md-0 Send New Candidates To <span class="color-primary">*</span>
+            p Alert emails with new candidates will be sent to
+        .col-12.col-md-7
+            fieldset
+                input(type="checkbox" name="post-job-send" id="post-job-send" checked)
+                label(for="post-job-send") EmployerName (You!)
+            .mt-md-2.d-flex.flex-column.flex-md-row
+                label.d-block.m-0.mr-md-4.flex-grow-1
+                    input(type="text" id="post-job-send-email").field-text
+                button(type="button").btn.btn-primary.mt-3.m-md-0 Add Email
+            .mt-3.mt-md-5.d-flex
+                input(type="checkbox" name="post-job-send" id="post-job-send-1" checked)
+                label(for="post-job-send-1") Add a FREE label indicating this job is extending offers during the COVID-19 crisis
+            div.d-flex
+                input(type="checkbox" name="post-job-send" id="post-job-send-2" checked)
+                label(for="post-job-send-2") Only show me candidates within 100 miles of this job's location
+            div.d-flex
+                input(type="checkbox" name="post-job-send" id="post-job-send-3" checked)
+                label(for="post-job-send-3") Accept applications without a resume
+    .row.field-footer.mt-3.pt-3.mt-md-5.pt-md-5
+        .col-12.col-md-5.col-xl-3
+            p.my-md-0 By clicking Save & Post Now, I agree that EcJobHunting may publish and/or distribute my job advertisement on its site and through its distribution partners.
+        .col-12.col-md-7.d-md-flex.align-items-md-start
+            button(type="submit").btn.btn-primary.mr-md-4 Save & Post Now
+            button(type="submit").btn.btn-outline-primary Save Draft

@@ -1,0 +1,62 @@
+.footer {
+  padding: 60px 0;
+  background-color: #16171a;
+  color: $color-white;
+
+  h3 {
+    margin: 20px 0 15px;
+    font-family: $font-title;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    color: $color-white;
+    position: relative;
+
+    &:after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 1px;
+      background-color: $color-primary;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
+
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    margin: 15px 0 0;
+
+    &:first-child {
+      margin: 0;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      flex-shrink: 0;
+      width: 7px;
+      height: 1px;
+      margin: 0 10px 0 0;
+      background-color: $color-white;
+    }
+
+  }
+
+  .social {
+    margin: 40px 0 0;
+  }
+
+  @include more-768 {
+    background: url(../images/background-footer.jpg) no-repeat center center;
+    background-size: cover;
+  }
+
+}

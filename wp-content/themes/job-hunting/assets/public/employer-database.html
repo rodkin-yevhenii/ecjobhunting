@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Employer: database
+    </title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.min.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <div class="container">
+          <div class="row align-items-md-center">
+            <div class="col-6 col-md-3">
+              <div class="header-logo"><img src="images/logo-2x.jpg" alt=""></div>
+            </div>
+            <div class="col-6 col-md-5 col-xl-6 align-self-md-center d-flex justify-content-end justify-content-xl-start">
+              <div class="header-burger d-md-none"><span></span></div>
+              <nav>
+                <ul class="header-menu">
+                  <li><a class="active" href="#">Home</a></li>
+                  <li><a href="#">Jobs</a></li>
+                  <li><a href="#">About</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul>
+              </nav>
+            </div>
+            <div class="col d-none d-md-block col-md-4 col-xl-3 header-account-wrapper">
+              <div class="header-account">
+                <div class="header-account-image"><img src="images/account.jpg" alt="account"></div>
+                <div class="header-account-content"><span>EmployerName</span><i class="fa fa-power-off"></i><a href="#">logout</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <main>
+        <nav class="menu menu-jobs">
+          <div class="container p-0">
+            <div class="row">
+              <div class="col-12 col-md-3 d-xl-none"><span>Account menu:</span></div>
+              <div class="col-12 col-md-6 col-xl-12">
+                <ul data-select>
+                  <li><a href="/employer-post-job.html">Post a Job</a></li>
+                  <li><a href="/employer-dashboard.html">Dashboard</a></li>
+                  <li><a href="/employer-candidates.html">Candidates</a></li>
+                  <li><a href="/employer-jobs.html">Jobs</a></li>
+                  <li><a href="/employer-messages.html">Messages</a></li>
+                  <li data-select-value><a>Resume Database</a></li>
+                  <li><a href="/employer-help.html">Help</a></li>
+                  <li><a href="/employer-activate.html"><img src="images/icons/active.png" alt="some text" /> Activate</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </nav>
+        <div class="page employer">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <h1>Resume Database</h1>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12" data-tab>
+                <ul class="results-header results-header-large">
+                  <li class="d-md-none" data-tab-value><span>Search Resumes</span></li>
+                  <li class="active" data-tab-item="search">Search Resumes</li>
+                  <li data-tab-item="saved">My Saved Searches</li>
+                  <li data-tab-item="viewed">My Viewed Resumes</li>
+                </ul>
+                <div class="results-content pt-0 pt-md-4">
+                  <div class="active" data-tab-content="search">
+                    <div class="container-fluid p-0">
+                      <div class="row">
+                        <div class="col-12 col-md-6 col-xl-4">
+                          <button class="filter-database-handler btn btn-outline-primary px-5 mb-3 d-md-none">Filter</button>
+                          <form class="filter-database">
+                            <fieldset>
+                              <div class="field-label mb-2">Your Active Jobs:</div>
+                              <div class="ys-select ys-select-bordered" data-select><span data-select-value>No jobs found</span>
+                                <ul>
+                                  <li data-select-item>Type 1</li>
+                                  <li data-select-item>Type 2</li>
+                                  <li data-select-item>Type 3</li>
+                                </ul>
+                                <input class="d-none" type="text">
+                              </div>
+                            </fieldset>
+                            <fieldset class="field-skills mt-4">
+                              <div class="field-label mb-2">Keywords:</div>
+                              <ul class="field-skills-list">
+                                <li><span>Adobe Photoshop</span><span class="field-skills-close"></span></li>
+                                <li><span>Figma</span><span class="field-skills-close"></span></li>
+                              </ul>
+                              <div class="field-skills-panel mt-2">
+                                <label class="d-block">
+                                  <input class="field-text" type="text" placeholder="Skills or other words">
+                                </label>
+                                <button class="btn btn-primary" type="button">Add</button>
+                              </div>
+                            </fieldset>
+                            <fieldset class="mt-4">
+                              <div class="field-label mb-2">Location:</div>
+                              <div class="ys-select ys-select-bordered" data-select><span data-select-value>City, state or zip code</span>
+                                <ul>
+                                  <li data-select-item>Type 1</li>
+                                  <li data-select-item>Type 2</li>
+                                  <li data-select-item>Type 3</li>
+                                </ul>
+                                <input class="d-none" type="text">
+                              </div>
+                            </fieldset>
+                            <fieldset class="mt-4">
+                              <div class="field-label mb-3">Radius: within <span data-noui-value="miles">0</span> miles</div>
+                              <div data-noui-slider="miles" data-noui-step="1" data-noui-start="0" data-noui-end="50"></div>
+                            </fieldset>
+                            <fieldset class="mt-4">
+                              <label class="field-label mb-2" for="resumes-job">Job Title:</label>
+                              <input class="field-text" type="text" id="resumes-job" placeholder="Past or present job titles">
+                            </fieldset>
+                            <fieldset class="mt-4">
+                              <label class="field-label mb-2" for="resumes-company">Previous Companies:</label>
+                              <input class="field-text" type="text" id="resumes-company" placeholder="Past or current employers">
+                            </fieldset>
+                            <fieldset class="mt-4">
+                              <div class="field-label mb-3">Freshness: posted <span data-noui-value="posted">0</span> days ago</div>
+                              <div data-noui-slider="posted" data-noui-step="1" data-noui-start="0" data-noui-end="30"></div>
+                            </fieldset>
+                            <fieldset class="mt-4">
+                              <div class="field-label">Minimum Education:</div>
+                              <div class="mt-2">
+                                <input type="radio" name="resume-education" id="resume-education-1">
+                                <label for="resume-education-1">Any</label>
+                              </div>
+                              <div class="mt-2">
+                                <input type="radio" name="resume-education" id="resume-education-2">
+                                <label for="resume-education-2">High School</label>
+                              </div>
+                              <div class="mt-2">
+                                <input type="radio" name="resume-education" id="resume-education-3">
+                                <label for="resume-education-3">Some College</label>
+                              </div>
+                              <div class="mt-2">
+                                <input type="radio" name="resume-education" id="resume-education-4">
+                                <label for="resume-education-4">Bachelors Degree</label>
+                              </div>
+                              <div class="mt-2">
+                                <input type="radio" name="resume-education" id="resume-education-5">
+                                <label for="resume-education-5">Masters Degree</label>
+                              </div>
+                              <div class="mt-2">
+                                <input type="radio" name="resume-education" id="resume-education-6">
+                                <label for="resume-education-6">Doctorate or Higher</label>
+                              </div>
+                            </fieldset>
+                            <fieldset class="mt-4">
+                              <div class="field-label">Industry:</div>
+                              <div class="mt-2">
+                                <input type="checkbox" name="resume-industry" id="resume-industry-1">
+                                <label for="resume-industry-1">Accounting/Finance</label>
+                              </div>
+                              <div class="mt-2">
+                                <input type="checkbox" name="resume-industry" id="resume-industry-2">
+                                <label for="resume-industry-2">Admin/Secretarial</label>
+                              </div>
+                              <div class="mt-2">
+                                <input type="checkbox" name="resume-industry" id="resume-industry-3">
+                                <label for="resume-industry-3">Architect/Design</label>
+                              </div>
+                              <div class="mt-2">
+                                <input type="checkbox" name="resume-industry" id="resume-industry-4">
+                                <label for="resume-industry-4">Art/Media/Writers</label>
+                              </div>
+                              <div class="mt-2">
+                                <input type="checkbox" name="resume-industry" id="resume-industry-5">
+                                <label for="resume-industry-5">Biotech/Pharmaceutical</label>
+                              </div>
+                              <div class="mt-2 see-more-hidden">
+                                <input type="checkbox" name="resume-industry" id="resume-industry-6">
+                                <label for="resume-industry-6">some text</label>
+                              </div>
+                              <div class="mt-2 see-more-hidden">
+                                <input type="checkbox" name="resume-industry" id="resume-industry-7">
+                                <label for="resume-industry-7">some text</label>
+                              </div>
+                              <div class="mt-2 see-more-hidden">
+                                <input type="checkbox" name="resume-industry" id="resume-industry-8">
+                                <label for="resume-industry-8">some text</label>
+                              </div>
+                              <div class="mt-2 see-more-hidden">
+                                <input type="checkbox" name="resume-industry" id="resume-industry-9">
+                                <label for="resume-industry-9">some text</label>
+                              </div>
+                              <div class="see-more color-primary"><span>+ See more</span><span class="see-more-hidden">- See top</span></div>
+                            </fieldset>
+                            <fieldset class="mt-4">
+                              <div class="field-label mb-2">Veteran Status:</div>
+                              <input type="checkbox" id="resume-veteran">
+                              <label for="resume-veteran">Self-identified as Veteran</label>
+                            </fieldset>
+                            <button class="btn btn-primary btn-full mt-4" type="submit">Apply</button>
+                          </form>
+                        </div>
+                        <div class="col-12 col-md-6 col-xl-8 mt-4">
+                          <div class="results-item">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col d-none d-md-block col-md-3 col-xl-2">
+                                  <div class="results-image"><img src="images/customer-photo-1.jpg" alt="photo"></div>
+                                </div>
+                                <div class="col-12 col-md-9 col-xl-10 d-flex flex-wrap">
+                                  <h4 class="color-primary">Ann Fuller</h4><span class="results-country color-secondary">London</span>
+                                  <ul>
+                                    <li><span class="color-secondary">$50000 p.a minimum</span></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="results-item">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col d-none d-md-block col-md-3 col-xl-2">
+                                  <div class="results-image"><img src="images/customer-photo-2.jpg" alt="photo"></div>
+                                </div>
+                                <div class="col-12 col-md-9 col-xl-10 d-flex flex-wrap">
+                                  <h4 class="color-primary">Annasmith</h4>
+                                  <ul>
+                                    <li><span class="color-secondary">Last Activity 12 months ago</span></li>
+                                    <li><span class="color-secondary">Automotive</span></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="results-item">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col d-none d-md-block col-md-3 col-xl-2">
+                                  <div class="results-image"><img src="images/customer-photo-3.jpg" alt="photo"></div>
+                                </div>
+                                <div class="col-12 col-md-9 col-xl-10 d-flex flex-wrap">
+                                  <h4 class="color-primary">Annette Cox</h4><span class="results-country color-secondary">Greenford</span>
+                                  <ul>
+                                    <li><span class="color-secondary">$50000 p.a minimum</span></li>
+                                    <li><span class="color-secondaryLast">Activity 4 years ago</span></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="results-item">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col d-none d-md-block col-md-3 col-xl-2">
+                                  <div class="results-image"><img src="images/customer-photo-4.jpg" alt="photo"></div>
+                                </div>
+                                <div class="col-12 col-md-9 col-xl-10 d-flex flex-wrap">
+                                  <h4 class="color-primary">Barry Burns</h4><span class="results-country color-secondary">London</span>
+                                  <ul>
+                                    <li><span class="color-secondary">$50000 p.a minimum</span></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="results-item">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col d-none d-md-block col-md-3 col-xl-2">
+                                  <div class="results-image"><img src="images/customer-photo-5.jpg" alt="photo"></div>
+                                </div>
+                                <div class="col-12 col-md-9 col-xl-10 d-flex flex-wrap">
+                                  <h4 class="color-primary">Betty Stanley</h4><span class="results-country color-secondary">London</span>
+                                  <ul>
+                                    <li><span class="color-secondary">$50000 p.a minimum</span></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="results-item">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col d-none d-md-block col-md-3 col-xl-2">
+                                  <div class="results-image"><img src="images/customer-photo-6.jpg" alt="photo"></div>
+                                </div>
+                                <div class="col-12 col-md-9 col-xl-10 d-flex flex-wrap">
+                                  <h4 class="color-primary">Billy Reed</h4><span class="results-country color-secondary">London</span>
+                                  <ul>
+                                    <li><span class="color-secondary">$50000 p.a minimum</span></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="results-item">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col d-none d-md-block col-md-3 col-xl-2">
+                                  <div class="results-image"><img src="images/customer-photo-1.jpg" alt="photo"></div>
+                                </div>
+                                <div class="col-12 col-md-9 col-xl-10 d-flex flex-wrap">
+                                  <h4 class="color-primary">Annasmith</h4>
+                                  <ul>
+                                    <li><span class="color-secondary">Last Activity 12 months ago</span></li>
+                                    <li><span class="color-secondary">Automotive</span></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="results-item">
+                            <div class="container-fluid">
+                              <div class="row">
+                                <div class="col d-none d-md-block col-md-3 col-xl-2">
+                                  <div class="results-image"><img src="images/customer-photo-2.jpg" alt="photo"></div>
+                                </div>
+                                <div class="col-12 col-md-9 col-xl-10 d-flex flex-wrap">
+                                  <h4 class="color-primary">Annette Cox</h4><span class="results-country color-secondary">Greenford</span>
+                                  <ul>
+                                    <li><span class="color-secondary">$50000 p.a minimum</span></li>
+                                    <li><span class="color-secondary">Last Activity 4 years ago</span></li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div data-tab-content="saved"><span>My saved searches</span></div>
+                  <div data-tab-content="viewed"><span>My viewed resumes</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-xl-9">
+              <h3>About Us</h3>
+              <p>Since 2019, ecjobhunting.com has given job seekers free access to millions of jobs from thousands of company websites and job boards. As the leading pay-for-performance recruitment advertising network, ecjobhunting.com drives millions of targeted applicants to jobs in every field and is the most cost-effective source of candidates for thousands of companies.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-md-4 col-xl-3">
+              <h3>For Candidates</h3>
+              <ul>
+                <li>About Candidate</li>
+                <li>Browse Jobs</li>
+                <li>Browse Categories</li>
+                <li>Submit Resume</li>
+                <li>Privacy Policy</li>
+                <li>Terms & Conditions</li>
+              </ul>
+            </div>
+            <div class="col-12 col-md-4 col-xl-3">
+              <h3>For Employers</h3>
+              <ul>
+                <li>Employer Login</li>
+                <li>Privacy Policy</li>
+                <li>Terms & Conditions</li>
+                <li>Post a Job</li>
+                <li>Job Packages</li>
+                <li>View Profile</li>
+              </ul>
+            </div>
+            <div class="col-12 col-md-4 col-xl-3">
+              <h3>Other</h3>
+              <ul>
+                <li>Communications</li>
+                <li>How It Works</li>
+                <li>Contact Us</li>
+              </ul>
+              <div class="social">
+                <ul>
+                  <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                  <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src="js/index/libs.js"></script>
+    <script src="js/index/scripts.js"></script>
+  </body>
+</html>

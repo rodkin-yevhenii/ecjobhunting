@@ -1,0 +1,14 @@
+.results.page
+    .container
+        .row
+            .col-12(data-tab)
+                ul.results-header.results-header-large
+                    li(data-tab-value).d-md-none
+                        span Create New Job
+                    li(data-tab-item="create").active Create New Job
+                    li(data-tab-item="duplicate") Duplicate Previous Job
+                .results-content
+                    div(data-tab-content="create").active
+                        include create
+                    div(data-tab-content="duplicate")
+                        include duplicate

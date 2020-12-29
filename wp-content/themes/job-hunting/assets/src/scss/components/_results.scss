@@ -1,0 +1,354 @@
+.results  {
+
+  &-header {
+    list-style: none;
+
+    [data-tab-value] {
+      padding: 25px 50px 25px 20px;
+      background-color: $color-primary;
+      border-radius: $br;
+      font-family: $font-title;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 30px;
+      color: $color-white;
+      @include select-arrow($color-white);
+
+      &.results-header-large {
+        padding: 10px 50px 10px 20px;
+      }
+
+      span {
+        display: block;
+        width: 100%;
+      }
+
+    }
+
+    [data-tab-item] {
+      display: none;
+      padding: 10px 20px;
+      font-family: $font-title;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 30px;
+      color: $color-black;
+      border-left: 1px solid $color-secondary;
+      border-right: 1px solid $color-secondary;
+      position: relative;
+      cursor: pointer;
+      transition: .3s;
+
+      &:not(.active):hover {
+        opacity: .5;
+      }
+
+      &:after {
+        content: '';
+        display: block;
+        width: 90%;
+        height: 1px;
+        margin: auto;
+        background-color: $color-secondary;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+      &:last-of-type {
+        border-bottom: 1px solid $color-secondary;
+        border-radius: 0 0 $br $br;
+
+        &:after {
+          display: none;
+        }
+
+      }
+
+      &.active {
+        color: $color-primary;
+      }
+
+    }
+
+    @include more-768 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      li[data-tab-item] {
+        display: block;
+        margin: 0 10px;
+        border: none;
+        color: $color-primary;
+        text-align: center;
+
+        &:first-child {
+          margin: 0 10px 0 0;
+        }
+
+        &:last-child {
+          border: none;
+          margin: 0 0 0 10px;
+
+          &:after {
+            display: block;
+          }
+
+        }
+
+        &:after {
+          content: '';
+          display: block;
+          width: 0;
+          height: 0;
+          margin: auto;
+          background-color: transparent;
+          border-top: 10px solid $color-primary;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 100%;
+          bottom: auto;
+          visibility: hidden;
+          opacity: 0;
+          transition: .3s;
+        }
+
+        &.active {
+          display: block;
+          color: $color-white;
+          background-color: $color-primary;
+          border-radius: $br;
+          position: relative;
+
+          &:after {
+            visibility: visible;
+            opacity: 1;
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  [data-tab].active {
+
+    .results-header {
+
+      [data-tab-value] {
+        border-radius: $br $br 0 0;
+      }
+
+      [data-tab-item] {
+        display: block;
+      }
+
+    }
+
+  }
+
+  &-content {
+    margin: 40px 0 0;
+    padding: 25px 0 0;
+    list-style: none;
+
+    [data-tab-content] {
+      display: none;
+
+      &.active {
+        display: block;
+      }
+
+    }
+
+    [data-tab-content="jobs"] {
+
+      .results-item {
+
+        ul {
+          display: flex;
+          margin: 0 30px 0 0;
+
+          &:last-child {
+            margin: 0;
+          }
+
+        }
+
+      }
+
+    }
+
+    [data-tab-content="resumes"] {
+
+      .results-image {
+        max-width: 70px;
+        border-radius: $br;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+        }
+
+      }
+
+    }
+
+    @include more-768 {
+      border-top: 1px solid #efefef;
+    }
+
+  }
+
+  &-item {
+    margin: 0 0 20px;
+    padding: 0 0 25px;
+    border-bottom: 1px solid #efefef;
+
+    .container-fluid {
+      padding: 0;
+    }
+
+    .employer & {
+
+      &:first-of-type {
+        padding: 20px 0 25px;
+        border-top: 1px solid #efefef;
+      }
+
+      ul:not(.vacancy-info) li {
+        margin: 10px 0;
+      }
+
+      .rate-buttons button {
+        background-color: $color-grey-light;
+
+        &:hover {
+          background-color: $color-grey;
+        }
+
+      }
+
+    }
+
+    &:last-of-type {
+      margin: 0;
+    }
+
+    small {
+      display: block;
+      width: 100%;
+      margin: 0 0 10px;
+      font-size: 12px;
+      line-height: 18px;
+      color: $color-secondary;
+    }
+
+    h4 {
+      margin: 0 0 15px;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 24px;
+      color: $color-primary;
+    }
+
+    span {
+      font-size: 20px;
+      line-height: 24px;
+    }
+
+    span.results-country {
+      margin: 0 0 15px;
+      color: $color-secondary;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    h4 + span.results-country {
+      margin: 0 0 15px 35px;
+      position: relative;
+      top: 2px;
+
+      &:before {
+        content: '';
+        display: block;
+        width: 1px;
+        height: 80%;
+        background-color: $color-primary;
+        position: absolute;
+        top: 10%;
+        right: calc(100% + 16px);
+      }
+
+    }
+
+    :not([data-select-value]) + ul {
+      display: block;
+      width: 100%;
+      list-style: none;
+      color: $color-secondary;
+
+      li {
+        display: block;
+        min-width: 80px;
+
+        span {
+          font-size: 16px;
+          line-height: 24px;
+        }
+
+      }
+
+    }
+
+    p {
+      margin: 10px 0 0;
+    }
+
+  }
+
+  &-link {
+    padding: 30px 0;
+
+    p {
+      margin: 0 0 20px;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+
+      i {
+        margin: 0 0 0 10px;
+        font-size: 20px;
+        line-height: 20px;
+      }
+
+      &:hover {
+        color: $color-black;
+        text-decoration: none;
+      }
+
+    }
+
+    @include more-768 {
+      margin: 35px 0 0;
+      padding: 70px 0;
+      border-top: 1px solid $color-grey;
+
+      p {
+        margin: 0;
+      }
+
+    }
+
+  }
+
+}

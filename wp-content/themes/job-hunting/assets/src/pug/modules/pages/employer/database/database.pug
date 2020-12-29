@@ -1,0 +1,20 @@
+.page.employer
+    .container
+        .row
+            .col-12
+                h1 Resume Database
+        .row
+            .col-12(data-tab)
+                ul.results-header.results-header-large
+                    li(data-tab-value).d-md-none
+                        span Search Resumes
+                    li(data-tab-item="search").active Search Resumes
+                    li(data-tab-item="saved") My Saved Searches
+                    li(data-tab-item="viewed") My Viewed Resumes
+                .results-content.pt-0.pt-md-4
+                    div(data-tab-content="search").active
+                        include search
+                    div(data-tab-content="saved")
+                        include saved
+                    div(data-tab-content="viewed")
+                        include viewed

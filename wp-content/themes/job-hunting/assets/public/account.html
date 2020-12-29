@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Account
+    </title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/styles.min.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <div class="container">
+          <div class="row align-items-md-center">
+            <div class="col-6 col-md-3">
+              <div class="header-logo"><img src="images/logo-2x.jpg" alt=""></div>
+            </div>
+            <div class="col-6 col-md-6 align-self-md-center d-flex justify-content-end justify-content-xl-start">
+              <div class="header-burger d-md-none"><span></span></div>
+              <nav>
+                <ul class="header-menu">
+                  <li><a class="active" href="#">Home</a></li>
+                  <li><a href="#">Jobs</a></li>
+                  <li><a href="#">About</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul>
+              </nav>
+            </div>
+            <div class="col d-none d-md-block col-md-3 col-xl-2 header-button-wrapper"><a class="btn btn-outline-white" href="#">Login  /  Sign Up</a></div>
+          </div>
+        </div>
+      </header>
+      <main>
+        <nav class="account-menu">
+          <ul>
+            <li><a href="#">Jobs</a></li>
+            <li><a href="#">Messages</a></li>
+            <li><a href="#">Profile</a></li>
+          </ul>
+        </nav>
+        <section class="account mt-3">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 col-xl-6">
+                <h2 class="no-decor mb-4">Change Password</h2>
+                <p>You are currently updating preferences for myemail@gmail.com (<a href="#">edit</a>)</p>
+                <form>
+                  <label class="field-label" for="account-password-current">Current Password</label>
+                  <input class="field-text" type="password" id="account-password-current">
+                  <p class="color-secondary">Forgot password? <a href="#">Click here</a> and we'll email you a link to reset your password.</p>
+                  <label class="field-label" for="account-password-new">Create Password</label>
+                  <input class="field-text" type="password" id="account-password-new">
+                  <label class="field-label" for="account-password-new-confirm">Confirm Password</label>
+                  <input class="field-text" type="password" id="account-password-new-confirm">
+                  <button class="btn btn-primary" type="submit">Save Password</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="account">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <h2 class="no-decor mb-4">Notifications</h2>
+                <form>
+                  <h3>Job Recommendations</h3>
+                  <fieldset>
+                    <input type="checkbox" id="notifications-1">
+                    <label for="notifications-1">Email digest of jobs based on your job search activity.</label>
+                  </fieldset>
+                  <fieldset>
+                    <input type="checkbox" id="notifications-2">
+                    <label for="notifications-2">Instant notifications when you match to a job, powered by our smart matching technology.</label>
+                  </fieldset>
+                  <h3>Application Status Updates</h3>
+                  <fieldset>
+                    <input type="checkbox" id="notifications-3">
+                    <label for="notifications-3">Updates to your job applications, including when it is received, viewed, rated, or closed by the employer, and other updates related to your job search.</label>
+                  </fieldset>
+                  <h3>Profile Activity</h3>
+                  <fieldset>
+                    <input type="checkbox" id="notifications-4">
+                    <label for="notifications-4">Receive information about which companies are viewing your profile, updates on your saved and viewed jobs, suggestions for improving your profile, and more.</label>
+                  </fieldset>
+                  <h3>Messages from Employers</h3>
+                  <fieldset>
+                    <input type="checkbox" id="notifications-5">
+                    <label for="notifications-5">Notifications when an employer contacts you about your job application.</label>
+                  </fieldset>
+                  <h3>Communications from EcJobHunting</h3>
+                  <fieldset>
+                    <input type="checkbox" id="notifications-6">
+                    <label for="notifications-6">Product tips and guidance to help you get the most out of EcJobHunting including job search advice, feedback requests, and product updates.</label>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="account">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <h2 class="no-decor mb-4">My Job Alerts</h2>
+                <p>Look in your inbox for jobs matching these searches. We do the searching for you!</p>
+                <div class="custom-handler">
+                  <div></div><span>Receive job alert emails matching my criteria specified below</span>
+                </div>
+                <form class="disabled">
+                  <h3>Job Title Matching</h3>
+                  <fieldset>
+                    <input type="checkbox" id="notifications-7" disabled>
+                    <label for="notifications-7">My resume and activity</label>
+                  </fieldset>
+                  <fieldset>
+                    <input type="checkbox" id="notifications-8" disabled>
+                    <label for="notifications-8">Specific keywords</label>
+                  </fieldset>
+                  <h3>Location Matching</h3>
+                  <fieldset>
+                    <input type="radio" id="notifications-9" name="notifications-radio" checked disabled>
+                    <label for="notifications-9">My activity</label>
+                  </fieldset>
+                  <fieldset>
+                    <input type="radio" id="notifications-10" name="notifications-radio" disabled>
+                    <label for="notifications-10">Specified location</label>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer class="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-xl-9">
+              <h3>About Us</h3>
+              <p>Since 2019, ecjobhunting.com has given job seekers free access to millions of jobs from thousands of company websites and job boards. As the leading pay-for-performance recruitment advertising network, ecjobhunting.com drives millions of targeted applicants to jobs in every field and is the most cost-effective source of candidates for thousands of companies.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-md-4 col-xl-3">
+              <h3>For Candidates</h3>
+              <ul>
+                <li>About Candidate</li>
+                <li>Browse Jobs</li>
+                <li>Browse Categories</li>
+                <li>Submit Resume</li>
+                <li>Privacy Policy</li>
+                <li>Terms & Conditions</li>
+              </ul>
+            </div>
+            <div class="col-12 col-md-4 col-xl-3">
+              <h3>For Employers</h3>
+              <ul>
+                <li>Employer Login</li>
+                <li>Privacy Policy</li>
+                <li>Terms & Conditions</li>
+                <li>Post a Job</li>
+                <li>Job Packages</li>
+                <li>View Profile</li>
+              </ul>
+            </div>
+            <div class="col-12 col-md-4 col-xl-3">
+              <h3>Other</h3>
+              <ul>
+                <li>Communications</li>
+                <li>How It Works</li>
+                <li>Contact Us</li>
+              </ul>
+              <div class="social">
+                <ul>
+                  <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                  <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src="js/index/libs.js"></script>
+    <script src="js/index/scripts.js"></script>
+  </body>
+</html>

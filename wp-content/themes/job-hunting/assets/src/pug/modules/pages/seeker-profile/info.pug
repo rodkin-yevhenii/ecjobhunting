@@ -1,0 +1,48 @@
+.profile-item
+    .profile-header
+        button(type="button" data-toggle="modal" data-target="#edit").profile-edit-link Edit
+        h2.no-decor About Me
+    form.profile-photo
+        .profile-photo-image
+            img(src="images/account.jpg" alt="photo")
+        input(type="file" id="profile-photo")
+        label(for="profile-photo") +
+    .profile-name
+        strong Nicholas Coppola
+        span Nyack NY
+.profile-item
+    .profile-header
+        button.profile-edit-link Edit
+        h2.no-decor Contact Information
+    ul
+        li
+            .profile-icon
+                img(src="images/icons/envelope.png" alt="icon")
+            span yar-shabanov@yandex.ru
+            span.color-red Verify your email to receive application updates from employers.
+            button.btn.btn-primary Resend Confirmation
+        li
+            .profile-icon
+                img(src="images/icons/mobile.png" alt="icon")
+            a(href="#") Add Phone Number
+.profile-item
+    .profile-header
+        button.profile-edit-link Edit
+        h2.no-decor Websites
+    ul
+        li
+            .profile-icon
+                img(src="images/icons/envelope.png" alt="icon")
+            a(href="#") Add Website
+        li
+            .profile-icon
+                img(src="images/icons/twitter.png" alt="icon")
+            a(href="#") Add Twitter Profile
+        li
+            .profile-icon
+                img(src="images/icons/instagram.png" alt="icon")
+            a(href="#") Add LinkedIn Profile
+        li
+            .profile-icon
+                img(src="images/icons/facebook.png" alt="icon")
+            a(href="#") Add Facebook Profile

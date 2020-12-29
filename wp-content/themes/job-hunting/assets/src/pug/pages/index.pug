@@ -1,0 +1,51 @@
+extends ../layout/index
+
+block title
+    | Index page
+
+block content
+    .container
+        .row
+            .col-12
+                ul#list.my-5
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/frontpage.html" target="_blank") frontpage
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/about.html" target="_blank") about
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/account.html" target="_blank") account
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/company.html" target="_blank") company
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/contact.html" target="_blank") contact
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/jobs.html" target="_blank") jobs
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/privacy.html" target="_blank") privacy
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/seeker-jobs.html" target="_blank") seeker-jobs
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/seeker-profile.html" target="_blank") seeker-profile
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/vacancy.html" target="_blank") vacancy
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/employer-activate.html" target="_blank") Employer activate
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/employer-candidates.html" target="_blank") Employer candidates
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/employer-dashboard.html" target="_blank") Employer dashboard
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/employer-database.html" target="_blank") Employer database
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/employer-help.html" target="_blank") Employer help
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/employer-jobs.html" target="_blank") Employer jobs
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/employer-messages.html" target="_blank") Employer messages
+                    li
+                        a(href="http://yegor-stetsiura.kharkiv.ua/test/ecjobhunting/employer-post-job.html" target="_blank") Employer post job
+        style
+            != "#list {list-style: none; counter-reset: list;} #list li:before {content: counter(list)'.';counter-increment: list; font-weight: 700; margin: 0 10px 0 0;}"
+block scripts
+    script(src="js/index/libs.js")
+    script(src="js/index/scripts.js")
