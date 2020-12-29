@@ -1,0 +1,76 @@
+nav.account-menu
+    ul
+        li
+            a(href="#") Jobs
+        li
+            a(href="#") Messages
+        li
+            a(href="#") Profile
+section.account.mt-3
+    .container
+        .row
+            .col-12.col-md-10.col-xl-6
+                h2.no-decor.mb-4 Change Password
+                p You are currently updating preferences for myemail@gmail.com (<a href="#">edit</a>)
+                form
+                    label.field-label(for="account-password-current") Current Password
+                    input.field-text(type="password" id="account-password-current")
+                    p.color-secondary Forgot password? <a href="#">Click here</a> and we'll email you a link to reset your password.
+                    label.field-label(for="account-password-new") Create Password
+                    input.field-text(type="password" id="account-password-new")
+                    label.field-label(for="account-password-new-confirm") Confirm Password
+                    input.field-text(type="password" id="account-password-new-confirm")
+                    button(type="submit").btn.btn-primary Save Password
+section.account
+    .container
+        .row
+            .col-12
+                h2.no-decor.mb-4 Notifications
+                form
+                    h3 Job Recommendations
+                    fieldset
+                        input(type="checkbox" id="notifications-1")
+                        label(for="notifications-1") Email digest of jobs based on your job search activity.
+                    fieldset
+                        input(type="checkbox" id="notifications-2")
+                        label(for="notifications-2") Instant notifications when you match to a job, powered by our smart matching technology.
+                    h3 Application Status Updates
+                    fieldset
+                        input(type="checkbox" id="notifications-3")
+                        label(for="notifications-3") Updates to your job applications, including when it is received, viewed, rated, or closed by the employer, and other updates related to your job search.
+                    h3 Profile Activity
+                    fieldset
+                        input(type="checkbox" id="notifications-4")
+                        label(for="notifications-4") Receive information about which companies are viewing your profile, updates on your saved and viewed jobs, suggestions for improving your profile, and more.
+                    h3 Messages from Employers
+                    fieldset
+                        input(type="checkbox" id="notifications-5")
+                        label(for="notifications-5") Notifications when an employer contacts you about your job application.
+                    h3 Communications from EcJobHunting
+                    fieldset
+                        input(type="checkbox" id="notifications-6")
+                        label(for="notifications-6") Product tips and guidance to help you get the most out of EcJobHunting including job search advice, feedback requests, and product updates.
+section.account
+    .container
+        .row
+            .col-12
+                h2.no-decor.mb-4 My Job Alerts
+                p Look in your inbox for jobs matching these searches. We do the searching for you!
+                .custom-handler
+                    div
+                    span Receive job alert emails matching my criteria specified below
+                form.disabled
+                    h3 Job Title Matching
+                    fieldset
+                        input(type="checkbox" id="notifications-7" disabled)
+                        label(for="notifications-7") My resume and activity
+                    fieldset
+                        input(type="checkbox" id="notifications-8" disabled)
+                        label(for="notifications-8") Specific keywords
+                    h3 Location Matching
+                    fieldset
+                        input(type="radio" id="notifications-9" name="notifications-radio" checked disabled)
+                        label(for="notifications-9") My activity
+                    fieldset
+                        input(type="radio" id="notifications-10" name="notifications-radio" disabled)
+                        label(for="notifications-10") Specified location

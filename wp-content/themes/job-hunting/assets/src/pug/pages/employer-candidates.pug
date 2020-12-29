@@ -1,0 +1,13 @@
+extends ../layout/inner-logge-in
+
+block title
+    | Employer: candidates
+
+block content
+    include ../modules/pages/employer/menu/menu-candidates
+    include ../modules/pages/employer/candidates
+
+
+block scripts
+    script(src="js/index/libs.js")
+    script(src="js/index/scripts.js")

@@ -1,0 +1,336 @@
+.profile {
+
+  &-item {
+    margin: 0 15px;
+    padding: 25px 0 30px;
+    border-bottom: 1px solid $color-grey;
+  }
+
+  &-item,
+  &-progress {
+
+    ul {
+      margin: 15px 0;
+      list-style: none;
+
+      li {
+        margin: 30px 0 0;
+        padding: 0 0 0 40px;
+        position: relative;
+
+        span {
+          display: block;
+        }
+
+        &:first-child {
+          margin: 0;
+        }
+
+        a {
+          color: $color-primary;
+        }
+
+        .btn {
+          margin: 15px 0 0;
+        }
+
+        .icon-check {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          left: 0;
+          top: 0;
+
+          &.active {
+            background-color: $color-primary;
+            border: 1px solid $color-primary;
+
+            &:before {
+              content: '\f00c';
+              font-family: FontAwesome, sans-serif;
+              color: $color-white;
+              font-size: 14px;
+              line-height: 25px;
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  &-progress {
+    padding: 25px 15px 40px;
+
+    ul {
+      margin: 30px 0 15px;
+    }
+
+  }
+
+  &-header {
+    position: relative;
+
+    h2 {
+      margin: 0 0 25px;
+    }
+
+    button.profile-edit-link + h2 {
+      padding: 0 35px 0 0;
+    }
+
+    button.profile-edit-link {
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      font-size: 16px;
+      line-height: 1;
+      color: $color-primary;
+      position: absolute;
+      right: 15px;
+      bottom: 7px;
+      z-index: 1;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+    }
+
+  }
+
+  &-photo {
+    margin: 0 0 15px;
+    position: relative;
+
+    &-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 125px;
+      height: 125px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 50%;
+    }
+
+    input {
+      display: none;
+
+      & + label {
+        display: block;
+        width: 40px;
+        height: 40px;
+        margin: 0;
+        background-color: $color-primary;
+        border: 1px solid $color-primary;
+        border-radius: 50%;
+        text-align: center;
+        color: $color-white;
+        font-size: 28px;
+        line-height: 38px;
+        position: absolute;
+        left: calc(50% + 30px);
+        bottom: 0;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $color-white;
+          color: $color-primary;
+        }
+
+      }
+
+    }
+
+  }
+
+  &-name {
+    text-align: center;
+
+    span {
+      display: block;
+      color: #a6a6a6;
+    }
+
+    strong {
+      display: block;
+      font-family: $font-title;
+      font-size: 24px;
+      line-height: 30px;
+      font-weight: 400;
+    }
+
+  }
+
+  &-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 30px;
+    position: absolute;
+    left: 0;
+    top: -2px;
+  }
+
+  &-progressbar {
+    width: 100%;
+    height: 25px;
+    margin: 15px 0 30px;
+    border: 1px solid $color-grey;
+    border-radius: 13px;
+    background-color: $color-grey-light;
+    position: relative;
+
+    span {
+      display: block;
+      background-color: $color-red;
+      border-radius: 13px;
+      position: absolute;
+      left: -1px;
+      top: -1px;
+      bottom: -1px;
+    }
+
+  }
+
+  &-activation {
+    margin: 0 15px 30px;
+    padding: 25px 20px 35px;
+    background-color: $color-grey-light;
+    border-radius: $br;
+    position: relative;
+
+    h3 {
+      padding: 0 60px 0 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .custom-handler {
+      position: absolute;
+      right: 0;
+      top: 30px;
+    }
+
+    & + .profile-header {
+      padding: 0 15px;
+
+      p {
+        margin: 15px 0 0;
+      }
+
+    }
+
+  }
+
+  &-subitem {
+    margin: 20px 0 0;
+    position: relative;
+
+    &:first-of-type {
+      margin: 0;
+    }
+
+    span,
+    strong,
+    h3 {
+      padding: 0 80px 0 0;
+    }
+
+    h3 {
+      margin: 8px 0 10px;
+    }
+
+    span {
+      font-size: 12px;
+      line-height: 18px;
+      color: $color-grey;
+    }
+
+    strong {
+      display: block;
+      margin: 0 0 10px;
+      font-weight: 400;
+      color: $color-grey;
+    }
+
+    button.btn {
+      position: absolute;
+      right: 0;
+      top: 5px;
+    }
+
+    p {
+      margin: 0;
+    }
+
+  }
+
+  @include more-768 {
+
+    &-item {
+      margin: 0;
+    }
+
+    &-activation {
+      margin: 25px 15px 30px;
+      padding: 30px 45px;
+
+      .custom-handler {
+        top: 35px;
+        right: 45px;
+      }
+
+      h3 {
+        padding: 0 90px 0 0;
+      }
+
+    }
+
+    &-header {
+
+      button.profile-edit-link {
+        right: 0;
+      }
+
+    }
+
+  }
+
+  @include more-1200 {
+
+    &-item {
+      padding: 40px 0 45px;
+
+      .btn-full {
+        width: auto;
+      }
+
+    }
+
+    &-activation {
+      margin: 25px 0 30px;
+      padding: 30px 95px 30px 45px;
+
+      & + .profile-header {
+        padding: 0;
+      }
+
+    }
+
+    &-progressbar {
+      margin: 0 0 30px;
+    }
+
+  }
+
+}

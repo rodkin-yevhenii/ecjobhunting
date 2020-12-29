@@ -1,0 +1,163 @@
+.filter {
+  display: none;
+  width: 290px;
+  padding: 20px 15px;
+  border-radius: $br;
+  background-color: $color-grey-light;
+  position: absolute;
+  left: 0;
+  top: calc(100% - 30px);
+  z-index: 1;
+
+  .ys-select {
+    margin: 20px 0 0;
+  }
+
+  button {
+    width: 100%;
+    margin: 20px 0 0;
+  }
+
+  &-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+
+    li {
+      margin: 5px 10px 5px 0;
+
+      &:last-child {
+        margin: 5px 0;
+      }
+
+      a {
+        display: block;
+        padding: 0 20px;
+        border-radius: 3px;
+        font-size: 16px;
+        line-height: 30px;
+        background-color: $color-grey-light;
+
+        &.active {
+          background-color: #292b32;
+          color: $color-white;
+        }
+
+        &:hover {
+          background-color: $color-grey;
+          text-decoration: none;
+        }
+
+      }
+
+    }
+
+  }
+
+  &-sidebar {
+    padding: 30px 50px 50px;
+    background-color: $color-grey-light;
+    border-radius: $br;
+
+    ul {
+      list-style: none;
+
+      li {
+        padding: 10px 0;
+        border-top: 1px solid $color-grey;
+
+        &:last-child {
+          border-bottom: 1px solid $color-grey;
+        }
+
+      }
+
+    }
+
+  }
+
+  &-database {
+    display: none;
+    width: calc(100% + 30px);
+    margin: 0 0 0 -15px;
+    padding: 15px 15px 20px;
+    background-color: $color-grey-light;
+    border-radius: $br;
+
+    &.active {
+      display: block;
+    }
+
+    &-handler {
+
+      &:not(.active):hover,
+      &:not(.active):focus,
+      &:not(.active):active {
+        background-color: $color-white!important;
+        border-color: $color-primary!important;
+        color: $color-primary!important;
+      }
+
+      &:not(:disabled):not(.disabled).active {
+        background-color: $color-primary;
+        border-color: $color-primary;
+        color: $color-white;
+      }
+
+    }
+
+    .field-skills-list {
+
+      li {
+        background-color: $color-white;
+      }
+
+    }
+
+    .noUi-target.noUi-horizontal {
+      background: $color-primary;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+      height: 3px;
+    }
+
+    .noUi-handle.noUi-handle-lower {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      top: -12px;
+
+      &:before,
+      &:after {
+        display: none;
+      }
+
+    }
+
+    @include more-768 {
+      display: block;
+      width: 100%;
+      margin: 0;
+      background-color: transparent;
+
+      .field-skills-list li {
+        background-color: $color-grey-light;
+      }
+
+    }
+
+  }
+
+  @include more-768 {
+    left: 15px;
+  }
+
+  @include more-1200 {
+    display: block!important;
+    width: 100%;
+    padding: 50px;
+    position: static;
+  }
+
+}

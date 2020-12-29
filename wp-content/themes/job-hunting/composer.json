@@ -1,0 +1,13 @@
+{
+  "name": "valovenko/ecjobhunting",
+  "authors": [
+    {
+      "name": "Alina Valovenko"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "EcJobHunting\\": "wp-content/themes/job-hunting/inc/"
+    }
+  }
+}

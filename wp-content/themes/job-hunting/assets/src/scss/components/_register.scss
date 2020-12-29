@@ -1,0 +1,51 @@
+.register {
+  background-color: $color-grey-light;
+
+  &-item {
+    margin: 0 0 50px;
+
+    &:last-of-type {
+      margin: 0;
+    }
+
+    &-icon {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 70px;
+      height: 70px;
+      margin: 0 0 20px;
+
+      img {
+        max-height: 100%;
+      }
+
+    }
+
+    p {
+      margin: 15px 0 30px;
+    }
+
+    @include more-768 {
+      margin: 0;
+    }
+
+  }
+
+  @include more-1200 {
+    padding: 110px 15px;
+
+    &-item {
+      padding: 0 20px 0 95px;
+
+      &-icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+    }
+
+  }
+
+}

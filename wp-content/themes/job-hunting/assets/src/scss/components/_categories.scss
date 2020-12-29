@@ -1,0 +1,18 @@
+.categories {
+  padding: 40px 15px 0;
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    list-style: none;
+
+    li {
+      margin: 6px;
+    }
+
+  }
+
+}

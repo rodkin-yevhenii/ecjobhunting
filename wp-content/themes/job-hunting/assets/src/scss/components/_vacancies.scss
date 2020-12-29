@@ -1,0 +1,208 @@
+.vacancies {
+
+  &-item {
+    padding: 20px 0 60px;
+    border-top: 1px solid $color-grey;
+    position: relative;
+
+    &:last-of-type {
+      border-bottom: 1px solid $color-grey;
+    }
+
+    ul {
+      list-style: none;
+
+      li {
+        margin: 10px 0;
+      }
+
+    }
+
+    p {
+      margin: 0;
+    }
+
+  }
+
+  &-header {
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      line-height: 24px;
+      color: $color-primary;
+    }
+
+    a {
+      position: absolute;
+      left: 0;
+      bottom: 20px;
+
+      i {
+        margin: 0 10px 0 0;
+      }
+
+    }
+
+  }
+
+  @include more-768 {
+
+    &-item {
+      padding: 25px 0;
+
+      ul {
+        display: flex;
+        align-items: center;
+
+        li {
+          margin: 5px 25px 5px 0;
+
+          &:last-child {
+            margin: 5px 0;
+          }
+
+        }
+
+      }
+
+      p {
+        margin: 10px 0 0;
+      }
+
+    }
+
+    &-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      a {
+        position: static;
+      }
+
+    }
+
+  }
+
+}
+
+.vacancy {
+
+  &-header {
+
+    strong {
+      display: block;
+      font-size: 20px;
+      line-height: 24px;
+      font-weight: 400;
+    }
+
+    span {
+      margin: 0 20px 0 0;
+    }
+
+    ul {
+      list-style: none;
+
+      li {
+        display: flex;
+        margin: 10px 0;
+
+        &:before {
+          content: '\f00c';
+          display: block;
+          margin: 0 20px 0 0;
+          font-family: FontAwesome, sans-serif;
+          color: $color-primary;
+          font-size: 18px;
+        }
+
+      }
+
+    }
+
+  }
+
+  &-image {
+    width: 270px;
+
+    img {
+      width: 100%;
+    }
+
+  }
+
+  &-footer {
+
+    .btn {
+      width: 100%;
+      margin: 10px 0;
+    }
+
+  }
+
+  &-company {
+    display: block;
+    margin: 20px 0 10px;
+    font-family: $font;
+    color: $color-primary;
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  @include more-768 {
+
+    &-header {
+
+      ul {
+        display: flex;
+        justify-content: space-between;
+
+        li {
+          margin: 10px 50px 0 0;
+        }
+
+      }
+
+    }
+
+    &-image {
+      margin: 0 30px 0 0;
+    }
+
+    &-company {
+      margin: 0 0 10px;
+    }
+
+    &-footer {
+      display: flex;
+
+      .btn {
+        width: auto;
+        margin: 0 30px 0 0;
+
+        &:last-of-type {
+          margin: 0;
+        }
+
+      }
+
+    }
+
+  }
+
+  @include more-1200 {
+
+    &-image {
+      width: 100%;
+      margin: 0 0 20px;
+    }
+
+    &-footer {
+      margin: 40px 0 0;
+    }
+
+  }
+
+}

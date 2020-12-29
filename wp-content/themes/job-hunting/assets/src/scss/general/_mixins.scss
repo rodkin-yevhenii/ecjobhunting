@@ -1,0 +1,159 @@
+@mixin more-400 {
+  @media (min-width: 400px) {
+    @content;
+  }
+}
+
+@mixin more-576 {
+  @media (min-width: 576px) {
+    @content;
+  }
+}
+
+@mixin more-768 {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin more-992 {
+  @media (min-width: 992px) {
+    @content;
+  }
+}
+
+@mixin more-1200 {
+  @media (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin input-placeholder {
+  font-family: $font;
+  font-size: 16px;
+  line-height: 50px;
+  color: $color-black;
+  opacity: 1;
+}
+
+@mixin select-arrow ($color) {
+  position: relative;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 1px;
+    margin: auto;
+    background-color: $color;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    transform-origin: center center;
+  }
+
+  &:before {
+    right: 28px;
+    transform: rotate(45deg);
+  }
+
+  &:after {
+    right: 20px;
+    transform: rotate(-45deg);
+  }
+
+  &.active {
+
+    &:before {
+      transform: rotate(-45deg);
+    }
+
+    &:after {
+      transform: rotate(45deg);
+    }
+
+  }
+
+}
+
+@mixin select-arrow-top ($color) {
+  position: relative;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 1px;
+    margin: auto;
+    background-color: $color;
+    position: absolute;
+    top: 12px;
+    transform-origin: center center;
+  }
+
+  &:before {
+    right: 28px;
+    transform: rotate(45deg);
+  }
+
+  &:after {
+    right: 20px;
+    transform: rotate(-45deg);
+  }
+
+  &:not(.collapsed) {
+
+    &:before {
+      transform: rotate(-45deg);
+    }
+
+    &:after {
+      transform: rotate(45deg);
+    }
+
+  }
+
+}
+
+@mixin select-arrow-small ($color) {
+  position: relative;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 1px;
+    margin: auto;
+    background-color: $color;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    transform-origin: center center;
+  }
+
+  &:before {
+    right: 16px;
+    transform: rotate(45deg);
+  }
+
+  &:after {
+    right: 10px;
+    transform: rotate(-45deg);
+  }
+
+  &.active {
+
+    &:before {
+      transform: rotate(-45deg);
+    }
+
+    &:after {
+      transform: rotate(45deg);
+    }
+
+  }
+
+}

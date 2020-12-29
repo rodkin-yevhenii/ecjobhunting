@@ -1,0 +1,28 @@
+@import "general/fonts";
+
+@import "font-awesome/font-awesome";
+@import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/slick-carousel/slick/slick.scss";
+@import "../../node_modules/nouislider/distribute/nouislider.min.css";
+//@import "../../node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.css";
+//@import "../../node_modules/air-datepicker/dist/css/datepicker.min.css";
+//@import "../../node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css";
+
+
+@import "general/variables";
+@import "general/mixins";
+
+@import "general/general";
+@import "components/modal";
+@import "components/header";
+@import "components/footer";
+@import "components/hero";
+@import "components/categories";
+@import "components/register";
+@import "components/results";
+@import "components/account";
+@import "components/vacancies";
+@import "components/card";
+@import "components/profile";
+@import "components/candidate";
+@import "components/filter";

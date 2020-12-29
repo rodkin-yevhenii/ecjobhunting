@@ -1,0 +1,91 @@
+.candidate {
+
+  &-list {
+    margin: 0 0 40px;
+
+    .slick-dots {
+      display: flex;
+      margin: 15px 0 0;
+      justify-content: center;
+      align-items: center;
+      list-style: none;
+      font-size: 0;
+
+      li {
+        margin: 0 3px;
+
+        button {
+          display: block;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: $color-black;
+          border: none;
+          color: transparent;
+        }
+
+        &.slick-active button {
+          background-color: $color-primary;
+        }
+
+      }
+
+    }
+
+    @include more-768 {
+      width: calc(100% + 30px);
+      margin: 25px -15px 40px;
+
+      .slick-arrow {
+        display: block;
+        width: 50px;
+        height: 50px;
+        border: none;
+        background-color: $color-grey-light;
+        background-image: url(../images/icons/arrows.png);
+        color: transparent;
+        font-size: 0;
+        position: absolute;
+        top: -75px;
+
+        &:hover {
+          background-color: $color-grey;
+        }
+
+        &.slick-prev {
+          right: 80px;
+          background-position: left top;
+        }
+
+        &.slick-next {
+          right: 15px;
+          background-position: right top;
+        }
+
+      }
+
+    }
+
+  }
+
+  &-card {
+    padding: 20px 20px 40px;
+    background-color: $color-grey-light;
+    border-radius: 3px;
+
+    .rate-buttons {
+      margin: 20px 0 0 30px;
+    }
+
+    @include more-768 {
+      margin: 0 15px;
+      padding: 25px 30px 40px;
+    }
+
+    @include more-1200 {
+      padding: 30px 40px 40px;
+    }
+
+  }
+
+}

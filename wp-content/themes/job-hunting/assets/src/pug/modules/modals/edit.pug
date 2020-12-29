@@ -1,0 +1,27 @@
+.modal.fade(id="edit" tabindex="-1" aria-hidden="true")
+    .modal-dialog
+        form.modal-content
+            .modal-header
+                h2.no-decor Lorem ipsum
+                button(type="button" data-dismiss="modal" aria-label="Close").close
+                    span(aria-hidden="true") &times;
+            .modal-body
+                .profile-photo
+                    .profile-photo-image
+                        img(src="images/account.jpg" alt="photo")
+                    input(type="file" id="profile-photo-modal")
+                    label(for="profile-photo-modal") Add Profile Photo
+                label(for="edit-name").field-label Full Name
+                input(type="text" id="edit-name").field-text
+                label(for="edit-headline").field-label Headline (optional)
+                input(type="text" id="edit-headline").field-text
+                label(for="edit-location").field-label Location
+                input(type="text" id="edit-location").field-text
+                label(for="edit-zip").field-label ZIP / Postal Code
+                input(type="text" id="edit-zip").field-text
+                fieldset
+                    input(type="checkbox" id="edit-checkbox")
+                    label(for="edit-checkbox") I am willing to relocate
+            .modal-footer
+                button(type="submit").btn.btn-primary Save
+                button(type="button" data-dismiss="modal" aria-label="Close").btn.btn-outline-primary Cancel

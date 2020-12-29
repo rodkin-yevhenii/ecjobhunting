@@ -1,0 +1,12 @@
+extends ../layout/inner-logge-in
+
+block title
+    | Employer: dashboard
+
+block content
+    include ../modules/pages/employer/menu/menu-dashboard
+    include ../modules/pages/employer/dashboard
+
+block scripts
+    script(src="js/index/libs.js")
+    script(src="js/index/scripts.js")

@@ -1,0 +1,97 @@
+.hero {
+  padding: 40px 15px;
+  background: $color-black url(../images/background-hero.jpg) no-repeat center center;
+  background-size: cover;
+  text-align: center;
+
+  h1 {
+    margin: 0 0 20px;
+    font-family: $font-title;
+    font-size: 36px;
+    line-height: 42px;
+    color: $color-white;
+    font-weight: 400;
+    position: static;
+
+    &:after {
+      display: none;
+    }
+
+  }
+
+  &-numbers {
+    margin: 10px 0 5px;
+    color: $color-white;
+
+    strong {
+      display: block;
+      font-family: $font-title;
+      font-size: 30px;
+      line-height: 30px;
+    }
+
+    span {
+      line-height: 30px;
+    }
+
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+  }
+
+  .field-text {
+    border: none;
+  }
+
+  &-form {
+    padding: 30px 15px;
+    background-color: $color-grey-light;
+
+    .field-text {
+      padding: 0 30px;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+  }
+
+  @include more-768 {
+    padding: 100px 0;
+
+    h1 {
+      margin: 0 0 30px;
+    }
+
+    &-numbers {
+      margin: 40px 0 0;
+
+      strong {
+        margin: 0 0 10px;
+      }
+
+    }
+
+    .field-text {
+      padding: 0 30px;
+    }
+
+    &-form {
+      padding: 60px 0;
+    }
+
+  }
+
+  @include more-1200 {
+
+    h1 {
+      font-size: 48px;
+      line-height: 56px;
+    }
+
+  }
+
+}

@@ -1,0 +1,27 @@
+header.header
+    .container
+        .row.align-items-md-center
+            .col-6.col-md-3
+                .header-logo
+                    img(src="images/logo-2x.jpg" alt="")
+            .col-6.col-md-5.col-xl-6.align-self-md-center.d-flex.justify-content-end.justify-content-xl-start
+                .header-burger.d-md-none
+                    span
+                nav
+                    ul.header-menu
+                        li
+                            a(href="#").active Home
+                        li
+                            a(href="#") Jobs
+                        li
+                            a(href="#") About
+                        li
+                            a(href="#") Contact
+            .col.d-none.d-md-block.col-md-4.col-xl-3.header-account-wrapper
+                .header-account
+                    .header-account-image
+                        img(src="images/account.jpg" alt="account")
+                    .header-account-content
+                        span EmployerName
+                        i.fa.fa-power-off
+                        a(href="#") logout

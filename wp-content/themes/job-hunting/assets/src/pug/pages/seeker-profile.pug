@@ -1,0 +1,22 @@
+extends ../layout/inner-logge-in
+
+block title
+    | Seeker-profile
+
+block content
+    include ../modules/pages/seeker-profile/menu
+    .container
+        .row.d-md-block.d-xl-flex.my-3.my-md-4.my-xl-5.clearfix
+            .col-12.order-0.col-md-5.float-md-left.col-xl-3
+                include ../modules/pages/seeker-profile/info
+            .col-12.order-2.col-md-7.float-md-right.col-xl-6.order-xl-1.mb-5
+                include ../modules/pages/seeker-profile/sections
+            .col-12.order-1.col-md-5.float-md-left.col-xl-3.order-xl-2
+                include ../modules/pages/seeker-profile/progress
+
+block modals
+    include ../modules/modals/edit
+
+block scripts
+    script(src="js/index/libs.js")
+    script(src="js/index/scripts.js")

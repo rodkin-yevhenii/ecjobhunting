@@ -1,0 +1,83 @@
+.account {
+  padding: 40px 15px 50px;
+  position: relative;
+
+  &-menu {
+    padding: 15px 0;
+    background-color: #292b32;
+
+    ul {
+      display: flex;
+      align-items: center;
+      align-content: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      li {
+        margin: 8px 25px;
+
+        &:first-child {
+          margin: 8px 25px 8px 0;
+        }
+
+        &:last-child {
+          margin: 8px 0 8px 25px;
+        }
+
+        a {
+          color: $color-white;
+          text-decoration: none;
+
+          &:hover {
+            color: $color-primary;
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    width: calc(100% - 60px);
+    height: 1px;
+    margin: auto;
+    background-color: $color-grey;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  button[type="submit"] {
+    margin: 30px 0 0;
+  }
+
+  .field-label {
+    margin: 15px 0 10px;
+  }
+
+  h3 {
+    margin: 20px 0 10px;
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 400;
+  }
+
+  form.disabled {
+
+    h3 {
+      color: $color-secondary;
+    }
+
+  }
+
+  .custom-handler + form {
+    padding: 0 0 0 75px;
+  }
+
+}
