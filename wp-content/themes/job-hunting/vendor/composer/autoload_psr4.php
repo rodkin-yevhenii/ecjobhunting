@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'EcJobHunting\\' => array($baseDir . '/wp-content/themes/job-hunting/inc'),
+    'EcJobHunting\\' => array($baseDir . '/inc'),
 );

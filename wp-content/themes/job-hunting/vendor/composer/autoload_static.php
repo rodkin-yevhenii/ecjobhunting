@@ -16,7 +16,7 @@ class ComposerStaticInitd3201fb2e183ce71e5d8bac248117927
     public static $prefixDirsPsr4 = array (
         'EcJobHunting\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/wp-content/themes/job-hunting/inc',
+            0 => __DIR__ . '/../..' . '/inc',
         ),
     );
 

@@ -7,7 +7,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "EcJobHunting\\": "wp-content/themes/job-hunting/inc/"
+      "EcJobHunting\\": "inc/"
     }
   }
 }
