@@ -3,6 +3,12 @@
  * Template Name: Candidate Profile
  */
 
+use EcJobHunting\Service\User\UserService;
+
+if (!UserService::isCandidate()) {
+    wp_redirect(get_post_type_archive_link('cv'), 301);
+}
+$candidate = UserService::getUser(get_current_user_id());
 get_header(); ?>
     <nav class="menu">
         <div class="container p-0">
@@ -10,7 +16,7 @@ get_header(); ?>
                 <div class="col-12 col-md-3 d-xl-none"><span>Account menu:</span></div>
                 <div class="col-12 col-md-6 col-xl-12">
                     <ul data-select>
-                        <li><a href="#">Jobs</a></li>
+                        <li><a href="<?php echo get_post_type_archive_link('vacancy')?>"><?php _e('Jobs', 'ecjobhunting'); ?></a></li>
                         <li><a href="#">Messages</a></li>
                         <li data-select-value><a>Profile</a></li>
                     </ul>
@@ -23,11 +29,12 @@ get_header(); ?>
             <div class="col-12 order-0 col-md-5 float-md-left col-xl-3">
                 <div class="profile-item">
                     <div class="profile-header">
-                        <button class="profile-edit-link" type="button" data-toggle="modal" data-target="#edit">Edit</button>
-                        <h2 class="no-decor">About Me</h2>
+                        <button class="profile-edit-link" type="button" data-toggle="modal" data-target="#edit">Edit
+                        </button>
+                        <h2 class="no-decor"><?php _e('About Me', 'ecjobhunting'); ?></h2>
                     </div>
                     <form class="profile-photo">
-                        <div class="profile-photo-image"><img src="images/account.jpg" alt="photo"></div>
+                        <div class="profile-photo-image"><img src="<?php echo $candidate->getPhoto(); ?>" alt="photo"></div>
                         <input type="file" id="profile-photo">
                         <label for="profile-photo">+</label>
                     </form>
@@ -40,11 +47,13 @@ get_header(); ?>
                     </div>
                     <ul>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/envelope.png" alt="icon"></div><span>yar-shabanov@yandex.ru</span><span class="color-red">Verify your email to receive application updates from employers.</span>
+                            <div class="profile-icon"><img src="images/icons/envelope.png" alt="icon"></div>
+                            <span>yar-shabanov@yandex.ru</span><span class="color-red">Verify your email to receive application updates from employers.</span>
                             <button class="btn btn-primary">Resend Confirmation</button>
                         </li>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/mobile.png" alt="icon"></div><a href="#">Add Phone Number</a>
+                            <div class="profile-icon"><img src="images/icons/mobile.png" alt="icon"></div>
+                            <a href="#">Add Phone Number</a>
                         </li>
                     </ul>
                 </div>
@@ -55,16 +64,20 @@ get_header(); ?>
                     </div>
                     <ul>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/envelope.png" alt="icon"></div><a href="#">Add Website</a>
+                            <div class="profile-icon"><img src="images/icons/envelope.png" alt="icon"></div>
+                            <a href="#">Add Website</a>
                         </li>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/twitter.png" alt="icon"></div><a href="#">Add Twitter Profile</a>
+                            <div class="profile-icon"><img src="images/icons/twitter.png" alt="icon"></div>
+                            <a href="#">Add Twitter Profile</a>
                         </li>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/instagram.png" alt="icon"></div><a href="#">Add LinkedIn Profile</a>
+                            <div class="profile-icon"><img src="images/icons/instagram.png" alt="icon"></div>
+                            <a href="#">Add LinkedIn Profile</a>
                         </li>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/facebook.png" alt="icon"></div><a href="#">Add Facebook Profile</a>
+                            <div class="profile-icon"><img src="images/icons/facebook.png" alt="icon"></div>
+                            <a href="#">Add Facebook Profile</a>
                         </li>
                     </ul>
                 </div>
@@ -75,7 +88,8 @@ get_header(); ?>
                     <div class="custom-handler">
                         <div></div>
                     </div>
-                    <p>Private: Your profile is not publicly accessible. However, it is viewable as a part of your applications.</p>
+                    <p>Private: Your profile is not publicly accessible. However, it is viewable as a part of your
+                        applications.</p>
                 </div>
                 <div class="profile-header">
                     <h2 class="no-decor">Work Experience</h2>
@@ -85,7 +99,10 @@ get_header(); ?>
                     <div class="profile-subitem"><span>Aug 2019 - Current</span>
                         <h3>web designer</h3><strong>companyName</strong>
                         <button class="btn btn-outline-secondary">Edit</button>
-                        <p>Enthusiastic and self-motivated web designer with 3+ years of experience. Eager to join WebHouse to bring top-class frontend development, UX, and visual design skills. In previous roles redesigned a SaaS website that reduced CAC by 50%, and implemented an SEO-optimized design that boosted traffic by 300%.</p>
+                        <p>Enthusiastic and self-motivated web designer with 3+ years of experience. Eager to join
+                            WebHouse to bring top-class frontend development, UX, and visual design skills. In previous
+                            roles redesigned a SaaS website that reduced CAC by 50%, and implemented an SEO-optimized
+                            design that boosted traffic by 300%.</p>
                     </div>
                     <div class="profile-subitem"><span>Aug 2016 - Aug 2017</span>
                         <h3>web designer</h3><strong>companyName</strong>
@@ -110,7 +127,8 @@ get_header(); ?>
                     <div class="profile-header">
                         <h2 class="no-decor">References</h2>
                     </div>
-                    <p>Hiring managers prefer candidates with references! Ask a former co-worker, manager, teacher or friend to write a reference for you.</p>
+                    <p>Hiring managers prefer candidates with references! Ask a former co-worker, manager, teacher or
+                        friend to write a reference for you.</p>
                     <button class="btn btn-outline-secondary btn-full">Request References</button>
                 </div>
                 <div class="profile-item">
@@ -139,24 +157,31 @@ get_header(); ?>
                     <p>Finish your profile to unlock better job matching and stand out to hiring managers!</p>
                     <ul>
                         <li>
-                            <div class="icon-check active"></div><span>Register with EcJobHunting</span>
+                            <div class="icon-check active"></div>
+                            <span>Register with EcJobHunting</span>
                         </li>
                         <li>
-                            <div class="icon-check"></div><span>Add Resume</span>
+                            <div class="icon-check"></div>
+                            <span>Add Resume</span>
                         </li>
                         <li>
-                            <div class="icon-check"></div><span>Add Phone Number</span>
+                            <div class="icon-check"></div>
+                            <span>Add Phone Number</span>
                         </li>
                         <li>
-                            <div class="icon-check"></div><span>Add Skills</span>
+                            <div class="icon-check"></div>
+                            <span>Add Skills</span>
                         </li>
                         <li>
-                            <div class="icon-check"></div><span>Add Headline</span>
+                            <div class="icon-check"></div>
+                            <span>Add Headline</span>
                         </li>
                         <li>
-                            <div class="icon-check"></div><span>Receive a Reference</span>
+                            <div class="icon-check"></div>
+                            <span>Receive a Reference</span>
                         </li>
-                    </ul><a class="btn btn-primary btn-full mt-4" href="#">I got hired!</a>
+                    </ul>
+                    <a class="btn btn-primary btn-full mt-4" href="#">I got hired!</a>
                 </div>
             </div>
         </div>
@@ -166,11 +191,12 @@ get_header(); ?>
             <form class="modal-content">
                 <div class="modal-header">
                     <h2 class="no-decor">Lorem ipsum</h2>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="profile-photo">
-                        <div class="profile-photo-image"><img src="images/account.jpg" alt="photo"></div>
+                        <div class="profile-photo-image"><img src="<?php echo $candidate->getPhoto(); ?>" alt="photo"></div>
                         <input type="file" id="profile-photo-modal">
                         <label for="profile-photo-modal">Add Profile Photo</label>
                     </div>
@@ -189,7 +215,9 @@ get_header(); ?>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="submit">Save</button>
-                    <button class="btn btn-outline-primary" type="button" data-dismiss="modal" aria-label="Close">Cancel</button>
+                    <button class="btn btn-outline-primary" type="button" data-dismiss="modal" aria-label="Close">
+                        Cancel
+                    </button>
                 </div>
             </form>
         </div>

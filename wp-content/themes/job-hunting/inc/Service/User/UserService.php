@@ -2,6 +2,10 @@
 
 namespace EcJobHunting\Service\User;
 
+use EcJobHunting\Entity\Candidate;
+use EcJobHunting\Entity\Company;
+use EcJobHunting\Entity\EcJobUser;
+
 class UserService
 {
     private static string $candidateRoleName = 'candidate';
@@ -39,7 +43,7 @@ class UserService
 
     public static function getPhotoUrl($userId = null)
     {
-        if(!$userId){
+        if (!$userId) {
             $userId = get_current_user_id();
         }
         $photo = get_field('photo', 'user_' . $userId);
@@ -78,5 +82,20 @@ class UserService
     public function editLoginUrl()
     {
         return site_url('/login/');
+    }
+
+    public static function getUser($id = null)
+    {
+        if (!$id) {
+            $user = wp_get_current_user();
+        } else {
+            $user = get_user_by('id', $id);
+        }
+        if (in_array('candidate', $user->roles)) {
+            return new Candidate($user);
+        } elseif (in_array('employer', $user->roles)) {
+            return new Company($user);
+        }
+        return new EcJobUser($user);
     }
 }
