@@ -2,7 +2,7 @@
 
 namespace EcJobHunting\Entity;
 
-class Company extends UserAbstract
+class EcJobUser extends UserAbstract
 {
 
 }

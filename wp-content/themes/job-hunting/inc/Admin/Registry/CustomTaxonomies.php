@@ -51,7 +51,7 @@ class CustomTaxonomies
     {
         register_taxonomy(
             'type',
-            ['vacancy'],
+            ['vacancy', 'cv'],
             [
                 'label' => 'Employment Type',
                 'labels' => [
@@ -86,7 +86,7 @@ class CustomTaxonomies
     {
         register_taxonomy(
             'skill',
-            ['vacancy'],
+            ['vacancy', 'cv'],
             [
                 'label' => 'Skills',
                 'labels' => [
@@ -121,7 +121,7 @@ class CustomTaxonomies
     {
         register_taxonomy(
             'location',
-            ['vacancy'],
+            ['vacancy', 'cv'],
             [
                 'label' => 'Locations',
                 'labels' => [
