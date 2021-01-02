@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta charset="<?php use EcJobHunting\Service\User\UserService;
+
+    bloginfo('charset'); ?>">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -34,12 +36,29 @@
                         ]
                     ); ?>
                 <?php endif; ?>
-                <div class="col d-none d-md-block col-md-3 col-xl-2 header-button-wrapper">
-                    <a class="btn btn-outline-white" href="<?php echo wp_login_url(); ?>"
-                       title="<?php _e('Login / Sign Up', 'ecjobhunting'); ?>"><?php _e(
-                            'Login / Sign Up',
-                            'ecjobhunting'
-                        ); ?></a></div>
+                <?php if (is_user_logged_in()): ?>
+                    <div class="col d-none d-md-block col-md-4 col-xl-3 header-account-wrapper">
+                        <div class="header-account">
+                            <div class="header-account-image"><img src="<?php echo UserService::getPhotoUrl(); ?>"
+                                                                   alt="account"></div>
+                            <div class="header-account-content"><span><?php echo ucwords(
+                                        wp_get_current_user()->display_name ?? "John Dou"
+                                    ); ?></span><i class="fa fa-power-off"></i><a
+                                        href="<?php echo wp_logout_url(); ?>" data-abc="true"><?php _e(
+                                        'logout',
+                                        'ecjobhunting'
+                                    ); ?></a></div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="col d-none d-md-block col-md-3 col-xl-2 header-button-wrapper">
+                        <a class="btn btn-outline-white" href="<?php echo wp_login_url(); ?>"
+                           title="<?php _e('Login / Sign Up', 'ecjobhunting'); ?>"><?php _e(
+                                'Login / Sign Up',
+                                'ecjobhunting'
+                            ); ?></a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </header>

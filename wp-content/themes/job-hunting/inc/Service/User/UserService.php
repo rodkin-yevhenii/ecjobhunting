@@ -37,6 +37,16 @@ class UserService
         return in_array(static::$employerRoleName, self::getCurrentUserRole()) ?? false;
     }
 
+    public static function getPhotoUrl($userId = null)
+    {
+        if(!$userId){
+            $userId = get_current_user_id();
+        }
+        $photo = get_field('photo', 'user_' . $userId);
+
+        return empty($photo) ? IMG_URI . 'account.jpg' : $photo;
+    }
+
     private function hooks()
     {
         add_action('template_redirect', [$this, 'redirectIfLogin']);

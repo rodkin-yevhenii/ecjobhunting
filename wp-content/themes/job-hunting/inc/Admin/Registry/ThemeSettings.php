@@ -12,12 +12,34 @@ class ThemeSettings
 
     public static function afterThemeSetup()
     {
+        static::registerMenu();
+        //Disable Admin panel for non admin users
+        static::disableAdminBar();
+    }
+
+    private static function registerMenu()
+    {
         register_nav_menus(
             [
                 'top' => 'Top Bar',
                 'primary' => 'Primary',
             ]
         );
+    }
+
+    private static function disableAdminBar()
+    {
+        if (!current_user_can('administrator')) {
+            show_admin_bar(false);
+            add_action(
+                'admin_init',
+                function () {
+                    if (is_admin()) {
+                      wp_redirect(site_url(), 301);
+                    }
+                }
+            );
+        }
     }
 
     public static function init()
