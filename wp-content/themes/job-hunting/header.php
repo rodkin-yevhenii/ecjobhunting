@@ -1,8 +1,8 @@
-<?php  global $ec_site; ?>
+<?php global $ec_site; ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <?php wp_title(); ?>
+    <meta charset="<?php bloginfo('charset'); ?>">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -14,7 +14,15 @@
         <div class="container">
             <div class="row align-items-md-center">
                 <div class="col-6 col-md-3">
-                    <div class="header-logo"><img src="<?php echo $ec_site->getLogoUrl(); ?>" alt=""></div>
+                    <div class="header-logo">
+                        <?php if (is_front_page()): ?>
+                            <img src="<?php echo $ec_site->getLogoUrl(); ?>"
+                                 alt="<?php _e('EC Job Hunting Logo', 'ecjobhunting'); ?>">
+                        <?php else: ?>
+                            <a href="<?php echo home_url('/'); ?>" title="<?php _e('Home', 'ecjobhunting'); ?>"><img
+                                        src="<?php echo $ec_site->getLogoUrl(); ?>" alt=""></a>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <?php if (has_nav_menu('top')) : ?>
                     <?php wp_nav_menu(
@@ -26,16 +34,13 @@
                         ]
                     ); ?>
                 <?php endif; ?>
-                <div class=" col d-none d-md-block col-md-4 col-xl-3 header-account-wrapper">
-                        <div class="header-account">
-                            <div class="header-account-image"><img src="<?php echo IMG_URI; ?>account.jpg"
-                                                                   alt="account">
-                            </div>
-                            <div class="header-account-content"><span>EmployerName</span><i class="fa fa-power-off"></i><a
-                                        href="#">logout</a></div>
-                        </div>
-                    </div>
-                </div>
+                <div class="col d-none d-md-block col-md-3 col-xl-2 header-button-wrapper">
+                    <a class="btn btn-outline-white" href="<?php echo wp_login_url(); ?>"
+                       title="<?php _e('Login / Sign Up', 'ecjobhunting'); ?>"><?php _e(
+                            'Login / Sign Up',
+                            'ecjobhunting'
+                        ); ?></a></div>
             </div>
+        </div>
     </header>
     <main>
