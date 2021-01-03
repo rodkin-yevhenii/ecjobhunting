@@ -10,23 +10,6 @@ if (!UserService::isCandidate()) {
 }
 $candidate = UserService::getUser(get_current_user_id());
 get_header(); ?>
-    <nav class="menu">
-        <div class="container p-0">
-            <div class="row">
-                <div class="col-12 col-md-3 d-xl-none"><span>Account menu:</span></div>
-                <div class="col-12 col-md-6 col-xl-12">
-                    <ul data-select>
-                        <li><a href="<?php echo get_post_type_archive_link('vacancy') ?>"><?php _e(
-                                    'Jobs',
-                                    'ecjobhunting'
-                                ); ?></a></li>
-                        <li><a href="#">Messages</a></li>
-                        <li data-select-value><a>Profile</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
     <div class="container">
         <div class="row d-md-block d-xl-flex my-3 my-md-4 my-xl-5 clearfix">
             <div class="col-12 order-0 col-md-5 float-md-left col-xl-3">

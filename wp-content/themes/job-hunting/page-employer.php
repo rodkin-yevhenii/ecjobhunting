@@ -4,25 +4,6 @@
  */
 
 get_header(); ?>
-    <nav class="menu menu-jobs">
-        <div class="container p-0">
-            <div class="row">
-                <div class="col-12 col-md-3 d-xl-none"><span>Account menu:</span></div>
-                <div class="col-12 col-md-6 col-xl-12">
-                    <ul data-select>
-                        <li><a href="/employer-post-job.html">Post a Job</a></li>
-                        <li data-select-value><a>Dashboard</a></li>
-                        <li><a href="/employer-candidates.html">Candidates</a></li>
-                        <li><a href="/employer-jobs.html">Jobs</a></li>
-                        <li><a href="/employer-messages.html">Messages</a></li>
-                        <li><a href="/employer-database.html">Resume Database</a></li>
-                        <li><a href="/employer-help.html">Help</a></li>
-                        <li><a href="/employer-activate.html"><img src="images/icons/active.png" alt="some text" /> Activate</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
     <div class="page">
         <div class="container mt-4">
             <div class="row">

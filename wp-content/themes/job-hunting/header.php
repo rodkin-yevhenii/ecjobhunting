@@ -1,19 +1,20 @@
 <?php
 
 use EcJobHunting\Entity\EcJobUser;
+use EcJobHunting\Service\User\UserService;
 
 global $ec_site;
 $user = new EcJobUser(wp_get_current_user());
 ?>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="<?php bloginfo('charset'); ?>">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <?php wp_head(); ?>
-</head>
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="<?php bloginfo('charset'); ?>">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <?php wp_head(); ?>
+    </head>
 <body <?php body_class(); ?>>
 <div class="wrapper">
     <header class="header">
@@ -26,7 +27,8 @@ $user = new EcJobUser(wp_get_current_user());
                                  alt="<?php _e('EC Job Hunting Logo', 'ecjobhunting'); ?>">
                         <?php else: ?>
                             <a href="<?php echo home_url('/'); ?>" title="<?php _e('Home', 'ecjobhunting'); ?>"><img
-                                        src="<?php echo $ec_site->getLogoUrl(); ?>" alt="<?php _e('EC Job Hunting Logo', 'ecjobhunting'); ?>"></a>
+                                        src="<?php echo $ec_site->getLogoUrl(); ?>"
+                                        alt="<?php _e('EC Job Hunting Logo', 'ecjobhunting'); ?>"></a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -71,3 +73,8 @@ $user = new EcJobUser(wp_get_current_user());
         </div>
     </header>
     <main>
+<?php if (UserService::isCandidate()):
+    get_template_part('template-parts/candidate/profile', 'menu');
+elseif (UserService::isEmployer()):
+    get_template_part('template-parts/employer/profile', 'menu');
+endif;
