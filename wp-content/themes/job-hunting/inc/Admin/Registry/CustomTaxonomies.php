@@ -6,45 +6,9 @@ class CustomTaxonomies
 {
     public function __construct()
     {
-        $this->registerCompany();
         $this->registerType();
         $this->registerSkills();
         $this->registerLocation();
-    }
-
-    private function registerCompany()
-    {
-        register_taxonomy(
-            'company',
-            ['vacancy'],
-            [
-                'label' => 'Company',
-                'labels' => [
-                    'name' => 'Companies',
-                    'singular_name' => 'Company',
-                    'add_new' => 'Add Company',
-                    'add_new_item' => 'Create new Company',
-                    'edit_item' => 'Edit Company',
-                    'new_item' => 'New Company',
-                    'view_item' => 'View Company',
-                    'search_items' => 'Find Companies',
-                    'not_found' => 'Companies not found',
-                    'not_found_in_trash' => 'Companies not found in trash',
-                    'parent_item_colon' => '',
-                    'menu_name' => 'Companies',
-
-                ],
-                'description' => '',
-                'public' => true,
-                'hierarchical' => false,
-                'rewrite' => true,
-                'capabilities' => [],
-                'meta_box_cb' => null,
-                'show_admin_column' => false,
-                'show_in_rest' => null,
-                'rest_base' => null,
-            ]
-        );
     }
 
     private function registerType()

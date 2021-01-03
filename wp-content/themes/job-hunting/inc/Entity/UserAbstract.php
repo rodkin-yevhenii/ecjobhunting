@@ -13,8 +13,8 @@ abstract class UserAbstract implements SiteUser
 
     public function __construct($user)
     {
-     $this->user = $user;
-     $this->id = $this->user->id ?? null;
+        $this->user = $user;
+        $this->id = $this->user->id ?? null;
     }
 
     public function getUserId()
@@ -35,6 +35,11 @@ abstract class UserAbstract implements SiteUser
     public function getProfileUrl()
     {
         return get_edit_profile_url($this->id);
+    }
+
+    public function getEmail()
+    {
+        return $this->user->user_email;
     }
 
     public function setPassword($password)

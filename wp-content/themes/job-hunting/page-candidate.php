@@ -16,7 +16,10 @@ get_header(); ?>
                 <div class="col-12 col-md-3 d-xl-none"><span>Account menu:</span></div>
                 <div class="col-12 col-md-6 col-xl-12">
                     <ul data-select>
-                        <li><a href="<?php echo get_post_type_archive_link('vacancy')?>"><?php _e('Jobs', 'ecjobhunting'); ?></a></li>
+                        <li><a href="<?php echo get_post_type_archive_link('vacancy') ?>"><?php _e(
+                                    'Jobs',
+                                    'ecjobhunting'
+                                ); ?></a></li>
                         <li><a href="#">Messages</a></li>
                         <li data-select-value><a>Profile</a></li>
                     </ul>
@@ -34,11 +37,16 @@ get_header(); ?>
                         <h2 class="no-decor"><?php _e('About Me', 'ecjobhunting'); ?></h2>
                     </div>
                     <form class="profile-photo">
-                        <div class="profile-photo-image"><img src="<?php echo $candidate->getPhoto(); ?>" alt="photo"></div>
+                        <div class="profile-photo-image"><img src="<?php echo $candidate->getPhoto(); ?>" alt="photo">
+                        </div>
                         <input type="file" id="profile-photo">
                         <label for="profile-photo">+</label>
                     </form>
-                    <div class="profile-name"><strong>Nicholas Coppola</strong><span>Nyack NY</span></div>
+                    <div class="profile-name">
+                        <strong><?php echo $candidate->getName() ?></strong>
+                        <span><?php echo $candidate->getHeadline() ?></span>
+                        <span><?php echo $candidate->getLocation() ?></span>
+                    </div>
                 </div>
                 <div class="profile-item">
                     <div class="profile-header">
@@ -47,13 +55,20 @@ get_header(); ?>
                     </div>
                     <ul>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/envelope.png" alt="icon"></div>
-                            <span>yar-shabanov@yandex.ru</span><span class="color-red">Verify your email to receive application updates from employers.</span>
-                            <button class="btn btn-primary">Resend Confirmation</button>
+                            <div class="profile-icon"><?php echo getEnvelopIcon(); ?></div>
+                            <span><?php echo $candidate->getEmail(); ?></span>
+                            <?php if (!$candidate->isEmailConfirmed()): ?>
+                                <span class="color-red">Verify your email to receive application updates from employers.</span>
+                                <button class="btn btn-primary">Resend Confirmation</button>
+                            <?php endif; ?>
                         </li>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/mobile.png" alt="icon"></div>
-                            <a href="#">Add Phone Number</a>
+                            <div class="profile-icon"><?php echo getPhoneIcon(); ?></div>
+                            <?php if ($candidate->getPhoneNumber()) : ?>
+                                <span><?php echo $candidate->getPhoneNumber(); ?></span>
+                            <?php else: ?>
+                                <a href="#">Add Phone Number</a>
+                            <?php endif; ?>
                         </li>
                     </ul>
                 </div>
@@ -64,20 +79,36 @@ get_header(); ?>
                     </div>
                     <ul>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/envelope.png" alt="icon"></div>
-                            <a href="#">Add Website</a>
+                            <div class="profile-icon"><?php echo getEnvelopIcon(); ?></div>
+                            <?php if ($candidate->getWebSite()) : ?>
+                                <span><?php echo $candidate->getWebSite(); ?></span>
+                            <?php else: ?>
+                                <a href="#">Add Website</a>
+                            <?php endif; ?>
                         </li>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/twitter.png" alt="icon"></div>
-                            <a href="#">Add Twitter Profile</a>
+                            <div class="profile-icon"><?php echo getTwitterIcon(); ?></div>
+                            <?php if ($candidate->getTwitter()) : ?>
+                                <span><?php echo $candidate->getTwitter(); ?></span>
+                            <?php else: ?>
+                                <a href="#">Add Twitter Profile</a>
+                            <?php endif; ?>
                         </li>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/instagram.png" alt="icon"></div>
-                            <a href="#">Add LinkedIn Profile</a>
+                            <div class="profile-icon"><?php echo getLinkedinIcon(); ?></div>
+                            <?php if ($candidate->getLinkedin()) : ?>
+                                <span><?php echo $candidate->getLinkedin(); ?></span>
+                            <?php else: ?>
+                                <a href="#">Add LinkedIn Profile</a>
+                            <?php endif; ?>
                         </li>
                         <li>
-                            <div class="profile-icon"><img src="images/icons/facebook.png" alt="icon"></div>
-                            <a href="#">Add Facebook Profile</a>
+                            <div class="profile-icon"><?php echo getFacebookIcon(); ?></div>
+                            <?php if ($candidate->getFacebook()) : ?>
+                                <span><?php echo $candidate->getFacebook(); ?></span>
+                            <?php else: ?>
+                                <a href="#">Add Facebook Profile</a>
+                            <?php endif; ?>
                         </li>
                     </ul>
                 </div>
@@ -85,43 +116,66 @@ get_header(); ?>
             <div class="col-12 order-2 col-md-7 float-md-right col-xl-6 order-xl-1 mb-5">
                 <div class="profile-activation">
                     <h3>Let Employers Find You</h3>
-                    <div class="custom-handler">
+                    <div class="custom-handler <?php echo $candidate->isPublished() ? "active" : ""; ?>">
                         <div></div>
                     </div>
-                    <p>Private: Your profile is not publicly accessible. However, it is viewable as a part of your
-                        applications.</p>
+                    <p><?php if ($candidate->isPublished()):
+                            _e(
+                                'Public: Your profile is publicly accessible.',
+                                'ecjobhunting'
+                            );
+                        else:
+                            _e(
+                                'Private: Your profile is not publicly accessible. However, it is viewable as a part of your
+                        applications.',
+                                'ecjobhunting'
+                            );
+                        endif; ?>
+                    </p>
                 </div>
-                <div class="profile-header">
-                    <h2 class="no-decor">Work Experience</h2>
-                    <p><a href="#">Add Work Experience</a></p>
-                </div>
+                <?php if ($candidate->getSummary()): ?>
+                    <div class="profile-item">
+                        <div class="profile-header">
+                            <h2 class="no-decor">Executive Summary</h2>
+                            <p><?php echo $candidate->getSummary(); ?></p>
+                            <button class="btn btn-outline-secondary">Edit</button>
+                        </div>
+                    </div>
+                <?php endif; ?>
                 <div class="profile-item">
-                    <div class="profile-subitem"><span>Aug 2019 - Current</span>
-                        <h3>web designer</h3><strong>companyName</strong>
-                        <button class="btn btn-outline-secondary">Edit</button>
-                        <p>Enthusiastic and self-motivated web designer with 3+ years of experience. Eager to join
-                            WebHouse to bring top-class frontend development, UX, and visual design skills. In previous
-                            roles redesigned a SaaS website that reduced CAC by 50%, and implemented an SEO-optimized
-                            design that boosted traffic by 300%.</p>
+                    <div class="profile-header">
+                        <h2 class="no-decor">Work Experience</h2>
+                        <p><a href="#">Add Work Experience</a></p>
                     </div>
-                    <div class="profile-subitem"><span>Aug 2016 - Aug 2017</span>
-                        <h3>web designer</h3><strong>companyName</strong>
-                        <button class="btn btn-outline-secondary">Edit</button>
-                        <p>— Met and corresponded with clients to determine client needs for company sites</p>
-                        <p>— Created corporate web sites, portals and large-scale web applications</p>
-                        <p>— Developed and designed new web interfaces, layouts and site graphics</p>
-                    </div>
+                    <?php if (!empty($candidate->getExperience())) :
+                        foreach ($candidate->getExperience() as $experience): ?>
+                            <div class="profile-subitem"><span><?php echo getDatePeriod(
+                                        $experience['period']
+                                    ); ?></span>
+                                <h3><?php echo $experience['job_position']; ?></h3>
+                                <strong><?php echo $experience['company_name']; ?></strong>
+                                <button class="btn btn-outline-secondary">Edit</button>
+                                <p><?php echo $experience['description']; ?></p>
+                            </div>
+                        <?php endforeach;
+                    endif; ?>
                 </div>
                 <div class="profile-item">
                     <div class="profile-header">
                         <h2 class="no-decor">Education</h2>
                     </div>
                     <p><a href="#">Add Education</a></p>
-                    <div class="profile-subitem"><span>2012 - 2016</span>
-                        <h3>New York School</h3><strong>No Degree</strong><strong>Major or field of study</strong>
-                        <button class="btn btn-outline-secondary">Edit</button>
-                        <p>Description</p>
-                    </div>
+                    <?php if (!empty($candidate->getEducation())) :
+                        foreach ($candidate->getEducation() as $education): ?>
+                            <div class="profile-subitem"><span><?php echo getDatePeriod($education['period']); ?></span>
+                                <h3><?php echo $education['name']; ?></h3>
+                                <?php echo $education['degree'] ? "<strong>{$education['degree']}</strong>" : ""; ?>
+                                <?php echo $education['fields_of_study'] ? "<strong>{$education['fields_of_study']}</strong>" : ""; ?>
+                                <button class="btn btn-outline-secondary">Edit</button>
+                                <?php echo $education['description'] ? "<p>{$education['description']}</p>" : ""; ?>
+                            </div>
+                        <?php endforeach;
+                    endif; ?>
                 </div>
                 <div class="profile-item">
                     <div class="profile-header">
@@ -132,7 +186,9 @@ get_header(); ?>
                     <button class="btn btn-outline-secondary btn-full">Request References</button>
                 </div>
                 <div class="profile-item">
-                    <p><a href="#">Add Executive Summary</a></p>
+                    <?php if ($candidate->getSummary()): ?>
+                        <p><a href="#">Add Executive Summary</a></p>
+                    <?php endif; ?>
                     <p><a href="#">Add Objective</a></p>
                     <p><a href="#">Add Achievements</a></p>
                     <p><a href="#">Add Certificates and Licenses</a></p>
@@ -196,7 +252,8 @@ get_header(); ?>
                 </div>
                 <div class="modal-body">
                     <div class="profile-photo">
-                        <div class="profile-photo-image"><img src="<?php echo $candidate->getPhoto(); ?>" alt="photo"></div>
+                        <div class="profile-photo-image"><img src="<?php echo $candidate->getPhoto(); ?>" alt="photo">
+                        </div>
                         <input type="file" id="profile-photo-modal">
                         <label for="profile-photo-modal">Add Profile Photo</label>
                     </div>
