@@ -27,3 +27,37 @@ $themeInit = ThemeInit::getInstance();
 global $ec_site;
 $ec_site = new SiteSettings();
 
+//// HELPERS ////
+
+function getEnvelopIcon(){
+    return "<img src='". IMG_URI . "icons/envelope.png' alt='Envelop Icon' />";
+}
+
+function getPhoneIcon(){
+    return "<img src='". IMG_URI . "icons/mobile.png' alt='Phone Icon' />";
+}
+
+function getTwitterIcon(){
+    return "<img src='". IMG_URI . "icons/twitter.png' alt='twitter Icon' />";
+}
+
+function getLinkedinIcon(){
+    return "<img src='". IMG_URI . "icons/instagram.png' alt='Linkedin Icon' />";
+}
+function getFacebookIcon(){
+    return "<img src='". IMG_URI . "icons/facebook.png' alt='facebook Icon' />";
+}
+
+function getDatePeriod($period){
+    return sprintf(
+        '%1$s - %2$s',
+        date(
+            'F Y',
+            strtotime($period['from'])
+        ),
+        date(
+            'F Y',
+            strtotime($period['to'])
+        )
+    );
+}
