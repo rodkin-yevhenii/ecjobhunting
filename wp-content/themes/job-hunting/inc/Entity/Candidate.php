@@ -28,9 +28,9 @@ class Candidate extends UserAbstract
         $cvs = get_posts(
             [
                 'post_type' => 'cv',
-                'posts_per_page' => 1,
+                'numberposts' => 1,
                 'fields' => 'ids',
-                'post_author' => $this->getUserId(),
+                'author' => $this->getUserId(),
             ]
         );
         if (!$cvs) {
@@ -44,7 +44,8 @@ class Candidate extends UserAbstract
         } else {
             $this->cvId = $cvs[0];
         }
-        $this->fields = get_fields($this->cvId);
+        $fields = get_fields($this->cvId);
+        $this->fields = $fields ? $fields : [];
     }
 
     // TODO Clarify with client Where needs to be displayed on FRONT

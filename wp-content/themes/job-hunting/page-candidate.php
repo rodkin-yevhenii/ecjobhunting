@@ -186,6 +186,9 @@ get_header(); ?>
                     <button class="btn btn-outline-secondary btn-full">Request References</button>
                 </div>
                 <div class="profile-item">
+                    <?php if ($candidate->getSummary()): ?>
+                        <p><a href="#">Add Executive Summary</a></p>
+                    <?php endif; ?>
                     <p><a href="#">Add Objective</a></p>
                     <p><a href="#">Add Achievements</a></p>
                     <p><a href="#">Add Certificates and Licenses</a></p>

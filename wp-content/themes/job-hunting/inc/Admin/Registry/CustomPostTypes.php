@@ -76,12 +76,9 @@ class CustomPostTypes
                 'menu_icon' => 'dashicons-admin-post',
                 'rewrite' => ['feeds' => false],
                 'supports' => [
-                    'title',
                     'editor',
                     'custom-fields',
-                    'thumbnail',
                     'author',
-                    'revisions',
                     'comments',
                 ],
             ]
