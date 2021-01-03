@@ -6,7 +6,6 @@ use EcJobHunting\Admin\Registry\AcfFields;
 use EcJobHunting\Admin\Registry\CustomPostTypes;
 use EcJobHunting\Admin\Registry\CustomTaxonomies;
 use EcJobHunting\Admin\Registry\ThemeSettings;
-use EcJobHunting\Admin\Registry\UserRoles;
 
 class AdminInit
 {

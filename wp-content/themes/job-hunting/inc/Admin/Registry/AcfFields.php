@@ -10,6 +10,8 @@ class AcfFields
             $this->vacancyFields();
             $this->siteSettingsFields();
             $this->cvFields();
+            $this->userFields();
+            $this->employerFields();
         }
     }
 
@@ -157,7 +159,7 @@ class AcfFields
                         'key' => 'field_5fecd775c41cb',
                         'label' => 'Why Work at This Company',
                         'name' => 'why_work_at_this_company',
-                        'type' => 'text',
+                        'type' => 'textarea',
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
@@ -176,7 +178,7 @@ class AcfFields
                         'key' => 'field_5fecd781c41cc',
                         'label' => 'Hiring Company Description',
                         'name' => 'hiring_company_description',
-                        'type' => 'text',
+                        'type' => 'textarea',
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
@@ -190,29 +192,6 @@ class AcfFields
                         'prepend' => '',
                         'append' => '',
                         'maxlength' => '',
-                    ],
-                    [
-                        'key' => 'field_5fecd79fc41cd',
-                        'label' => 'Send New Candidates To',
-                        'name' => 'send_new_candidates_to',
-                        'type' => 'checkbox',
-                        'instructions' => '',
-                        'required' => 0,
-                        'conditional_logic' => 0,
-                        'wrapper' => [
-                            'width' => '',
-                            'class' => '',
-                            'id' => '',
-                        ],
-                        'choices' => [
-                        ],
-                        'allow_custom' => 0,
-                        'default_value' => [
-                        ],
-                        'layout' => 'vertical',
-                        'toggle' => 0,
-                        'return_format' => 'value',
-                        'save_custom' => 0,
                     ],
                     [
                         'key' => 'field_5fecd7d5c41ce',
@@ -274,6 +253,72 @@ class AcfFields
                 ],
                 'menu_order' => 0,
                 'position' => 'normal',
+                'style' => 'default',
+                'label_placement' => 'top',
+                'instruction_placement' => 'label',
+                'hide_on_screen' => '',
+                'active' => true,
+                'description' => '',
+            ]
+        );
+        acf_add_local_field_group(
+            [
+                'key' => 'group_5ff2004e4555a',
+                'title' => 'Job Statistic',
+                'fields' => [
+                    [
+                        'key' => 'field_5ff2005d88a3e',
+                        'label' => 'Visitors',
+                        'name' => 'visitors',
+                        'type' => 'number',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'default_value' => 0,
+                        'placeholder' => '',
+                        'prepend' => '',
+                        'append' => '',
+                        'min' => 0,
+                        'max' => '',
+                        'step' => 1,
+                    ],
+                    [
+                        'key' => 'field_5ff2007688a3f',
+                        'label' => 'Applied',
+                        'name' => 'applied',
+                        'type' => 'user',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'role' => [
+                            0 => 'candidate',
+                        ],
+                        'allow_null' => 0,
+                        'multiple' => 1,
+                        'return_format' => 'id',
+                    ],
+                ],
+                'location' => [
+                    [
+                        [
+                            'param' => 'post_type',
+                            'operator' => '==',
+                            'value' => 'vacancy',
+                        ],
+                    ],
+                ],
+                'menu_order' => 0,
+                'position' => 'side',
                 'style' => 'default',
                 'label_placement' => 'top',
                 'instruction_placement' => 'label',
@@ -878,6 +923,126 @@ class AcfFields
                             'param' => 'post_type',
                             'operator' => '==',
                             'value' => 'cv',
+                        ],
+                    ],
+                ],
+                'menu_order' => 0,
+                'position' => 'normal',
+                'style' => 'default',
+                'label_placement' => 'top',
+                'instruction_placement' => 'label',
+                'hide_on_screen' => '',
+                'active' => true,
+                'description' => '',
+            ]
+        );
+    }
+
+    private function userFields()
+    {
+        acf_add_local_field_group(
+            [
+                'key' => 'group_5ff1bdc727371',
+                'title' => 'Extended user settings',
+                'fields' => [
+                    [
+                        'key' => 'field_5ff1bdf01984d',
+                        'label' => 'Photo',
+                        'name' => 'photo',
+                        'type' => 'image',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'return_format' => 'url',
+                        'preview_size' => 'medium',
+                        'library' => 'uploadedTo',
+                        'min_width' => '',
+                        'min_height' => '',
+                        'min_size' => '',
+                        'max_width' => '',
+                        'max_height' => '',
+                        'max_size' => '',
+                        'mime_types' => '',
+                    ],
+                ],
+                'location' => [
+                    [
+                        [
+                            'param' => 'user_form',
+                            'operator' => '==',
+                            'value' => 'edit',
+                        ],
+                    ],
+                ],
+                'menu_order' => 0,
+                'position' => 'normal',
+                'style' => 'default',
+                'label_placement' => 'top',
+                'instruction_placement' => 'label',
+                'hide_on_screen' => '',
+                'active' => true,
+                'description' => '',
+            ]
+        );
+    }
+
+    private function employerFields()
+    {
+        acf_add_local_field_group(
+            [
+                'key' => 'group_5ff1f2fc6b631',
+                'title' => 'Employer Data',
+                'fields' => [
+                    [
+                        'key' => 'field_5ff1f319b9bd4',
+                        'label' => 'Is Activated',
+                        'name' => 'is_activated',
+                        'type' => 'true_false',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'message' => '',
+                        'default_value' => 0,
+                        'ui' => 1,
+                        'ui_on_text' => 'Premium',
+                        'ui_off_text' => 'Standart',
+                    ],
+                    [
+                        'key' => 'field_5ff1f3b6b9bd5',
+                        'label' => 'Avaible credits',
+                        'name' => 'avaible_credits',
+                        'type' => 'text',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'default_value' => 0,
+                        'placeholder' => '$0.00',
+                        'prepend' => '',
+                        'append' => '',
+                        'maxlength' => '',
+                    ],
+                ],
+                'location' => [
+                    [
+                        [
+                            'param' => 'user_role',
+                            'operator' => '==',
+                            'value' => 'employer',
                         ],
                     ],
                 ],
