@@ -5,6 +5,7 @@ namespace EcJobHunting\Front;
 final class SiteSettings
 {
     private ?string $logoUrl;
+    private static array $jobSettings;
 
     public function __construct()
     {
@@ -18,5 +19,14 @@ final class SiteSettings
     public function getLogoUrl()
     {
         return $this->logoUrl;
+    }
+
+    public static function getJobSettings()
+    {
+        if (empty(self::$jobSettings)) {
+            $fields = get_field('post_new_job', 'option');
+            self::$jobSettings = empty($fields) ? [] : $fields;
+        }
+        return self::$jobSettings;
     }
 }
