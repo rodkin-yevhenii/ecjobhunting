@@ -91,25 +91,30 @@ gulp.task( 'libs', function () {
 
 /*** */
 
-gulp.task( 'repaint', function () {
+gulp.task( 'repaint', (done) => {
   browsersync( {
     server: {
       baseDir: 'public',
       directory: true
     }
   } );
+  done();
 } );
 
 gulp.task( 'clean', function () {
   return del.sync( [ 'public/js', 'public/css', 'public/*.html' ] );
 } );
 
-gulp.task( 'build', [ 'markup', 'styles', 'libs', 'scripts' ] );
-
-gulp.task( 'watch', [ 'repaint' ], function () {
+gulp.task( 'watch', (done) => {
   gulp.watch( 'src/pug/**/*.pug', [ 'markup' ] );
   gulp.watch( 'src/scss/**/*.scss', [ 'styles' ] );
   gulp.watch( [ 'src/js/**/*.js' ], [ 'scripts' ] );
+  done();
 } );
 
-gulp.task( 'default', [ 'watch' ] );
+gulp.task( 'build', (done) =>{
+  gulp.series('clean', gulp.parallel( 'markup', 'styles', 'libs', 'scripts' ) )(done)
+});
+gulp.task( 'default', (done) =>{
+  gulp.series('watch' )(done)
+} );
