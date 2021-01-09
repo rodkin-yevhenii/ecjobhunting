@@ -246,6 +246,7 @@ $(function () {
     }
   });
   $publishJobFrom.on('submit', function (event) {
+    event.preventDefault();
     var benefits = $('input[name="post-job-benefits[]"]').map(function (index, item) {
       return $(item).attr('id');
     });
@@ -256,6 +257,7 @@ $(function () {
     var skills = $('.field-skills-list li').map(function (index, item) {
       return $(item).attr('data-key');
     });
+    console.log(benefits);
     var formData = new FormData();
     formData.append('action', 'create_job');
     formData.append('id', $(_this).attr('id'));
@@ -270,7 +272,7 @@ $(function () {
     formData.append('period', $('#period').attr('data-value'));
     formData.append('isCompensationIncluded', $('#post-job-commission').val());
     formData.append('street', $('#post-job-address').val());
-    formData.append('skills', skills);
+    formData.append('skills', JSON.stringify(skills));
     formData.append('company', $('#post-job-company').val());
     formData.append('reasonsToWork', $('#post-job-why').val());
     formData.append('companyDesc', $('#post-job-company-description').val());
@@ -278,7 +280,6 @@ $(function () {
     formData.append('notifyEmail', $('#post-job-send-email').val());
     formData.append('agreements', agreements);
     sendAjaxRequest(formData);
-    event.preventDefault();
   });
 
   function sendAjaxRequest(data) {
