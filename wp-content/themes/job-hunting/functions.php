@@ -142,4 +142,3 @@ function getActivateProfileIcon()
 {
     return "<img src='" . IMG_URI . "icons/active.png' alt='activate Icon' />";
 }
-

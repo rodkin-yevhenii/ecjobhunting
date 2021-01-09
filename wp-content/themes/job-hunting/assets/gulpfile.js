@@ -55,7 +55,8 @@ gulp.task('styles', function () {
 gulp.task('scripts', function (done) {
     const scripts = {
         'index': [
-            'src/js/general.js'
+            'src/js/general.js',
+            'src/js/ajax.js',
         ]
     };
     Object.keys(scripts).forEach(name => {

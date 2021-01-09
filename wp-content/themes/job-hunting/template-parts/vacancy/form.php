@@ -23,7 +23,7 @@ $currencies = get_field_object('field_compensation_currency')['choices']; // fie
 $period = get_field_object('field_compensation_period')['choices']; // field_compensation_period option
 $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements option
 ?>
-<form class="container-fluid p-0">
+<form class="container-fluid p-0 publish-job-form">
     <div class="row mt-md-4">
         <div class="col-12 col-md-5 col-xl-3">
             <label class="field-label mb-2 mb-md-0 mt-md-3" for="post-job-title"><?php echo $vacancy->getTitle(); ?>
@@ -52,10 +52,10 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                             data-select-value>Select employment type</span>
                     <ul>
                         <?php foreach ($employmentTypes as $type): ?>
-                            <li data-select-item><?php echo $type->name; ?></li>
+                            <li data-select-item data-key="<?php echo $type->term_id; ?>"><?php echo $type->name; ?></li>
                         <?php endforeach; ?>
                     </ul>
-                    <input class="d-none" type="text">
+                    <input class="d-none" type="text" id="employment-type">
                 </div>
             </div>
         <?php endif; ?>
@@ -78,7 +78,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
             <div class="col-12 col-md-4">
                 <?php foreach ($benefits_1 as $id => $item): ?>
                     <fieldset>
-                        <input type="checkbox" name="post-job-benefits" id="<?php echo $id; ?>">
+                        <input type="checkbox" name="post-job-benefits[]" id="<?php echo $id; ?>">
                         <label for="<?php echo $id; ?>"><?php echo $item; ?></label>
                     </fieldset>
                 <?php endforeach; ?>
@@ -116,21 +116,21 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                                 data-select-value>USD</span>
                         <ul>
                             <?php foreach ($currencies as $item): ?>
-                                <li data-select-item><?php echo $item; ?></li>
+                                <li data-select-item data-key="<?php echo $item; ?>"><?php echo $item; ?></li>
                             <?php endforeach; ?>
                         </ul>
-                        <input class="d-none" type="text">
+                        <input class="d-none" type="text" id="currency">
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($period)): ?>
                     <div class="ys-select ys-select-bordered mt-3 mt-md-0 flex-md-grow-1 mr-lg-4" data-select><span
                                 data-select-value>Annualy</span>
                         <ul>
-                            <?php foreach ($period as $item): ?>
-                                <li data-select-item><?php echo $item; ?></li>
+                            <?php foreach ($period as $key => $item): ?>
+                                <li data-select-item data-key="<?php echo $key; ?>"><?php echo $item; ?></li>
                             <?php endforeach; ?>
                         </ul>
-                        <input class="d-none" type="text">
+                        <input class="d-none" type="text" id="period">
                     </div>
                 <?php endif; ?>
                 <div class="mt-3 mt-md-4 mt-lg-3">
@@ -158,8 +158,8 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
         </div>
         <div class="col-12 col-md-7 field-skills">
             <ul class="field-skills-list mb-md-4">
-                <li><span>Adobe Photoshop</span><span class="field-skills-close"></span></li>
-                <li><span>Figma</span><span class="field-skills-close"></span></li>
+                <li data-key="Adobe Photoshop"><span>Adobe Photoshop</span><span class="field-skills-close"></span></li>
+                <li data-key="Figma"><span>Figma</span><span class="field-skills-close"></span></li>
             </ul>
             <div class="field-skills-panel d-flex flex-column flex-md-row">
                 <label class="d-block mb-0 mt-3 mt-md-0 flex-md-grow-1 mr-md-4">
@@ -221,7 +221,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                         $classNames = " mt-3 mt-md-5";
                     endif; ?>
                     <div class="d-flex<?php echo $classNames; ?>">
-                        <input type="checkbox" name="post-job-send" id="<?php echo $id; ?>">
+                        <input type="checkbox" name="post-job-send[]" id="<?php echo $id; ?>">
                         <label for="<?php echo $id; ?>"><?php echo $item; ?></label>
                     </div>
                 <?php endforeach; ?>

@@ -4,6 +4,7 @@
 namespace EcJobHunting\Service\Job;
 
 
+use EcJobHunting\Front\EcResponse;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Interfaces\AjaxResponse;
 
@@ -15,13 +16,14 @@ class JobService
     private array $benefits;
     private array $compensationPeriods;
     private array $agreementOptions;
+    private AjaxResponse $response;
 
     public function __invoke()
     {
         if (wp_doing_ajax()) {
             //create job
             add_action('wp_ajax_create_job', [$this, 'createNewJobAjax']);
-            add_action('wp_ajax_create_job', [$this, 'createNewJobAjax']);
+            add_action('wp_ajax_nopriv_create_job', [$this, 'createNewJobAjax']);
         }
 
     }
@@ -29,11 +31,12 @@ class JobService
     public function __construct()
     {
         $this->jobSettings = SiteSettings::getJobSettings();
+        $this->response = new EcResponse();
     }
 
-    public function createNewJobAjax(AjaxResponse $response)
+    public function createNewJobAjax()
     {
-        $response->send();
+        $this->response->send();
     }
 
     /**

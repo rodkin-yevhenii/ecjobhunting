@@ -197,7 +197,7 @@ $( () => {
       value = input.val(),
       list = $( skills ).find( 'ul' );
     if ( value && value.length ) {
-      $( `<li><span>${ value }</span><span class="field-skills-close"></span></li>` ).appendTo( list );
+      $( `<li data-key="${ value }"><span>${ value }</span><span class="field-skills-close"></span></li>` ).appendTo( list );
       input.val( '' );
     }
   }
@@ -238,5 +238,3 @@ $( () => {
   }
 
 } );
-
-console.log('test')
