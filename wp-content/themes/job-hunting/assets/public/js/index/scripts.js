@@ -220,3 +220,4 @@ $(function () {
     }
   }
 });
+console.log('test');

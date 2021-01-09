@@ -114,9 +114,9 @@ gulp.task('watch', () => {
     gulp.watch('src/js/**/*.js', gulp.series('scripts'));
 });
 
-gulp.task('build', (done) => {
-    gulp.series('clean', gulp.parallel('styles', 'libs', 'scripts'))(done);
+gulp.task('production', (done) => {
+    gulp.series('clean', gulp.parallel('markup', 'styles', 'libs', 'scripts'))(done);
 });
-gulp.task('default', (done) => {
+gulp.task('dev', (done) => {
     gulp.series('watch')(done)
 });
