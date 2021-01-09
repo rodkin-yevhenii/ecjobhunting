@@ -52,7 +52,7 @@ gulp.task('styles', function () {
 
 /** scripts */
 
-gulp.task('scripts', function () {
+gulp.task('scripts', function (done) {
     const scripts = {
         'index': [
             'src/js/general.js'
@@ -70,9 +70,10 @@ gulp.task('scripts', function () {
                 stream: true
             })));
     });
+    done()
 });
 
-gulp.task('libs', function () {
+gulp.task('libs', function (done) {
     const libs = {
         'index': [
             'node_modules/jquery/dist/jquery.min.js',
@@ -87,6 +88,7 @@ gulp.task('libs', function () {
             .pipe(concat('libs.js'))
             .pipe(gulp.dest(`public/js/${name}`))
     });
+    done()
 });
 
 /*** */
@@ -106,16 +108,14 @@ gulp.task('clean', function (done) {
     done();
 });
 
-gulp.task('watch', (done) => {
+gulp.task('watch', () => {
     gulp.watch('src/pug/**/*.pug', gulp.series('markup'));
     gulp.watch('src/scss/**/*.scss', gulp.series('styles'));
     gulp.watch('src/js/**/*.js', gulp.series('scripts'));
-    done();
 });
 
 gulp.task('build', (done) => {
-    gulp.series('clean', gulp.parallel('styles', 'libs', 'scripts'));
-    done();
+    gulp.series('clean', gulp.parallel('styles', 'libs', 'scripts'))(done);
 });
 gulp.task('default', (done) => {
     gulp.series('watch')(done)
