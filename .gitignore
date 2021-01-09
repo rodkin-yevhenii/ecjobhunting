@@ -13,9 +13,6 @@ wp-content/*
 # ignore node dependency directories
 node_modules/
 
-# ignore node dependency directories
-node_modules/
-
 # ignore log files and databases
 *.log
 *.sql
