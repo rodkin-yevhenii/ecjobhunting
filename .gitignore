@@ -21,3 +21,4 @@ node_modules/
 *.sql
 *.sqlite
 *.idea/
+/package-lock.json
