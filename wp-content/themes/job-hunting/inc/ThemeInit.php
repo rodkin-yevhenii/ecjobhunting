@@ -6,6 +6,7 @@ use EcJobHunting\Admin\AdminInit;
 use EcJobHunting\Admin\Registry\UserRoles;
 use EcJobHunting\Front\FrontInit;
 use EcJobHunting\Front\SiteSettings;
+use EcJobHunting\Service\Job\JobService;
 use EcJobHunting\Service\Widget\WidgetInit;
 use EcJobHunting\Service\User\UserService;
 
@@ -40,6 +41,7 @@ final class ThemeInit
     private function registerFrontHooks()
     {
         add_action('init', new FrontInit());
+        add_action('init', new JobService());
     }
 
     private function registerWidgets()
@@ -66,7 +68,7 @@ final class ThemeInit
 
     public function createBasicPages()
     {
-        $pages = ['signup', 'candidate', 'employer', 'login'];
+        $pages = ['signup', 'candidate', 'employer', 'login', 'post-job', 'my-jobs', 'messages', 'my-database', 'help', 'activation'];
 
         foreach ($pages as $slug) {
             $page = get_page_by_path($slug);

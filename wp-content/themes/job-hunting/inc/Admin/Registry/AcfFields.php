@@ -2,6 +2,8 @@
 
 namespace EcJobHunting\Admin\Registry;
 
+use EcJobHunting\Front\SiteSettings;
+
 class AcfFields
 {
     public function __construct()
@@ -13,6 +15,11 @@ class AcfFields
             $this->userFields();
             $this->employerFields();
         }
+        //job settings
+        add_filter('acf/load_field/key=field_5fecd57ec26b9', [$this, 'benefitsChoices']);
+        add_filter('acf/load_field/key=field_5fecd839c41cf', [$this, 'agreementChoices']);
+        add_filter('acf/load_field/key=field_compensation_currency', [$this, 'currencyChoices']);
+        add_filter('acf/load_field/key=field_compensation_period', [$this, 'compensationPeriodChoices']);
     }
 
     private function vacancyFields()
@@ -26,7 +33,7 @@ class AcfFields
                         'key' => 'field_5fecd57ec26b9',
                         'label' => 'Benefits',
                         'name' => 'benefits',
-                        'type' => 'repeater',
+                        'type' => 'checkbox',
                         'instructions' => '',
                         'required' => 0,
                         'conditional_logic' => 0,
@@ -35,32 +42,10 @@ class AcfFields
                             'class' => '',
                             'id' => '',
                         ],
-                        'collapsed' => '',
-                        'min' => 0,
-                        'max' => 0,
-                        'layout' => 'block',
-                        'button_label' => 'New Benefit',
-                        'sub_fields' => [
-                            [
-                                'key' => 'field_5fecd64bc26ba',
-                                'label' => 'Benefit',
-                                'name' => 'benefit',
-                                'type' => 'text',
-                                'instructions' => '',
-                                'required' => 0,
-                                'conditional_logic' => 0,
-                                'wrapper' => [
-                                    'width' => '',
-                                    'class' => '',
-                                    'id' => '',
-                                ],
-                                'default_value' => 'Medical Insurance',
-                                'placeholder' => '',
-                                'prepend' => '',
-                                'append' => '',
-                                'maxlength' => 118,
-                            ],
-                        ],
+                        'layout' => 'vertical',
+                        'toggle' => 0,
+                        'return_format' => 'value',
+                        'save_custom' => 0,
                     ],
                     [
                         'key' => 'field_5fecd6a9c26bb',
@@ -86,7 +71,7 @@ class AcfFields
                                 'required' => 0,
                                 'conditional_logic' => 0,
                                 'wrapper' => [
-                                    'width' => '',
+                                    'width' => '50',
                                     'class' => '',
                                     'id' => '',
                                 ],
@@ -105,7 +90,7 @@ class AcfFields
                                 'required' => 0,
                                 'conditional_logic' => 0,
                                 'wrapper' => [
-                                    'width' => '',
+                                    'width' => '50',
                                     'class' => '',
                                     'id' => '',
                                 ],
@@ -115,6 +100,50 @@ class AcfFields
                                 'append' => '',
                                 'maxlength' => '',
                             ],
+                        ],
+                    ],
+                    [
+                        'key' => 'field_compensation_currency',
+                        'label' => 'Compensation Currency',
+                        'name' => 'compensation_currency',
+                        'type' => 'select',
+                        'allow_custom' => 0,
+                        'layout' => 'vertical',
+                        'toggle' => 0,
+                        'return_format' => 'value',
+                        'save_custom' => 0,
+                        'wrapper' => [
+                            'width' => '40',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                    ],
+                    [
+                        'key' => 'field_compensation_period',
+                        'label' => 'Compensation Period',
+                        'name' => 'compensation_period',
+                        'type' => 'select',
+                        'allow_custom' => 0,
+                        'layout' => 'vertical',
+                        'toggle' => 0,
+                        'return_format' => 'value',
+                        'save_custom' => 0,
+                        'wrapper' => [
+                            'width' => '40',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                    ],
+                    [
+                        'key' => 'field_is_commission_included',
+                        'label' => 'Plus commission',
+                        'name' => 'is_commission_included',
+                        'type' => 'true_false',
+                        'default' => 0,
+                        'wrapper' => [
+                            'width' => '20',
+                            'class' => '',
+                            'id' => '',
                         ],
                     ],
                     [
@@ -224,17 +253,6 @@ class AcfFields
                             'width' => '',
                             'class' => '',
                             'id' => '',
-                        ],
-                        'choices' => [
-                            'covid' => 'Add a FREE label indicating this job is extending offers during the COVID-19 crisis',
-                            'closest' => 'Only show me candidates within 100 miles of this job\'s location',
-                            'accept_all' => 'Accept applications without a resume',
-                        ],
-                        'allow_custom' => 0,
-                        'default_value' => [
-                            0 => 'covid',
-                            1 => 'closest',
-                            2 => 'accept_all',
                         ],
                         'layout' => 'vertical',
                         'toggle' => 0,
@@ -375,6 +393,243 @@ class AcfFields
                         'max_height' => '',
                         'max_size' => '',
                         'mime_types' => '',
+                    ],
+                ],
+                'location' => [
+                    [
+                        [
+                            'param' => 'options_page',
+                            'operator' => '==',
+                            'value' => 'site-settings',
+                        ],
+                    ],
+                ],
+                'menu_order' => 0,
+                'position' => 'normal',
+                'style' => 'default',
+                'label_placement' => 'top',
+                'instruction_placement' => 'label',
+                'hide_on_screen' => '',
+                'active' => true,
+                'description' => '',
+            ]
+        );
+        acf_add_local_field_group(
+            [
+                'key' => 'group_5ff88c88c1962',
+                'title' => 'User Settings',
+                'fields' => [
+                    [
+                        'key' => 'field_5ff88c9ac50c8',
+                        'label' => 'Employer',
+                        'name' => '',
+                        'type' => 'tab',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'placement' => 'top',
+                        'endpoint' => 0,
+                    ],
+                    [
+                        'key' => 'field_5ff88cb4c50c9',
+                        'label' => 'Post New Job',
+                        'name' => 'post_new_job',
+                        'type' => 'group',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'layout' => 'block',
+                        'sub_fields' => [
+                            [
+                                'key' => 'field_5ff88cc8c50ca',
+                                'label' => 'Benefits',
+                                'name' => 'benefits',
+                                'type' => 'repeater',
+                                'instructions' => '',
+                                'required' => 0,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'collapsed' => '',
+                                'min' => 0,
+                                'max' => 0,
+                                'layout' => 'table',
+                                'button_label' => 'Add Benefit',
+                                'sub_fields' => [
+                                    [
+                                        'key' => 'field_5ff88cdac50cb',
+                                        'label' => 'Benefit Name',
+                                        'name' => 'name',
+                                        'type' => 'text',
+                                        'instructions' => '',
+                                        'required' => 0,
+                                        'conditional_logic' => 0,
+                                        'wrapper' => [
+                                            'width' => '',
+                                            'class' => '',
+                                            'id' => '',
+                                        ],
+                                        'default_value' => '',
+                                        'placeholder' => 'Medical Insurance',
+                                        'prepend' => '',
+                                        'append' => '',
+                                        'maxlength' => '',
+                                    ],
+                                ],
+                            ],
+                            [
+                                'key' => 'field_5ff88d0fc50cc',
+                                'label' => 'Currency',
+                                'name' => 'currency',
+                                'type' => 'repeater',
+                                'instructions' => '',
+                                'required' => 0,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'collapsed' => '',
+                                'min' => 0,
+                                'max' => 0,
+                                'layout' => 'table',
+                                'button_label' => 'Add currency',
+                                'sub_fields' => [
+                                    [
+                                        'key' => 'field_5ff88d1bc50cd',
+                                        'label' => 'Currency Name',
+                                        'name' => 'name',
+                                        'type' => 'text',
+                                        'instructions' => '',
+                                        'required' => 0,
+                                        'conditional_logic' => 0,
+                                        'wrapper' => [
+                                            'width' => '',
+                                            'class' => '',
+                                            'id' => '',
+                                        ],
+                                        'default_value' => '',
+                                        'placeholder' => '',
+                                        'prepend' => '',
+                                        'append' => '',
+                                        'maxlength' => '',
+                                    ],
+                                ],
+                            ],
+                            [
+                                'key' => 'field_5ff88e21ace4a',
+                                'label' => 'Compensation Period',
+                                'name' => 'compensation_period',
+                                'type' => 'repeater',
+                                'instructions' => '',
+                                'required' => 0,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'collapsed' => '',
+                                'min' => 0,
+                                'max' => 0,
+                                'layout' => 'table',
+                                'button_label' => 'Add Name of period',
+                                'sub_fields' => [
+                                    [
+                                        'key' => 'field_5ff88e34ace4b',
+                                        'label' => 'Name',
+                                        'name' => 'name',
+                                        'type' => 'text',
+                                        'instructions' => '',
+                                        'required' => 0,
+                                        'conditional_logic' => 0,
+                                        'wrapper' => [
+                                            'width' => '',
+                                            'class' => '',
+                                            'id' => '',
+                                        ],
+                                        'default_value' => 'Annualy',
+                                        'placeholder' => 'Annualy',
+                                        'prepend' => '',
+                                        'append' => '',
+                                        'maxlength' => '',
+                                    ],
+                                ],
+                            ],
+                            [
+                                'key' => 'field_5ff88dbebf0ab',
+                                'label' => 'Agreement Options',
+                                'name' => 'agreement_options',
+                                'type' => 'repeater',
+                                'instructions' => '',
+                                'required' => 0,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'collapsed' => '',
+                                'min' => 0,
+                                'max' => 0,
+                                'layout' => 'table',
+                                'button_label' => 'Add option',
+                                'sub_fields' => [
+                                    [
+                                        'key' => 'field_5ff8aa6cd2357',
+                                        'label' => 'Option key',
+                                        'name' => 'key',
+                                        'type' => 'text',
+                                        'instructions' => '',
+                                        'required' => 0,
+                                        'conditional_logic' => 0,
+                                        'wrapper' => [
+                                            'width' => '20',
+                                            'class' => '',
+                                            'id' => '',
+                                        ],
+                                        'default_value' => '',
+                                        'placeholder' => '',
+                                        'prepend' => '',
+                                        'append' => '',
+                                        'maxlength' => '',
+                                    ],
+                                    [
+                                        'key' => 'field_5ff88dd7bf0ac',
+                                        'label' => 'Agreement Name',
+                                        'name' => 'name',
+                                        'type' => 'text',
+                                        'instructions' => '',
+                                        'required' => 0,
+                                        'conditional_logic' => 0,
+                                        'wrapper' => [
+                                            'width' => '80',
+                                            'class' => '',
+                                            'id' => '',
+                                        ],
+                                        'default_value' => '',
+                                        'placeholder' => '',
+                                        'prepend' => '',
+                                        'append' => '',
+                                        'maxlength' => '',
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
                 'location' => [
@@ -1056,5 +1311,42 @@ class AcfFields
                 'description' => '',
             ]
         );
+    }
+
+    public function benefitsChoices($field)
+    {
+        $settings = SiteSettings::getJobSettings();
+        $jobService = $settings['benefits'] ?? [];
+        return $this->prepareFieldChoices($jobService, $field);
+    }
+
+    public function agreementChoices($field)
+    {
+        $settings = SiteSettings::getJobSettings();
+        $jobService = $settings['agreement_options'] ?? [];
+        return $this->prepareFieldChoices($jobService, $field);
+    }
+
+    public function currencyChoices($field)
+    {
+        $settings = SiteSettings::getJobSettings();
+        $jobService = $settings['currency'] ?? [];
+        return $this->prepareFieldChoices($jobService, $field);
+    }
+
+    public function compensationPeriodChoices($field)
+    {
+        $settings = SiteSettings::getJobSettings();
+        $jobService = $settings['compensation_period'] ?? [];
+        return $this->prepareFieldChoices($jobService, $field);
+    }
+
+    private function prepareFieldChoices($items, $field)
+    {
+        foreach ($items as $id => $item) {
+            $key = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $item['key'] ?? $item['name'])));
+            $field['choices'][$key] = $item['name'];
+        }
+        return $field;
     }
 }

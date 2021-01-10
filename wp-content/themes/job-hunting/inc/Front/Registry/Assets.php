@@ -14,6 +14,7 @@ class Assets
         $this->baseSrc = get_stylesheet_directory_uri() . '/assets/public/';
         $this->styles();
         $this->scripts();
+        $this->localizeScripts();
     }
 
     private function styles()
@@ -25,5 +26,16 @@ class Assets
     {
         wp_enqueue_script('libs', $this->baseSrc . 'js/index/libs.js', [], '1.0', true);
         wp_enqueue_script($this->handle, $this->baseSrc . 'js/index/scripts.js', ['libs'], '1.0', true);
+    }
+
+    private function localizeScripts()
+    {
+        wp_localize_script(
+            $this->handle,
+            'siteSettings',
+            [
+                'ajaxurl' => admin_url('admin-ajax.php'),
+            ]
+        );
     }
 }

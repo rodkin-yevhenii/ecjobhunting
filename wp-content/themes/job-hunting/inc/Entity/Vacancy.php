@@ -6,60 +6,81 @@ use EcJobHunting\Service\User\UserService;
 
 class Vacancy
 {
+    private ?int $id= null;
     private string $title = '';
     private string $description = '';
-    private int $visitors = 0;
-    private array $applied = [];
+    private ?string $datePosted = '';
     private ?int $author = null;
     private array $benefits = [];
+    private string $currency = 'USD';
     private array $compensationRange = ['from' => 0, 'to' => 0];
-    private string $location = '';
+    private float $compensationMin = 0;
+    private float $compensationMax = 0;
+    private string $compensationPeriod = 'annualy';
+    private bool $isCommissionIncluded = false;
+
+    //Taxonomies
+    private array $location = []; // taxonomy Location
+    private array $employmentType = []; //taxonomy types
+    private array $skills = []; //taxonomy Skills
+
+    //employer info
+    private string $streetAddress = '';
     private string $companyName = '';
     private string $reasonsToWork = '';
     private string $companyDescription = '';
-    private string $email = '';
-    private bool $isCovidExtending = false;
-    private bool $showClosestCandidate = false;
-    private bool $isAcceptAll = false;
+    private bool $notifyEmployer = true;
+    private string $emailsToNotify = '';
+    private array $agreementOptions = [];
+
+    //statistic
+    private array $candidates = [];
+    private int $candidatesNumber = 0;
+    private int $visitors = 0;
+
+
     private $employer;
 
-    public function __construct(?int $id)
+    public function __construct(?int $id= null)
     {
         $vacancy = get_post($id);
-        if (!$vacancy) {
-            return null;
-        }
-        // Basic Data
-        $this->title = $vacancy->post_title;
-        $this->description = strip_tags($vacancy->post_content);
-        $this->author = $vacancy->post_author;
+        if ($vacancy) {
+            // Basic Data
+            $this->title = $vacancy->post_title;
+            $this->description = strip_tags($vacancy->post_content);
+            $this->author = $vacancy->post_author;
 
-        $this->employer = UserService::getUser($this->author);
 
-        //Meta Data
-        $fields = get_field($id);
-        if ($fields) {
-            $this->visitors = !empty($fields['visitors']) ? $fields['visitors'] : 0;
-            $this->applied = !empty($fields['applied']) ? $fields['applied'] : [];
-            $this->benefits = !empty($fields['benefits']) ? $fields['benefits'] : [];
-            $this->compensationRange = !empty($fields['compensation_range']) ? $fields['compensation_range'] : $this->compensationRange;
-            $this->location = !empty($fields['street_address']) ? $fields['street_address'] : '';
-            $this->companyName = !empty($fields['hiring_company']) ? $fields['hiring_company']
-                : $this->employer->getName();
-            $this->reasonsToWork = !empty($fields['why_work_at_this_company']) ? $fields['why_work_at_this_company'] : '';
-            $this->companyDescription = !empty($fields['hiring_company_description']) ? $fields['hiring_company_description'] : '';
-            $this->email = !empty($fields['emails_to_inform']) ? $fields['emails_to_inform']
-                : $this->employer->getEmail();
-            if (is_array($fields['additional_options'])) {
-                $this->isCovidExtending = in_array('covid', $fields['additional_options']) ?? false;
+            //Meta Data
+            $fields = get_field($id);
+            if ($fields) {
+                $this->visitors = !empty($fields['visitors']) ? $fields['visitors'] : 0;
+                $this->candidates = !empty($fields['applied']) ? $fields['applied'] : [];
+                $this->candidatesNumber = count($this->candidates);
+                $this->benefits = !empty($fields['benefits']) ? $fields['benefits'] : [];
+                $this->compensationRange = !empty($fields['compensation_range']) ? $fields['compensation_range'] : $this->compensationRange;
+                $this->location = !empty($fields['street_address']) ? $fields['street_address'] : '';
+                $this->companyName = !empty($fields['hiring_company']) ? $fields['hiring_company']
+                    : $this->employer->getName();
+                $this->reasonsToWork = !empty($fields['why_work_at_this_company']) ? $fields['why_work_at_this_company'] : '';
+                $this->companyDescription = !empty($fields['hiring_company_description']) ? $fields['hiring_company_description'] : '';
+                $this->emailsToNotify = !empty($fields['emails_to_inform']) ? $fields['emails_to_inform']
+                    : $this->employer->getEmail();
+                if (is_array($fields['additional_options'])) {
+                    $this->agreementOptions = in_array('closest', $fields['additional_options']) ?? false;
+                }
             }
-            if (is_array($fields['additional_options'])) {
-                $this->showClosestCandidate = in_array('closest', $fields['additional_options']) ?? false;
-            }
-            if (is_array($fields['additional_options'])) {
-                $this->isAcceptAll = in_array('accept_all', $fields['additional_options']) ?? false;
-            }
+        } else {
+            $this->employer = UserService::getUser();
         }
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**
@@ -91,7 +112,7 @@ class Vacancy
      */
     public function getEmail()
     {
-        return $this->email;
+        return $this->emailsToNotify;
     }
 
     /**
@@ -161,8 +182,8 @@ class Vacancy
     /**
      * @return int|mixed
      */
-    public function getVisitors()
+    public function getCandidates()
     {
-        return $this->visitors;
+        return $this->candidates;
     }
 }

@@ -178,7 +178,7 @@ $(function () {
         list = $(skills).find('ul');
 
     if (value && value.length) {
-      $("<li><span>".concat(value, "</span><span class=\"field-skills-close\"></span></li>")).appendTo(list);
+      $("<li data-key=\"".concat(value, "\"><span>").concat(value, "</span><span class=\"field-skills-close\"></span></li>")).appendTo(list);
       input.val('');
     }
   }
@@ -218,5 +218,110 @@ $(function () {
       messages.find('.messages-content').eq(0).addClass('active');
       messages.find("[data-tab-item=\"".concat(value, "\"]")).addClass('active');
     }
+  }
+});
+"use strict";
+
+var _this = void 0;
+
+$(function () {
+  var ajaxUrl = window.siteSettings.ajaxurl;
+  var $publishJobFrom = $('.publish-job-form');
+  var $duplicateJobFrom = $('.duplicate-job-form');
+  $publishJobFrom.on('click', '[data-select-item]', function () {
+    var select = $(this).parents('[data-select]');
+
+    if (!$(this).hasClass('active')) {
+      var value = $(this).attr('data-key');
+      select.find($('input')).attr('data-value', value);
+      select.children('[data-select-value]').html(value);
+    }
+  });
+  $publishJobFrom.on('click', 'fieldset input', function () {
+    var $input = $(this);
+
+    if ($input.hasClass('selected')) {
+      $input.removeClass('selected');
+    } else {
+      $input.addClass('selected');
+    }
+  });
+  $duplicateJobFrom.on('submit', function (event) {
+    event.preventDefault();
+    var postId = $('#post-job-title-duplicate').val();
+    var author = $duplicateJobFrom.attr('data-author');
+    var submitBtn = $duplicateJobFrom.find('button[type="submit"]');
+    var formData = new FormData();
+    formData.append('action', 'duplicate_job');
+    formData.append('postId', postId || 0);
+    formData.append('author', author || '');
+    sendAjaxRequest(formData, submitBtn);
+  });
+  $publishJobFrom.on('submit', function (event) {
+    event.preventDefault();
+    var submitBtn = $publishJobFrom.find("button[type=submit]:focus");
+    var benefits = [];
+    var agreements = [];
+    var skills = [];
+    $('input[name="post-job-benefits[]"]:checked').each(function (index, item) {
+      benefits.push($(item).attr('id'));
+    });
+    $('input[name="post-job-send[]"]:checked').each(function (index, item) {
+      agreements.push($(item).attr('id'));
+    });
+    var $compensationRange = $('.field-prices input');
+    $('.field-skills-list li').each(function (index, item) {
+      skills.push($(item).attr('data-key'));
+    });
+    var formData = new FormData();
+    formData.append('action', 'create_job');
+    formData.append('id', $(_this).attr('id'));
+    formData.append('status', $(submitBtn).attr('data-status')) || 'draft';
+    formData.append('title', $('#post-job-title').val());
+    formData.append('location', $('#post-job-location').val());
+    formData.append('typeId', $('#employment-type').attr('data-value'));
+    formData.append('description', $('#post-job-description').val());
+    formData.append('benefits', benefits);
+    formData.append('compensationFrom', $($compensationRange[0]).val());
+    formData.append('compensationTo', $($compensationRange[1]).val());
+    formData.append('currency', $('#currency').attr('data-value') || 'USD');
+    formData.append('period', $('#period').attr('data-value') || 'annualy');
+    formData.append('isCommissionIncluded', $('#post-job-commission').val());
+    formData.append('street', $('#post-job-address').val());
+    formData.append('skills', skills);
+    formData.append('company', $('#post-job-company').val());
+    formData.append('reasonsToWork', $('#post-job-why').val());
+    formData.append('companyDesc', $('#post-job-company-description').val());
+    formData.append('notifyMe', $('#post-job-send').val());
+    formData.append('notifyEmail', $('#post-job-send-email').val());
+    formData.append('agreements', agreements);
+    formData.append('author', $publishJobFrom.attr('data-author'));
+    sendAjaxRequest(formData, submitBtn);
+  });
+
+  function sendAjaxRequest(data, $messageContainer) {
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data: data,
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function success(response) {
+        if (response && response.status === 201) {
+          $($messageContainer).removeClass('is-error');
+          $($messageContainer).html(response.message);
+          setTimeout(function () {
+            window.location.replace(response.permalink);
+          }, 3000);
+        } else if (response.status === 404 || response.status === 401) {
+          $($messageContainer).html(response.message);
+          $($messageContainer).addClass('is-error');
+        } else {
+          $($messageContainer).addClass('is-error');
+          $($messageContainer).html('Something went wrong, try again');
+        }
+      }
+    });
   }
 });
