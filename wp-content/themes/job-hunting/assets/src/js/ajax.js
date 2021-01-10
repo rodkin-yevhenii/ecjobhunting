@@ -21,19 +21,22 @@ $(() => {
         }
     })
 
-    $publishJobFrom.on('submit', (event) => {
+    $publishJobFrom.on('click', 'button', (event) => {
         event.preventDefault()
-        const benefits = $('input[name="post-job-benefits[]"]').map((index, item) => {
-            return $(item).attr('id')
+        let benefits = [];
+        let agreements = [];
+        let skills = [];
+        $('input[name="post-job-benefits[]"]:checked').each((index, item) => {
+            benefits.push($(item).attr('id'))
         })
 
-        const agreements = $('input[name="post-job-send[]"]').map((index, item) => {
-            return $(item).attr('id')
+        $('input[name="post-job-send[]:checked"]').each((index, item) => {
+            agreements.push($(item).attr('id'))
         })
 
         const $compensationRange = $('.field-prices input')
-        const skills = $('.field-skills-list li').map((index, item) => {
-            return $(item).attr('data-key')
+        $('.field-skills-list li').each((index, item) => {
+            skills.push($(item).attr('data-key'))
         })
         console.log(benefits)
         let formData = new FormData();
@@ -50,7 +53,7 @@ $(() => {
         formData.append('period', $('#period').attr('data-value'));
         formData.append('isCompensationIncluded', $('#post-job-commission').val());
         formData.append('street', $('#post-job-address').val());
-        formData.append('skills', JSON.stringify(skills));
+        formData.append('skills', skills);
         formData.append('company', $('#post-job-company').val());
         formData.append('reasonsToWork', $('#post-job-why').val());
         formData.append('companyDesc', $('#post-job-company-description').val());
@@ -69,10 +72,10 @@ $(() => {
             processData: false,
             contentType: false,
             dataType: "json",
-            success: function(data, textStatus, jqXHR) {
+            success: function (data, textStatus, jqXHR) {
                 console.log(data)
             },
-            error: function(data, textStatus, jqXHR) {
+            error: function (data, textStatus, jqXHR) {
                 console.log(data)
             },
         })

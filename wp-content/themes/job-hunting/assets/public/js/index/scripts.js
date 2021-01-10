@@ -245,17 +245,20 @@ $(function () {
       $input.addClass('selected');
     }
   });
-  $publishJobFrom.on('submit', function (event) {
+  $publishJobFrom.on('click', 'button', function (event) {
     event.preventDefault();
-    var benefits = $('input[name="post-job-benefits[]"]').map(function (index, item) {
-      return $(item).attr('id');
+    var benefits = [];
+    var agreements = [];
+    var skills = [];
+    $('input[name="post-job-benefits[]"]:checked').each(function (index, item) {
+      benefits.push($(item).attr('id'));
     });
-    var agreements = $('input[name="post-job-send[]"]').map(function (index, item) {
-      return $(item).attr('id');
+    $('input[name="post-job-send[]:checked"]').each(function (index, item) {
+      agreements.push($(item).attr('id'));
     });
     var $compensationRange = $('.field-prices input');
-    var skills = $('.field-skills-list li').map(function (index, item) {
-      return $(item).attr('data-key');
+    $('.field-skills-list li').each(function (index, item) {
+      skills.push($(item).attr('data-key'));
     });
     console.log(benefits);
     var formData = new FormData();
@@ -272,7 +275,7 @@ $(function () {
     formData.append('period', $('#period').attr('data-value'));
     formData.append('isCompensationIncluded', $('#post-job-commission').val());
     formData.append('street', $('#post-job-address').val());
-    formData.append('skills', JSON.stringify(skills));
+    formData.append('skills', skills);
     formData.append('company', $('#post-job-company').val());
     formData.append('reasonsToWork', $('#post-job-why').val());
     formData.append('companyDesc', $('#post-job-company-description').val());

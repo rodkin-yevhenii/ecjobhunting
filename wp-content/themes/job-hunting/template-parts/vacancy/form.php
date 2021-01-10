@@ -88,7 +88,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
             <div class="col-12 col-md-3">
                 <?php foreach ($benefits_2 as $id => $item): ?>
                     <fieldset>
-                        <input type="checkbox" name="post-job-benefits" id="<?php echo $id; ?>">
+                        <input type="checkbox" name="post-job-benefits[]" id="<?php echo $id; ?>">
                         <label for="<?php echo $id; ?>"><?php echo $item; ?></label>
                     </fieldset>
                 <?php endforeach; ?>
