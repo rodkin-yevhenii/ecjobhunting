@@ -52,7 +52,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                             data-select-value>Select employment type</span>
                     <ul>
                         <?php foreach ($employmentTypes as $type): ?>
-                            <li data-select-item data-key="<?php echo $type->term_id; ?>"><?php echo $type->name; ?></li>
+                            <li data-select-item data-key="<?php echo $type->name; ?>"><?php echo $type->name; ?></li>
                         <?php endforeach; ?>
                     </ul>
                     <input class="d-none" type="text" id="employment-type">

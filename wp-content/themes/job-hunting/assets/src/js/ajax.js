@@ -6,7 +6,7 @@ $(() => {
     $publishJobFrom.on('click', '[data-select-item]', function () {
         const select = $(this).parents('[data-select]')
         if (!$(this).hasClass('active')) {
-            const value = $(this).val()
+            const value = $(this).attr('data-key')
             select.find($('input')).attr('data-value', value)
             select.children('[data-select-value]').html(value)
         }
@@ -77,14 +77,10 @@ $(() => {
             processData: false,
             contentType: false,
             dataType: "json",
-            success: function (data, textStatus, jqXHR) {
-                console.log(data)
-                console.log(textStatus)
-                console.log(jqXHR)
-            },
-            error: function (data, textStatus, jqXHR) {
-                console.log(data)
-            },
+            success: function (r) {
+                console.log('response')
+                console.log(r)
+            }
         })
     }
 })

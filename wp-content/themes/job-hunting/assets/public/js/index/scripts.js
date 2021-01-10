@@ -231,7 +231,7 @@ $(function () {
     var select = $(this).parents('[data-select]');
 
     if (!$(this).hasClass('active')) {
-      var value = $(this).val();
+      var value = $(this).attr('data-key');
       select.find($('input')).attr('data-value', value);
       select.children('[data-select-value]').html(value);
     }
@@ -295,14 +295,9 @@ $(function () {
       data: data,
       processData: false,
       contentType: false,
-      dataType: "json",
-      success: function success(data, textStatus, jqXHR) {
-        console.log(data);
-        console.log(textStatus);
-        console.log(jqXHR);
-      },
-      error: function error(data, textStatus, jqXHR) {
-        console.log(data);
+      success: function success(r) {
+        console.log('response');
+        console.log(r);
       }
     });
   }

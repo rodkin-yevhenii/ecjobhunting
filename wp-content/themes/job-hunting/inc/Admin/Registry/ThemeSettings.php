@@ -29,7 +29,7 @@ class ThemeSettings
 
     private static function disableAdminBar()
     {
-        if (!current_user_can('administrator')) {
+        if (!current_user_can('administrator') && !wp_doing_ajax()) {
             show_admin_bar(false);
             add_action(
                 'admin_init',
