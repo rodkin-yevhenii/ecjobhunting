@@ -25,12 +25,12 @@ if(!current_user_can('employer')){
                         <form class="container-fluid p-0">
                             <div class="row mt-md-4">
                                 <div class="col-12 col-xl-3">
-                                    <label class="field-label mb-2 mb-md-0 mt-md-3 mt-xl-3" for="post-job-title-dublicate">Enter a Previous Job Title <span class="color-primary">*</span></label>
+                                    <label class="field-label mb-2 mb-md-0 mt-md-3 mt-xl-3" for="post-job-title-dublicate">Enter a Previous Job ID <span class="color-primary">*</span></label>
                                 </div>
                                 <div class="col-12 col-xl-7 mt-md-4 mt-xl-0">
                                     <input class="field-text" type="text" id="post-job-title-dublicate" required>
                                     <p class="mt-4"><strong>Important: </strong> Posting an exact copy of an active job in the same or nearby location will be rejected by the job boards</p>
-                                    <button class="btn btn-primary btn-lg mt-4 mt-xl-5" type="submit">Dublicate Job</button>
+                                    <button class="btn btn-primary btn-lg mt-4 mt-xl-5" type="submit">Duplicate Job</button>
                                 </div>
                             </div>
                         </form>

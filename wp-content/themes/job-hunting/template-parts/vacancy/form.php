@@ -23,7 +23,7 @@ $currencies = get_field_object('field_compensation_currency')['choices']; // fie
 $period = get_field_object('field_compensation_period')['choices']; // field_compensation_period option
 $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements option
 ?>
-<form class="container-fluid p-0 publish-job-form">
+<form class="container-fluid p-0 publish-job-form" data-author="<?php echo get_current_user_id();?>">
     <div class="row mt-md-4">
         <div class="col-12 col-md-5 col-xl-3">
             <label class="field-label mb-2 mb-md-0 mt-md-3" for="post-job-title"><?php echo $vacancy->getTitle(); ?>
@@ -234,8 +234,8 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                 job advertisement on its site and through its distribution partners.</p>
         </div>
         <div class="col-12 col-md-7 d-md-flex align-items-md-start">
-            <button class="btn btn-primary mr-md-4" type="submit">Save & Post Now</button>
-            <button class="btn btn-outline-primary" type="submit">Save Draft</button>
+            <button class="btn btn-primary mr-md-4" type="submit" data-status="publish">Save & Post Now</button>
+            <button class="btn btn-outline-primary" type="submit" data-status="draft">Save Draft</button>
         </div>
     </div>
 </form>
