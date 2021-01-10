@@ -72,7 +72,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
     <?php if (!empty($benefits)) : ?>
         <div class="row mt-3 mt-md-5">
         <div class="col-12 col-md-5 col-xl-3">
-            <div class="field-label mb-2 mb-md-0">Benefits <span class="color-primary">*</span></div>
+                <div class="field-label mb-2 mb-md-0">Benefits</div>
         </div>
         <?php if (!empty($benefits_1)) : ?>
             <div class="col-12 col-md-4">
@@ -183,7 +183,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
             <label class="field-label mb-2 mb-md-0 mt-md-3" for="post-job-why">Why Work at This Company</label>
         </div>
         <div class="col-12 col-md-7">
-            <input class="field-text" type="text" id="post-job-why" required>
+            <textarea class="field-textarea" id="post-job-why"></textarea>
         </div>
     </div>
     <div class="row mt-3 mt-md-4">

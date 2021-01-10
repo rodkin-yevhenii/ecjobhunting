@@ -1801,3 +1801,15 @@ form {
   }
 
 }
+
+.is-error{
+  background-color: red;
+  border-color: yellow;
+  color: #fff;
+
+  &:hover{
+    color: red;
+    border-color: red;
+    background-color: #fff;
+  }
+}

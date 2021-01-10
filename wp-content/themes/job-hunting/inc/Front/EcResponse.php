@@ -14,6 +14,31 @@ class EcResponse implements AjaxResponse
     protected ?string $order = '';
     protected ?string $s = '';
     protected ?int $total = 0;
+    protected ?int $id = null;
+    protected ?string $permalink = null;
+    protected ?string $message = null;
+
+    /**
+     * @param int|null $id
+     *
+     * @return $this
+     */
+    public function setId(?int $id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param string $permalink
+     *
+     * @return $this
+     */
+    public function setPermalink(string $permalink)
+    {
+        $this->permalink = $permalink;
+        return $this;
+    }
 
     public function setStatus(int $status)
     {
@@ -57,6 +82,17 @@ class EcResponse implements AjaxResponse
         return $this;
     }
 
+    /**
+     * @param string|null $message
+     *
+     * @return EcResponse
+     */
+    public function setMessage(?string $message)
+    {
+        $this->message = $message;
+        return $this;
+    }
+
     public function send(): string
     {
         $response = [
@@ -67,6 +103,9 @@ class EcResponse implements AjaxResponse
             'orderby' => $this->order,
             's' => $this->s,
             'total' => $this->total,
+            'id' => $this->id,
+            'permalink' => $this->permalink,
+            'message' => $this->message,
         ];
         echo json_encode($response);
         wp_die();

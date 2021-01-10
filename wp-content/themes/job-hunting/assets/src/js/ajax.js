@@ -2,6 +2,7 @@ $(() => {
 
     const ajaxUrl = window.siteSettings.ajaxurl
     const $publishJobFrom = $('.publish-job-form')
+    const $duplicateJobFrom = $('.duplicate-job-form')
 
     $publishJobFrom.on('click', '[data-select-item]', function () {
         const select = $(this).parents('[data-select]')
@@ -19,6 +20,20 @@ $(() => {
         } else {
             $input.addClass('selected')
         }
+    })
+
+    $duplicateJobFrom.on('submit', (event)=>{
+        event.preventDefault()
+        const postId = $('#post-job-title-duplicate').val()
+        const author = $duplicateJobFrom.attr('data-author');
+        const submitBtn = $duplicateJobFrom.find('button[type="submit"]')
+
+        let formData = new FormData();
+        formData.append('action', 'duplicate_job')
+        formData.append('postId', postId || 0)
+        formData.append('author', author || '')
+
+        sendAjaxRequest(formData, submitBtn);
     })
 
     $publishJobFrom.on('submit', (event) => {
@@ -64,12 +79,10 @@ $(() => {
         formData.append('agreements', agreements);
         formData.append('author', $publishJobFrom.attr('data-author'));
 
-        console.log(formData)
-
-        sendAjaxRequest(formData);
+        sendAjaxRequest(formData, submitBtn);
     })
 
-    function sendAjaxRequest(data) {
+    function sendAjaxRequest(data, $messageContainer) {
         $.ajax({
             type: 'POST',
             url: ajaxUrl,
@@ -77,9 +90,21 @@ $(() => {
             processData: false,
             contentType: false,
             dataType: "json",
-            success: function (r) {
-                console.log('response')
-                console.log(r)
+            success: function (response) {
+                if (response && response.status === 201) {
+                    $($messageContainer).removeClass('is-error')
+                    $($messageContainer).html(response.message)
+                    setTimeout(() => {
+                        window.location.replace(response.permalink)
+                    }, 3000)
+                } else if(response.status === 404 || response.status === 401){
+                    $($messageContainer).html(response.message)
+                    $($messageContainer).addClass('is-error')
+                }
+                else {
+                    $($messageContainer).addClass('is-error')
+                    $($messageContainer).html('Something went wrong, try again')
+                }
             }
         })
     }
