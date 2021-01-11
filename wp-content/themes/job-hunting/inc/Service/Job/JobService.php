@@ -53,10 +53,11 @@ class JobService
                     'hiring_company' => $_POST['company'],
                     'why_work_at_this_company' => $_POST['reasonsToWork'],
                     'hiring_company_description' => $_POST['companyDesc'],
-                    'send_new_candidates_to' => $_POST['notifyMe'],
+                    'send_new_candidates_to' => $_POST['notifyMe'] === 'on' ? 1 : 0,
                     'emails_to_inform' => $_POST['notifyEmail'] === 'on' ? 1 : 0,
                     'is_commission_included' => $_POST['isCommissionIncluded'] === 'on' ? 1 : 0,
-                    'additional_options' => serialize($_POST['agreements']),
+                    'additional_options' => explode(',', $_POST['agreements']),
+                    'benefits' => explode(',', $_POST['benefits']),
                 ],
                 'tax_input' => [
                     'type' => explode(',', $_POST['typeId']) ?? [],
@@ -71,20 +72,6 @@ class JobService
                     'Job wansn\'t created, please try again later or send email to support team'
                 )->setStatus(501)->send();
             }
-            if (!empty($_POST['benefits'])) {
-                $benefits = [];
-                $benefitsSrc = explode(',', $_POST['benefits']);
-                foreach ($benefitsSrc as $benefit) {
-                    array_push(
-                        $benefits,
-                        [
-                            'field_5fecd64bc26ba' => $benefit,
-                        ],
-                    );
-                }
-                update_field('field_5fecd57ec26b9', $benefits, $postId);
-            }
-
             $this->response
                 ->setId($postId)
                 ->setPermalink(get_the_permalink($postId))
