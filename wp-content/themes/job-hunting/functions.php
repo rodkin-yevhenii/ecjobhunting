@@ -11,10 +11,10 @@ if (!defined('SIGNUP_URL')) {
     define('SIGNUP_URL', site_url('/signup/'));
 }
 if (!defined('CANDIDATE_PROFILE_URL')) {
-    define('CANDIDATE_PROFILE_URL', site_url('/candidate/'));
+    define('CANDIDATE_PROFILE_URL', site_url('/profile/'));
 }
 if (!defined('EMPLOYER_PROFILE_URL')) {
-    define('EMPLOYER_PROFILE_URL', site_url('/employer/'));
+    define('EMPLOYER_PROFILE_URL', site_url('/profile/'));
 }
 
 use EcJobHunting\Front\SiteSettings;

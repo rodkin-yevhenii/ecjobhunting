@@ -470,6 +470,25 @@ class AcfFields
                                 'button_label' => 'Add Benefit',
                                 'sub_fields' => [
                                     [
+                                        'key' => 'field_5ffc96256f2a4',
+                                        'label' => 'Option key',
+                                        'name' => 'key',
+                                        'type' => 'text',
+                                        'instructions' => '',
+                                        'required' => 0,
+                                        'conditional_logic' => 0,
+                                        'wrapper' => [
+                                            'width' => '20',
+                                            'class' => '',
+                                            'id' => '',
+                                        ],
+                                        'default_value' => '',
+                                        'placeholder' => '',
+                                        'prepend' => '',
+                                        'append' => '',
+                                        'maxlength' => '',
+                                    ],
+                                    [
                                         'key' => 'field_5ff88cdac50cb',
                                         'label' => 'Benefit Name',
                                         'name' => 'name',
@@ -478,7 +497,7 @@ class AcfFields
                                         'required' => 0,
                                         'conditional_logic' => 0,
                                         'wrapper' => [
-                                            'width' => '',
+                                            'width' => '80',
                                             'class' => '',
                                             'id' => '',
                                         ],
@@ -550,6 +569,25 @@ class AcfFields
                                 'button_label' => 'Add Name of period',
                                 'sub_fields' => [
                                     [
+                                        'key' => 'field_5ffc959c3013c',
+                                        'label' => 'Option key',
+                                        'name' => 'key',
+                                        'type' => 'text',
+                                        'instructions' => '',
+                                        'required' => 0,
+                                        'conditional_logic' => 0,
+                                        'wrapper' => [
+                                            'width' => '20',
+                                            'class' => '',
+                                            'id' => '',
+                                        ],
+                                        'default_value' => '',
+                                        'placeholder' => '',
+                                        'prepend' => '',
+                                        'append' => '',
+                                        'maxlength' => '',
+                                    ],
+                                    [
                                         'key' => 'field_5ff88e34ace4b',
                                         'label' => 'Name',
                                         'name' => 'name',
@@ -558,7 +596,7 @@ class AcfFields
                                         'required' => 0,
                                         'conditional_logic' => 0,
                                         'wrapper' => [
-                                            'width' => '',
+                                            'width' => '80',
                                             'class' => '',
                                             'id' => '',
                                         ],

@@ -33,15 +33,18 @@ class CustomPostTypes
 
                 ],
                 'public' => true,
-                'publicly_queryable' => true,
+                'has_archive' => true,
                 'show_ui' => true,
                 'show_in_menu' => true,
-                'query_var' => true,
-                'rewrite' => true,
-                'has_archive' => true,
-                'hierarchical' => false,
-                'menu_position' => null,
-                'supports' => ['title', 'editor', 'author', 'thumbnail',],
+                'show_in_nav_menus' => true,
+                'menu_icon' => 'dashicons-admin-post',
+                'rewrite' => ['feeds' => false],
+                'supports' => [
+                    'editor',
+                    'custom-fields',
+                    'author',
+                    'comments',
+                ],
             ]
         );
     }

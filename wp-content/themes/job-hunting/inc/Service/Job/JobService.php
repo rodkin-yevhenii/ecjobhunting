@@ -7,6 +7,7 @@ namespace EcJobHunting\Service\Job;
 use EcJobHunting\Front\EcResponse;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Interfaces\AjaxResponse;
+use WP_Query;
 
 class JobService
 {
@@ -16,6 +17,7 @@ class JobService
     private array $benefits;
     private array $compensationPeriods;
     private array $agreementOptions;
+
     private AjaxResponse $response;
 
     public function __invoke()
@@ -28,6 +30,10 @@ class JobService
             //duplicate job
             add_action('wp_ajax_duplicate_job', [$this, 'duplicateJobAjax']);
             add_action('wp_ajax_nopriv_duplicate_job', [$this, 'duplicateJobAjax']);
+
+            //duplicate job
+            add_action('wp_ajax_load_more', [$this, 'loadMoreItems']);
+            add_action('wp_ajax_nopriv_load_more', [$this, 'loadMoreItems']);
         }
     }
 
@@ -53,10 +59,11 @@ class JobService
                     'hiring_company' => $_POST['company'],
                     'why_work_at_this_company' => $_POST['reasonsToWork'],
                     'hiring_company_description' => $_POST['companyDesc'],
-                    'send_new_candidates_to' => $_POST['notifyMe'],
+                    'send_new_candidates_to' => $_POST['notifyMe'] === 'on' ? 1 : 0,
                     'emails_to_inform' => $_POST['notifyEmail'] === 'on' ? 1 : 0,
                     'is_commission_included' => $_POST['isCommissionIncluded'] === 'on' ? 1 : 0,
-                    'additional_options' => serialize($_POST['agreements']),
+                    'additional_options' => explode(',', $_POST['agreements']),
+                    'benefits' => explode(',', $_POST['benefits']),
                 ],
                 'tax_input' => [
                     'type' => explode(',', $_POST['typeId']) ?? [],
@@ -71,20 +78,6 @@ class JobService
                     'Job wansn\'t created, please try again later or send email to support team'
                 )->setStatus(501)->send();
             }
-            if (!empty($_POST['benefits'])) {
-                $benefits = [];
-                $benefitsSrc = explode(',', $_POST['benefits']);
-                foreach ($benefitsSrc as $benefit) {
-                    array_push(
-                        $benefits,
-                        [
-                            'field_5fecd64bc26ba' => $benefit,
-                        ],
-                    );
-                }
-                update_field('field_5fecd57ec26b9', $benefits, $postId);
-            }
-
             $this->response
                 ->setId($postId)
                 ->setPermalink(get_the_permalink($postId))
@@ -152,6 +145,54 @@ class JobService
                 ->setMessage('Job was copied')
                 ->setStatus(201)
                 ->send();
+        } catch (\Exception $ex) {
+            $this->response
+                ->setMessage($ex->getMessage())
+                ->setStatus(501)
+                ->send();
+        }
+    }
+
+    public function loadMoreItems()
+    {
+        try {
+            if (empty($_POST['offset'])) {
+                $this->response->setMessage(
+                    'Offset data is required'
+                )->setStatus(204)->send();
+            }
+            $query = new WP_Query(
+                [
+                    'post_type' => $_POST['post_type'] ?? 'vacancy',
+                    'post_status' => $_POST['post_status'] ?? 'publish',
+                    'per_page' => (int)$_POST['per_page'] ?? 10,
+                    'offset' => (int)$_POST['offset'],
+                    'fields' => 'ids'
+                ]
+            );
+
+            if($query->have_posts()) {
+                global $post;
+                ob_start();
+                foreach ($query->posts as $post){
+                    setup_postdata($post);
+                    get_template_part('template-parts/vacancy/card', 'default');
+                }
+                wp_reset_postdata();
+                $html = ob_get_clean();
+
+                $this->response
+                    ->setMessage('Data returned')
+                    ->setStatus(200)
+                    ->setResponseBody($html)
+                    ->setCount($query->post_count)
+                    ->setTotal($query->found_posts)
+                    ->send();
+            } else {
+                $this->response->setMessage(
+                    'No items found'
+                )->setStatus(204)->send();
+            }
         } catch (\Exception $ex) {
             $this->response
                 ->setMessage($ex->getMessage())
