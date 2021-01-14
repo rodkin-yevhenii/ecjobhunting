@@ -51,6 +51,9 @@ $(function () {
       resumeMilesValue.get(0).innerHTML = Math.abs(values[handle]);
     });
   });
+  $(document).ready(function () {
+    $('li.profile-menu.active-item').attr('data-select-value', 'true');
+  });
   $(window).on('resize', function () {
     pageRepaint();
   });

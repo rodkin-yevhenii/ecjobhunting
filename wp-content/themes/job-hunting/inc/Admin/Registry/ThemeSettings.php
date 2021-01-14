@@ -22,7 +22,8 @@ class ThemeSettings
         register_nav_menus(
             [
                 'top' => 'Top Bar',
-                'primary' => 'Primary',
+                'employer' => 'Employer',
+                'candidate' => 'Job Seeker',
             ]
         );
     }
