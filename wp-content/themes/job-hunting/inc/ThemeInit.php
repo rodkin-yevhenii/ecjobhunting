@@ -68,7 +68,7 @@ final class ThemeInit
 
     public function createBasicPages()
     {
-        $pages = ['signup', 'candidate', 'employer', 'login', 'post-job', 'my-jobs', 'messages', 'my-database', 'help', 'activation'];
+        $pages = ['signup', 'dashboard', 'profile', 'login', 'post-job', 'my-jobs', 'messages', 'activation'];
 
         foreach ($pages as $slug) {
             $page = get_page_by_path($slug);
