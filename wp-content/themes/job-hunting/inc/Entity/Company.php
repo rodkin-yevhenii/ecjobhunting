@@ -18,7 +18,7 @@ class Company extends UserAbstract
     {
         parent::__construct($user);
         $this->isActivated = get_field('is_activated', 'user_' . $this->getUserId()) ?? false;
-        $this->credits = get_field('avaible_credits', 'user_' . $this->getUserId()) ?? 0;
+        $this->credits = floatval(get_field('avaible_credits', 'user_' . $this->getUserId()) ?? 0);
     }
 
     /**

@@ -1,23 +1,8 @@
-<?php get_header(); ?>
-    <form class="hero">
-        <div class="container">
-            <div class="row d-flex justify-content-xl-center">
-                <div class="col-12 col-md-5 col-xl-4">
-                    <label class="my-2">
-                        <input class="field-text" type="text" placeholder="Job Title">
-                    </label>
-                </div>
-                <div class="col-12 col-md-5 col-xl-4">
-                    <label class="my-2">
-                        <input class="field-text" type="text" placeholder="Location">
-                    </label>
-                </div>
-                <div class="col-12 col-md-2">
-                    <button class="btn btn-primary my-2" type="submit">Search</button>
-                </div>
-            </div>
-        </div>
-    </form>
+<?php
+
+global $wp_query;
+get_header(); ?>
+<?php get_template_part('template-parts/vacancy/form', 'search'); ?>
     <section class="my-3">
         <div class="container">
             <div class="row">
@@ -80,18 +65,26 @@
                     </form>
                 </div>
                 <div class="col-12 col-xl-8 order-xl-0">
-                    <div class="vacancies">
-                        <?php if (have_posts()): ?>
-                            <?php while (have_posts()): the_post(); ?>
-                                <?php get_template_part('template-parts/vacancy/card', 'default'); ?>
-                            <?php endwhile; ?>
-                        <?php else: ?>
-                            <?php get_template_part('content-none'); ?>
+                    <?php if (have_posts()): ?>
+                        <div class="vacancies js-vacancies" data-total="<?php echo $wp_query->found_posts; ?>"
+                             data-paged="1" data-posttype="vacancy" data-perpage="10" data-shown="<?php echo $wp_query->post_count; ?>">
+                            <?php while (have_posts()): the_post();
+                                get_template_part('template-parts/vacancy/card', 'default');
+                            endwhile;
+                            ?>
+                        </div>
+                        <?php if ($wp_query->post_count < $wp_query->found_posts): ?>
+                            <button class="btn btn-outline-primary btn-lg mt-5 js-load-more">
+                                Load More Job Results
+                            </button>
                         <?php endif; ?>
-                    </div>
-                    <button class="btn btn-outline-primary btn-lg mt-5">Load More Job Results</button>
+                    <?php else:
+                        get_template_part('content', 'none');
+                    endif;
+                    ?>
                 </div>
             </div>
         </div>
     </section>
+    </main>
 <?php get_footer();

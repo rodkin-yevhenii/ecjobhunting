@@ -17,7 +17,18 @@ class EcResponse implements AjaxResponse
     protected ?int $id = null;
     protected ?string $permalink = null;
     protected ?string $message = null;
+    protected ?int $count = 0;
 
+    /**
+     * @param int|null $count
+     *
+     * @return EcResponse
+     */
+    public function setCount(?int $count)
+    {
+        $this->count = $count;
+        return $this;
+    }
     /**
      * @param int|null $id
      *
@@ -106,6 +117,7 @@ class EcResponse implements AjaxResponse
             'id' => $this->id,
             'permalink' => $this->permalink,
             'message' => $this->message,
+            'itemsCount' => $this->count,
         ];
         echo json_encode($response);
         wp_die();

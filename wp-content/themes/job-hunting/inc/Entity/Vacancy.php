@@ -8,6 +8,7 @@ use EcJobHunting\Service\User\UserService;
 class Vacancy
 {
     private ?int $id = null;
+    private string $permalink = '';
     private string $title = '';
     private string $description = '';
     private ?string $datePosted = '';
@@ -51,8 +52,10 @@ class Vacancy
             $this->title = $vacancy->post_title;
             $this->description = strip_tags($vacancy->post_content);
             $this->author = $vacancy->post_author;
+            $this->datePosted = $vacancy->post_date;
             $this->fieldsObject = get_field_object('post_new_job', 'option');
-
+            $this->permalink = get_the_permalink($id);
+            $this->employer = UserService::getUser($this->author);
             //Meta Data
             $fields = get_fields($id);
             if ($fields) {
@@ -67,7 +70,7 @@ class Vacancy
                 $this->notifyEmployer = (bool)$fields['emails_to_inform'];
                 $this->isCommissionIncluded = (bool)$fields['is_commission_included'];
                 $this->agreementOptions = $fields['additional_options'] ?? [];
-                $this->benefits = $fields['benefits'] ?? [];
+                $this->benefits = (array)$fields['benefits'] ?? [];
                 $this->visitors = (int)$fields['visitors'] ?? 0;
                 $this->candidates = (array)$fields['applied'] ?? [];
                 $this->currency = ucwords($fields['compensation_currency'] ?? 'USD');
@@ -293,5 +296,13 @@ class Vacancy
     public function getStreetAddress(): string
     {
         return $this->streetAddress;
+    }
+
+    /**
+     * @return false|string|\WP_Error
+     */
+    public function getPermalink()
+    {
+        return $this->permalink;
     }
 }

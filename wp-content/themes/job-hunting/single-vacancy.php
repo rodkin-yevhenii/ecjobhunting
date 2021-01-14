@@ -10,8 +10,9 @@ $vacancy = new Vacancy(get_the_ID());
 get_header(); ?>
     <main>
         <?php if (have_posts() && $vacancy): the_post();
-        $benefits = $vacancy->getBenefits();
-        ?>
+            $benefits = $vacancy->getBenefits();
+            $employer = $vacancy->getEmployer();
+            ?>
             <section class="mt-3 my-md-5">
                 <div class="container">
                     <div class="row justify-content-xl-between">
@@ -43,37 +44,28 @@ get_header(); ?>
                                 <?php endif; ?>
                             </div>
                             <article class="mt-5">
-                                <h4>Why Work at This Company?</h4>
-                                <p class="mb-4">Inc 500 fastest growing companies</p>
-                                <p class="mb-4">The Penso Agency is looking to hire a select few business partners for
-                                    the fastest growing financial services sales organization in the United States. We
-                                    are looking for like-minded people who are coachable and have a proven track record
-                                    of integrity and willingness to think outside the box. Insurance industry experience
-                                    is not required but you must be willing to think and act like a business owner.</p>
-                                <h4>About The Penso Agency:</h4>
-                                <p class="mb-4">INNOVATION: We are a people and tech company developing a new model in a
-                                    world of traditional insurance sales. With an ever changing market and the
-                                    proliferation of social media our business model is more lucrative than ever
-                                    before.</p>
-                                <p class="mb-4">FINANCIAL INDEPENDENCE: We are passionate about creating an
-                                    entrepreneurial platform for both personal producers who desire an active six figure
-                                    income and builders who want to create a passive income stream where the sky is the
-                                    limit.</p>
-                                <p class="mb-4">LEADERSHIP: Our mission is to serve our agents by providing access to
-                                    warm leads and a simple, yet, sophisticated selling system coupled with unparalleled
-                                    support and leadership. We build leaders!</p>
-                                <p class="mb-4">PRODUCT PORTFOLIO: Our carriers and their products are selected from the
-                                    BEST in the industry and serve our primary markets of Mortgage Protection, Final
-                                    Expense, Annuities and Index Universal Life. Our top rated carriers include
-                                    Foresters, United Home Life, and American Amicable.</p>
+                                <?php if ($vacancy->getDescription()): ?>
+                                    <h2><?php _e('Job description', 'ecjobhunting')?></h2>
+                                    <p class="mb-4"><?php echo $vacancy->getDescription(); ?></p>
+                                <?php endif; ?>
+
+                                <?php if ($vacancy->getReasonsToWork()): ?>
+                                    <h3><?php _e('Why Work at This Company?', 'ecjobhunting')?></h3>
+                                    <p class="mb-4"><?php echo $vacancy->getReasonsToWork(); ?></p>
+                                <?php endif; ?>
+
+                                <?php if ($vacancy->getReasonsToWork()): ?>
+                                    <h3><?php _e('About The Penso Agency:', 'ecjobhunting')?></h3>
+                                    <p class="mb-4"><?php echo $vacancy->getCompanyDescription(); ?></p>
+                                <?php endif; ?>
                             </article>
-                            <div class="vacancy-footer"><a class="btn btn-primary btn-lg" href="#">Apply Now</a><a
-                                        class="btn btn-outline-primary btn-lg" href="#">Am I Qualified?</a></div>
+                            <div class="vacancy-footer"><a class="btn btn-primary btn-lg" href="#">Apply Now</a></div>
                         </div>
                         <div class="col-12 col-xl-3 my-5 d-md-flex d-xl-block">
-                            <div class="vacancy-image"><img src="images/penso.png" alt="vacancy"></div>
+                            <div class="vacancy-image"><img src="<?php echo $employer->getPhoto(); ?>" alt="<?php echo $employer->getName(); ?>"></div>
                             <div class="vacancy-info">
-                                <h2 class="vacancy-company no-decor">The Penso Agency</h2><span class="color-secondary">Posted date: 2 days ago</span>
+                                <h2 class="vacancy-company no-decor"><?php echo $vacancy->getCompanyName(); ?></h2>
+                                <span class="color-secondary"><?php echo nicetime($vacancy->getDatePosted()); ?></span>
                                 <div class="social mt-4"><span>Share this job:</span>
                                     <ul>
                                         <li><a href="#"><i class="fa fa-facebook"></i></a></li>

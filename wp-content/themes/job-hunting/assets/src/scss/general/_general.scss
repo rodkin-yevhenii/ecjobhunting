@@ -1801,6 +1801,13 @@ form {
   }
 
 }
+.error404 {
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
 
 .is-error{
   background-color: red;
