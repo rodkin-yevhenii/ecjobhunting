@@ -2,6 +2,7 @@
 
 namespace EcJobHunting\Entity;
 
+use EcJobHunting\Service\User\UserService;
 use WP_Query;
 
 class Company extends UserAbstract
@@ -82,5 +83,26 @@ class Company extends UserAbstract
     public function getJobVisitors(): int
     {
         return $this->jobVisitors;
+    }
+
+    public function getCandidates(): array
+    {
+        if (!$this->candidates) {
+            $vacancies = $this->getVacancies();
+            foreach ($vacancies as $vacancy){
+                $applied  = get_field('applied', $vacancy);
+                if($applied){
+                    $resumes = [];
+                    foreach ($applied as $candidate){
+                        $resume  = new Candidate(get_user_by('id', $candidate));
+                        if($resume->isPublished()){
+                            $resumes[] = $resume;
+                        }
+                    }
+                    $this->candidates = array_merge($this->candidates, $resumes);
+                }
+            }
+        }
+        return $this->candidates;
     }
 }

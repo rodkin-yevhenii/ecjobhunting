@@ -59,8 +59,12 @@ class Vacancy
             //Meta Data
             $fields = get_fields($id);
             if ($fields) {
-                $this->compensationFrom = !empty($fields['compensation_range']['from']) ? $fields['compensation_range']['from'] : 0;
-                $this->compensationTo = !empty($fields['compensation_range']['to']) ? $fields['compensation_range']['to'] : 0;
+                $this->compensationFrom = !empty($fields['compensation_range']['from']) && is_numeric(
+                    $fields['compensation_range']['from']
+                ) ? $fields['compensation_range']['from'] : 0;
+                $this->compensationTo = !empty($fields['compensation_range']['to']) && is_numeric(
+                    $fields['compensation_range']['to']
+                ) ? $fields['compensation_range']['to'] : 0;
                 $this->compensationRange = !empty($fields['compensation_range']) ? $fields['compensation_range'] : $this->compensationRange;
                 $this->streetAddress = !empty($fields['street_address']) ? $fields['street_address'] : '';
 
@@ -218,7 +222,7 @@ class Vacancy
     }
 
     /**
-     * @return float|int
+     * @return float|int|string
      */
     public function getCompensationTo()
     {
@@ -226,7 +230,7 @@ class Vacancy
     }
 
     /**
-     * @return float|int
+     * @return float|int|string
      */
     public function getCompensationFrom()
     {

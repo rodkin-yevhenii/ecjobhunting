@@ -436,6 +436,21 @@ class AcfFields
                         'endpoint' => 0,
                     ],
                     [
+                        'key' => 'field_600732abbd03a',
+                        'label' => 'Contact us URL',
+                        'name' => 'contact_us_url',
+                        'type' => 'link',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'return_format' => 'url',
+                    ],
+                    [
                         'key' => 'field_5ff88cb4c50c9',
                         'label' => 'Post New Job',
                         'name' => 'post_new_job',
