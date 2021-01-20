@@ -20,6 +20,7 @@ class Vacancy
     private float $compensationTo = 0;
     private string $compensationPeriod = 'annualy';
     private bool $isCommissionIncluded = false;
+    private string $status = 'draft';
 
     //Taxonomies
     private array $location = []; // taxonomy Location
@@ -56,6 +57,7 @@ class Vacancy
             $this->fieldsObject = get_field_object('post_new_job', 'option');
             $this->permalink = get_the_permalink($id);
             $this->employer = UserService::getUser($this->author);
+            $this->status = $vacancy->post_status;
             //Meta Data
             $fields = get_fields($id);
             if ($fields) {
@@ -68,7 +70,7 @@ class Vacancy
                 $this->compensationRange = !empty($fields['compensation_range']) ? $fields['compensation_range'] : $this->compensationRange;
                 $this->streetAddress = !empty($fields['street_address']) ? $fields['street_address'] : '';
 
-                $this->companyName = $fields['hiring_company'] ?? '';
+                $this->companyName = $fields['hiring_company'] ?? $this->employer->getName();
                 $this->reasonsToWork = $fields['why_work_at_this_company'] ?? '';
                 $this->companyDescription = $fields['hiring_company_description'] ?? '';
                 $this->notifyEmployer = (bool)$fields['emails_to_inform'];
@@ -86,6 +88,11 @@ class Vacancy
         } else {
             $this->employer = UserService::getUser();
         }
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
