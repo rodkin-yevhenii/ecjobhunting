@@ -52,6 +52,9 @@ class FrontInit
         if ($key !== false) {
             unset($classes[$key]);
         }
+        if (is_front_page()) {
+           return ['frontpage'];
+        }
         return $classes;
     }
 }

@@ -73,8 +73,11 @@ $user = new EcJobUser(wp_get_current_user());
         </div>
     </header>
     <main>
-<?php if (UserService::isCandidate()):
-    get_template_part('template-parts/candidate/profile', 'menu');
-elseif (UserService::isEmployer()):
-    get_template_part('template-parts/employer/profile', 'menu');
+<?php
+if (!is_front_page()):
+    if (UserService::isCandidate()):
+        get_template_part('template-parts/candidate/profile', 'menu');
+    elseif (UserService::isEmployer()):
+        get_template_part('template-parts/employer/profile', 'menu');
+    endif;
 endif;

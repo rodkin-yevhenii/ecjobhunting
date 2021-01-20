@@ -9,6 +9,7 @@ class CustomTaxonomies
         $this->registerType();
         $this->registerSkills();
         $this->registerLocation();
+        $this->registerJobCategories();
     }
 
     private function registerType()
@@ -106,6 +107,42 @@ class CustomTaxonomies
                 'description' => '',
                 'public' => true,
                 'hierarchical' => false,
+                'rewrite' => true,
+                'capabilities' => [],
+                'meta_box_cb' => null,
+                'show_admin_column' => false,
+                'show_in_rest' => null,
+                'rest_base' => null,
+            ]
+        );
+    }
+
+    private function registerJobCategories()
+    {
+        register_taxonomy(
+            'job-category',
+            ['vacancy', 'cv'],
+            [
+                'label' => 'Job Category',
+                'labels' => [
+                    'name' => 'Job Categories',
+                    'singular_name' => 'Job Category',
+                    'add_new' => 'Add Category',
+                    'add_new_item' => 'Create new Category',
+                    'edit_item' => 'Edit Category',
+                    'new_item' => 'New Category',
+                    'view_item' => 'View Category',
+                    'search_items' => 'Find Category',
+                    'not_found' => 'Categories not found',
+                    'not_found_in_trash' => 'Categories not found in trash',
+                    'parent_item_colon' => '',
+                    'menu_name' => 'Categories',
+
+                ],
+                'description' => '',
+                'public' => true,
+                'hierarchical' => true,
+                'has_archive' => true,
                 'rewrite' => true,
                 'capabilities' => [],
                 'meta_box_cb' => null,
