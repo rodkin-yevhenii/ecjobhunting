@@ -48,6 +48,14 @@ class Candidate extends UserAbstract
         $this->fields = $fields ? $fields : [];
     }
 
+    /**
+     * @return int|\WP_Error|\WP_Post|null
+     */
+    public function getCvId()
+    {
+        return $this->cvId;
+    }
+
     // TODO Clarify with client Where needs to be displayed on FRONT
     public function getHeadline()
     {

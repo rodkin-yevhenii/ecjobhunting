@@ -75,6 +75,19 @@ function nicetime($date)
     return "$difference $periods[$j] {$tense}";
 }
 
+function dateDiff($posted)
+{
+    try {
+        $earlier = new DateTime($posted);
+        $today = new DateTime('now');
+        $diff = $today->diff($earlier)->format("%a");
+
+        return $diff;
+    } catch (Exception $e) {
+        return $e->getMessage();
+    }
+}
+
 /**
  * Returns nice formatted date period
  *

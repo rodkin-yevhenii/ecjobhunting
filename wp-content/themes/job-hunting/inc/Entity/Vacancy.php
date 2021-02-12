@@ -20,6 +20,7 @@ class Vacancy
     private float $compensationTo = 0;
     private string $compensationPeriod = 'annualy';
     private bool $isCommissionIncluded = false;
+    private string $status = 'draft';
 
     //Taxonomies
     private array $location = []; // taxonomy Location
@@ -56,15 +57,20 @@ class Vacancy
             $this->fieldsObject = get_field_object('post_new_job', 'option');
             $this->permalink = get_the_permalink($id);
             $this->employer = UserService::getUser($this->author);
+            $this->status = $vacancy->post_status;
             //Meta Data
             $fields = get_fields($id);
             if ($fields) {
-                $this->compensationFrom = !empty($fields['compensation_range']['from']) ? $fields['compensation_range']['from'] : 0;
-                $this->compensationTo = !empty($fields['compensation_range']['to']) ? $fields['compensation_range']['to'] : 0;
+                $this->compensationFrom = !empty($fields['compensation_range']['from']) && is_numeric(
+                    $fields['compensation_range']['from']
+                ) ? $fields['compensation_range']['from'] : 0;
+                $this->compensationTo = !empty($fields['compensation_range']['to']) && is_numeric(
+                    $fields['compensation_range']['to']
+                ) ? $fields['compensation_range']['to'] : 0;
                 $this->compensationRange = !empty($fields['compensation_range']) ? $fields['compensation_range'] : $this->compensationRange;
                 $this->streetAddress = !empty($fields['street_address']) ? $fields['street_address'] : '';
 
-                $this->companyName = $fields['hiring_company'] ?? '';
+                $this->companyName = $fields['hiring_company'] ?? $this->employer->getName();
                 $this->reasonsToWork = $fields['why_work_at_this_company'] ?? '';
                 $this->companyDescription = $fields['hiring_company_description'] ?? '';
                 $this->notifyEmployer = (bool)$fields['emails_to_inform'];
@@ -82,6 +88,11 @@ class Vacancy
         } else {
             $this->employer = UserService::getUser();
         }
+    }
+
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -218,7 +229,7 @@ class Vacancy
     }
 
     /**
-     * @return float|int
+     * @return float|int|string
      */
     public function getCompensationTo()
     {
@@ -226,7 +237,7 @@ class Vacancy
     }
 
     /**
-     * @return float|int
+     * @return float|int|string
      */
     public function getCompensationFrom()
     {

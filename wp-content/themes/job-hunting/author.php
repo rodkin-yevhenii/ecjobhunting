@@ -1,3 +1,5 @@
-<?php get_header(); ?>
-<div>Author Page</div>
-<?php get_footer();
+<?php use EcJobHunting\Service\User\UserService;
+
+get_header();
+get_template_part('content', 'none');
+get_footer();
