@@ -157,6 +157,10 @@ $(function () {
       currentItem.addClass('active');
     }
   });
+  $(document).on('click', '.recent-info-tab ul.results-header li', function () {
+    var headerText = $(this).parents('.recent-info-tab').find('h2');
+    headerText.text($(this).attr('data-tab-message'));
+  });
   $(document).on('click', '[data-tab-back]', function () {
     var parent = $(this).parents('[data-tab]');
     parent.find("[data-tab-item]").removeClass('active');
