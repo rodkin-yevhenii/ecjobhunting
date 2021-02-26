@@ -237,6 +237,7 @@ $(function () {
   var $duplicateJobFrom = $('.duplicate-job-form');
   var $vacancyHolder = $('.js-vacancies');
   var $loadMoreBtn = $('.js-load-more');
+  var $registerForm = $('.registerform');
 
   function postJobAjax(data, $messageContainer) {
     $.ajax({
@@ -245,7 +246,7 @@ $(function () {
       data: data,
       processData: false,
       contentType: false,
-      dataType: "json",
+      dataType: 'json',
       success: function success(response) {
         if (response && response.status === 201) {
           $($messageContainer).removeClass('is-error');
@@ -280,7 +281,7 @@ $(function () {
       type: 'POST',
       url: ajaxUrl,
       data: data,
-      dataType: "json",
+      dataType: 'json',
       success: function success(response) {
         if (response.html) {
           $holder.append(response.html);
@@ -328,7 +329,7 @@ $(function () {
   });
   $publishJobFrom.on('submit', function (event) {
     event.preventDefault();
-    var submitBtn = $publishJobFrom.find("button[type=submit]:focus");
+    var submitBtn = $publishJobFrom.find('button[type=submit]:focus');
     var benefits = [];
     var agreements = [];
     var skills = [];
@@ -376,5 +377,49 @@ $(function () {
     }
 
     loadMoreAjax($vacancyHolder, $loadMoreBtn);
+  });
+  $registerForm.on('submit', function (e) {
+    e.preventDefault();
+    var $form = $(e.currentTarget);
+    var validator = $form.validate({
+      rules: {
+        password: "required",
+        pwd_confirmation: {
+          equalTo: ".password"
+        }
+      },
+      highlight: function highlight(element) {
+        $(element).parent().addClass('form-invalid');
+      },
+      unhighlight: function unhighlight(element) {
+        $(element).parent().removeClass('form-invalid');
+      },
+      messages: {
+        password: "Incorrect password",
+        pwd_confirmation: "<small>Password doesn't match</small>"
+      }
+    });
+    console.log(validator);
+
+    if (!validator.form()) {
+      return;
+    }
+
+    var data = {
+      action: 'register_user',
+      email: $form.find("input[name='email']").val(),
+      username: $form.find("input[name='username']").val(),
+      password: $form.find("input[name='pwd']").val(),
+      role: $form.find("input[name='role']").val()
+    };
+    console.log(data);
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data: data,
+      success: function success(response) {
+        console.log(response);
+      }
+    });
   });
 });

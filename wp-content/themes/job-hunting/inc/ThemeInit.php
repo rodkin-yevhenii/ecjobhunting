@@ -7,6 +7,7 @@ use EcJobHunting\Admin\Registry\UserRoles;
 use EcJobHunting\Front\FrontInit;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Service\Job\JobService;
+use EcJobHunting\Service\User\Registration;
 use EcJobHunting\Service\Widget\WidgetInit;
 use EcJobHunting\Service\User\UserService;
 
@@ -42,6 +43,7 @@ final class ThemeInit
     {
         add_action('init', new FrontInit());
         add_action('init', new JobService());
+        add_action('init', new Registration());
     }
 
     private function registerWidgets()
