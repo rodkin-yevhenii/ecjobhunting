@@ -78,6 +78,7 @@ gulp.task('libs', function (done) {
     const libs = {
         'index': [
             'node_modules/jquery/dist/jquery.min.js',
+            'node_modules/jquery-validation/dist/jquery.validate.js',
             'node_modules/bootstrap/dist/js/bootstrap.min.js',
             'node_modules/scroll-lock/dist/scroll-lock.min.js',
             'node_modules/slick-carousel/slick/slick.min.js',

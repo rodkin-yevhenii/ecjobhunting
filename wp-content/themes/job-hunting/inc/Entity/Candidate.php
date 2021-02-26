@@ -21,6 +21,7 @@ class Candidate extends UserAbstract
     private array $experience;
     private array $education;
     private string $summary;
+    private string $salaryExpectation = '0';
 
     public function __construct($user)
     {
@@ -223,4 +224,14 @@ class Candidate extends UserAbstract
         return $this->summary;
     }
 
+    /**
+     * @return string
+     */
+    public function getSalaryExpectation(): string
+    {
+        if (empty($this->salaryExpectation)) {
+            $this->salaryExpectation = $this->fields['salary'] ?? '';
+        }
+        return $this->salaryExpectation;
+    }
 }

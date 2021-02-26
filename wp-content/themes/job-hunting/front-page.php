@@ -1,11 +1,30 @@
 <?php
 
+global $post;
 $jobCategories = get_terms(
     ['taxonomy' => 'job-category', 'hide_empty' => false, 'orderby' => 'name', 'order' => 'ASC']
 );
+$args = [
+    'post_type' => 'vacancy',
+    'posts_per_page' => 5,
+    'post_status' => 'publish',
+    'fields' => 'ids',
+];
+$latestJobs = new WP_Query($args);
+$args['post_type'] = 'cv';
+$latestResume = new WP_Query($args);
 
+$latestCompanies = get_users(
+    [
+        'role' => 'employer',
+        'orderby' => 'registered',
+        'order' => 'DESC',
+        'number' => 5,
+    ]
+);
+$counts = count_users();
 get_header(); ?>
-    <form class="hero">
+    <form class="hero" role="search" method="get" id="searchform" class="searchform" action="<?php echo esc_url( home_url( '/' ) ); ?>">
         <div class="container">
             <div class="row d-flex justify-content-xl-center">
                 <div class="col-12">
@@ -13,12 +32,12 @@ get_header(); ?>
                 </div>
                 <div class="col-12 col-md-5 col-xl-4">
                     <label class="my-2">
-                        <input class="field-text" type="text" placeholder="Job Title">
+                        <input class="field-text" type="text" placeholder="Job Title" name="s" id="s">
                     </label>
                 </div>
                 <div class="col-12 col-md-5 col-xl-4">
                     <label class="my-2">
-                        <input class="field-text" type="text" placeholder="Location">
+                        <input class="field-text" type="text" placeholder="Location" name="location" id="location">
                     </label>
                 </div>
                 <div class="col-12 col-md-2">
@@ -26,10 +45,10 @@ get_header(); ?>
                 </div>
             </div>
             <div class="row">
-                <div class="col-6 col-md-3 hero-numbers"><strong>6890</strong><span>Jobs</span></div>
-                <div class="col-6 col-md-3 hero-numbers"><strong>2773</strong><span>Members</span></div>
-                <div class="col-6 col-md-3 hero-numbers"><strong>1200</strong><span>Resumes</span></div>
-                <div class="col-6 col-md-3 hero-numbers"><strong>1300</strong><span>Companies</span></div>
+                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $latestJobs->found_posts; ?></strong><span>Jobs</span></div>
+                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $counts['total_users']; ?></strong><span>Members</span></div>
+                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $latestResume->found_posts; ?></strong><span>Resumes</span></div>
+                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $counts['avail_roles']['employer']; ?></strong><span>Companies</span></div>
             </div>
         </div>
     </form>
@@ -59,388 +78,54 @@ get_header(); ?>
     <section class="results">
         <div class="container">
             <div class="row">
-                <div class="col-12" data-tab>
+                <div class="col-12 recent-info-tab" data-tab>
                     <h2 class="align-center">We have founds 16 available jobs for you</h2>
                     <ul class="results-header">
                         <li class="d-md-none" data-tab-value><span>Jobs</span></li>
-                        <li class="active" data-tab-item="jobs">Jobs</li>
-                        <li data-tab-item="resumes">Latest Resumes</li>
-                        <li data-tab-item="companies">Latest Companies</li>
+                        <li class="active" data-tab-item="jobs" data-tab-message="<?php printf(
+                            __('We have founds %d available jobs for you', 'ecjobhunting'),
+                            $latestJobs->found_posts
+                        ); ?>">Jobs
+                        </li>
+                        <li data-tab-item="resumes" data-tab-message="<?php printf(
+                            __('We have founds %d CVs for you', 'ecjobhunting'),
+                            $latestResume->found_posts
+                        ); ?>">Latest Resumes
+                        </li>
+                        <li data-tab-item="companies" data-tab-message="<?php printf(
+                            __('We have founds %d companies for you', 'ecjobhunting'),
+                            $counts['avail_roles']['employer']
+                        ); ?>">Latest Companies
+                        </li>
                     </ul>
                     <ul class="results-content">
-                        <li class="active" data-tab-content="jobs">
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/jobs-image-1.png"
-                                                                            alt="image">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9"><small>5 years ago</small>
-                                            <h4 class="color-primary">Computer and Information Tech</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">Full-Time</span></li>
-                                                <li><span class="color-secondary">London, United Kingdom</span></li>
-                                            </ul>
-                                            <p>Schweitzer Engineering Laboratories (SEL) seeks a professional,
-                                                innovative and detailed individual for our Mechanical Designer
-                                                position.
-                                                If you are looking for an opportunity to practice World Class
-                                                ...</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/jobs-image-2.png"
-                                                                            alt="image">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9"><small>5 years ago</small>
-                                            <h4 class="color-primary">Graduate Inside Sales Representatives</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">Full-Time</span></li>
-                                                <li><span class="color-secondary">London, United Kingdom</span></li>
-                                            </ul>
-                                            <p>Schweitzer Engineering Laboratories (SEL) seeks a professional,
-                                                innovative and detailed individual for our Mechanical Designer
-                                                position.
-                                                If you are looking for an opportunity to practice World Class
-                                                ...</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/jobs-image-3.png"
-                                                                            alt="image">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9"><small>5 years ago</small>
-                                            <h4 class="color-primary">Java Developer Scala Spring Linux Java
-                                                Dev</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">Full-Time</span></li>
-                                                <li><span class="color-secondary">London, United Kingdom</span></li>
-                                            </ul>
-                                            <p>Schweitzer Engineering Laboratories (SEL) seeks a professional,
-                                                innovative and detailed individual for our Mechanical Designer
-                                                position.
-                                                If you are looking for an opportunity to practice World Class
-                                                ...</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/jobs-image-4.png"
-                                                                            alt="image">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9"><small>5 years ago</small>
-                                            <h4 class="color-primary">Graduate Inside Sales Executive Job</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">Full-Time</span></li>
-                                                <li><span class="color-secondary">London, United Kingdom</span></li>
-                                            </ul>
-                                            <p>Schweitzer Engineering Laboratories (SEL) seeks a professional,
-                                                innovative and detailed individual for our Mechanical Designer
-                                                position.
-                                                If you are looking for an opportunity to practice World Class
-                                                ...</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/jobs-image-5.png"
-                                                                            alt="image">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9"><small>5 years ago</small>
-                                            <h4 class="color-primary">Senior Rolling Stock Technician Required</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">Full-Time</span></li>
-                                                <li><span class="color-secondary">London, United Kingdom</span></li>
-                                            </ul>
-                                            <p>Schweitzer Engineering Laboratories (SEL) seeks a professional,
-                                                innovative and detailed individual for our Mechanical Designer
-                                                position.
-                                                If you are looking for an opportunity to practice World Class
-                                                ...</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li data-tab-content="resumes">
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/customer-photo-1.jpg"
-                                                                            alt="photo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                                            <h4 class="color-primary">Ann Fuller</h4><span
-                                                    class="results-country color-secondary">London</span>
-                                            <ul>
-                                                <li><span class="color-secondary">$50000 p.a minimum</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/customer-photo-2.jpg"
-                                                                            alt="photo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                                            <h4 class="color-primary">Annasmith</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">Last Activity 12 months ago</span>
-                                                </li>
-                                                <li><span class="color-secondary">Automotive</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/customer-photo-3.jpg"
-                                                                            alt="photo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                                            <h4 class="color-primary">Annette Cox</h4><span
-                                                    class="results-country color-secondary">Greenford</span>
-                                            <ul>
-                                                <li><span class="color-secondary">$50000 p.a minimum</span></li>
-                                                <li><span class="color-secondaryLast">Activity 4 years ago</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/customer-photo-4.jpg"
-                                                                            alt="photo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                                            <h4 class="color-primary">Barry Burns</h4><span
-                                                    class="results-country color-secondary">London</span>
-                                            <ul>
-                                                <li><span class="color-secondary">$50000 p.a minimum</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/customer-photo-5.jpg"
-                                                                            alt="photo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                                            <h4 class="color-primary">Betty Stanley</h4><span
-                                                    class="results-country color-secondary">London</span>
-                                            <ul>
-                                                <li><span class="color-secondary">$50000 p.a minimum</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/customer-photo-6.jpg"
-                                                                            alt="photo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                                            <h4 class="color-primary">Billy Reed</h4><span
-                                                    class="results-country color-secondary">London</span>
-                                            <ul>
-                                                <li><span class="color-secondary">$50000 p.a minimum</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/customer-photo-1.jpg"
-                                                                            alt="photo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                                            <h4 class="color-primary">Annasmith</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">Last Activity 12 months ago</span>
-                                                </li>
-                                                <li><span class="color-secondary">Automotive</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/customer-photo-2.jpg"
-                                                                            alt="photo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                                            <h4 class="color-primary">Annette Cox</h4><span
-                                                    class="results-country color-secondary">Greenford</span>
-                                            <ul>
-                                                <li><span class="color-secondary">$50000 p.a minimum</span></li>
-                                                <li><span class="color-secondary">Last Activity 4 years ago</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li data-tab-content="companies">
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center align-items-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/companies-image-1.png"
-                                                                            alt="logo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-7 col-xl-7 d-flex flex-wrap">
-                                            <h4 class="color-primary">Altes Bank</h4><span
-                                                    class="results-country color-secondary">United Kingdom</span>
-                                            <ul>
-                                                <li><span class="color-secondary">Retail</span></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col d-none d-md-block col-md-3 col-xl-2"><span
-                                                    class="color-secondary">0 vacancies</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center align-items-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/companies-image-2.png"
-                                                                            alt="logo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-7 col-xl-7 d-flex flex-wrap">
-                                            <h4 class="color-primary">Altes Bank</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">London, United Kingdom</span></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col d-none d-md-block col-md-3 col-xl-2"><span
-                                                    class="color-primary">103 vacancies</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center align-items-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/companies-image-3.png"
-                                                                            alt="logo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-7 col-xl-7 d-flex flex-wrap">
-                                            <h4 class="color-primary">Altes Bank</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">London, United Kingdom</span></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col d-none d-md-block col-md-3 col-xl-2"><span
-                                                    class="color-primary">15 vacancies</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center align-items-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/companies-image-4.png"
-                                                                            alt="logo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-7 col-xl-7 d-flex flex-wrap">
-                                            <h4 class="color-primary">Altes Bank</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">United Kingdom</span></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col d-none d-md-block col-md-3 col-xl-2"><span
-                                                    class="color-primary">7 vacancies</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center align-items-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/companies-image-5.png"
-                                                                            alt="logo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-7 col-xl-7 d-flex flex-wrap">
-                                            <h4 class="color-primary">Altes Bank</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">United Kingdom</span></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col d-none d-md-block col-md-3 col-xl-2"><span
-                                                    class="color-primary">12 vacancies</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="results-item">
-                                <div class="container-fluid">
-                                    <div class="row d-flex justify-content-xl-center align-items-center">
-                                        <div class="col d-none d-md-block col-md-2 col-xl-1">
-                                            <div class="results-image"><img src="images/companies-image-6.png"
-                                                                            alt="logo"></div>
-                                        </div>
-                                        <div class="col-12 col-md-7 col-xl-7 d-flex flex-wrap">
-                                            <h4 class="color-primary">Altes Bank</h4>
-                                            <ul>
-                                                <li><span class="color-secondary">London, United Kingdom</span></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col d-none d-md-block col-md-3 col-xl-2"><span
-                                                    class="color-primary">5 vacancies</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        <?php if ($latestJobs->have_posts()) : ?>
+                            <li class="active" data-tab-content="jobs">
+                                <?php foreach ($latestJobs->posts as $post) :
+                                    setup_postdata($post);
+                                    get_template_part('template-parts/vacancy/card', 'featured');
+                                endforeach;
+                                wp_reset_postdata();
+                                ?>
+                            </li>
+                        <?php endif;
+                        if ($latestResume->have_posts()) : ?>
+                            <li data-tab-content="resumes">
+                                <?php foreach ($latestResume->posts as $post) :
+                                    setup_postdata($post);
+                                    get_template_part('template-parts/candidate/card', 'short');
+                                endforeach;
+                                wp_reset_postdata();
+                                ?>
+                            </li>
+                        <?php endif;
+                        if ($latestCompanies) : ?>
+                            <li data-tab-content="companies">
+                                <?php foreach ($latestCompanies as $user) :
+                                    get_template_part('template-parts/employer/card', 'default', ['user' => $user]);
+                                endforeach; ?>
+                            </li>
+                        <?php endif; ?>
                     </ul>
                 </div>
             </div>
@@ -453,18 +138,24 @@ get_header(); ?>
         <div class="container">
             <div class="row">
                 <div class="col-12 col-md-6 register-item">
-                    <div class="register-item-icon d-none d-md-flex"><img src="images/icons/register-icon-1.png"
-                                                                          alt="icon"></div>
+                    <div class="register-item-icon d-none d-md-flex"><img
+                                src="<?php echo IMG_URI . 'icons/register-icon-1.png'; ?>"
+                                alt="icon"></div>
                     <h3>Employer Account</h3>
                     <p>We are a group of entrepreneurs brought together to provide a differentiated approach to the
-                        recruiting industry.</p><a class="btn btn-outline-secondary" href="#">Register Account</a>
+                        recruiting industry.</p><a class="btn btn-outline-secondary"
+                                                   href="<?php echo SIGNUP_URL . '?user=employer'; ?>">Register
+                        Account</a>
                 </div>
                 <div class="col-12 col-md-6 register-item">
-                    <div class="register-item-icon d-none d-md-flex"><img src="images/icons/register-icon-2.png"
-                                                                          alt="icon"></div>
+                    <div class="register-item-icon d-none d-md-flex"><img
+                                src="<?php echo IMG_URI . 'icons/register-icon-2.png'; ?>"
+                                alt="icon"></div>
                     <h3>Candidates Account</h3>
                     <p>We are a group of entrepreneurs brought together to provide differentiated approach. We are a
-                        group of entrepreneurs</p><a class="btn btn-outline-secondary" href="#">Register Account</a>
+                        group of entrepreneurs</p><a class="btn btn-outline-secondary"
+                                                     href="<?php echo SIGNUP_URL . '?user=candidate'; ?>">Register
+                        Account</a>
                 </div>
             </div>
         </div>
