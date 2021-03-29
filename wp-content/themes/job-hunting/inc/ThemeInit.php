@@ -154,19 +154,62 @@ final class ThemeInit
                 'schema' => null,
             ]
         );
+        register_rest_field(
+            'vacancy',
+            'location',
+            [
+                'get_callback' => [$this, 'retrieveJobLocation'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
+            'skills',
+            [
+                'get_callback' => [$this, 'retrieveJobSkills'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
+            'employmentType',
+            [
+                'get_callback' => [$this, 'retrieveJobEmploymentType'],
+                'schema' => null,
+            ]
+        );
     }
 
     public function retrievePostMeta($object)
     {
         //get the id of the post object array
         $post_id = $object['id'];
-
+        $meta = get_post_meta($post_id);
+        $meta['benefits'] = unserialize($meta['benefits'][0]);
+        $meta['additional_options'] = unserialize($meta['additional_options'][0]);
         //return the post meta
-        return get_post_meta($post_id);
+        return $meta;
     }
 
     public function retrievePostTitle($object)
     {
         return get_the_title($object['id']);
+    }
+
+    public function retrieveJobLocation($object)
+    {
+        return wp_get_post_terms($object['id'], 'location', ['fields'=> 'names']);
+    }
+
+    public function retrieveJobSkills($object)
+    {
+        return wp_get_post_terms($object['id'], 'skill', ['fields'=> 'names']);
+    }
+
+    public function retrieveJobEmploymentType($object)
+    {
+        return wp_get_post_terms($object['id'], 'type', ['fields'=> 'names']);
     }
 }

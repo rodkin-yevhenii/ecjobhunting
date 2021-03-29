@@ -23,7 +23,24 @@ $(() => {
 
     response.then((r) => {
       const job = {
-        title: r.title
+        title: r.title,
+        jobLocation: r.location,
+        employmentType: r.employmentType,
+        jobDescription: r.content.rendered,
+        benefits: r.meta.benefits,
+        compensationFrom: r.meta.compensation_range_from,
+        compensationTo: r.meta.compensation_range_to,
+        currency: r.meta.compensation_currency,
+        period: r.meta.compensation_period,
+        isCommissionIncluded: r.meta.is_commission_included,
+        street: r.meta.street_address,
+        reasonToWork: r.meta.why_work_at_this_company,
+        skills: r.skills,
+        companyName: r.meta.hiring_company,
+        companyDesc: r.meta.hiring_company_description,
+        notifyMe: r.meta.send_new_candidates_to,
+        emailsToInform: r.meta.emails_to_inform,
+        options: r.meta.additional_options,
       }
 
       console.log(r)
