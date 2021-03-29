@@ -38,11 +38,20 @@ class Assets
 
     private function localizeScripts()
     {
+        if(is_user_logged_in()){
+            $credentials = get_userdata(get_current_user_id());
+            $basic = base64_encode("{$credentials->user_login}:{$credentials->user_pass}");
+        } else
+        {
+            $basic = '';
+        }
+
         wp_localize_script(
             $this->handle,
             'siteSettings',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
+                '_basic'=>$basic
             ]
         );
     }

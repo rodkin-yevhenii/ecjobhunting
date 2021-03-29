@@ -8,6 +8,18 @@ async function getVacancy (id) {
   return await response.json()
 }
 
+async function updateVacancy (id, dataset) {
+  const response = await fetch(`/wp-json/wp/v2/vacancies/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization': 'Basic ' + window._basic
+    },
+    body: JSON.stringify(dataset)
+  })
+  return response
+}
+
 $(() => {
   const $edit = $('.js-edit-job')
   const $duplicate = $('.js-duplicate-job')
@@ -72,6 +84,18 @@ $(() => {
 
   $modal.on('click', '.close', () => {
     $modal.addClass('is-hidden')
+  })
+
+  $publish.on('click', (e) => {
+    const dataset = {
+      status: 'publish'
+    }
+    const id = $(e.currentTarget).closest('ul').attr('data-job-id')
+
+    let promise = updateVacancy(id, dataset)
+    promise.then((response) => response.json())
+      .then((data) => { console.log(data) })
+      .catch((err) => { console.log(err) })
   })
 
 })
