@@ -28,11 +28,11 @@ $(() => {
         employmentType: r.employmentType,
         jobDescription: r.content.rendered,
         benefits: r.meta.benefits,
-        compensationFrom: r.meta.compensation_range_from,
-        compensationTo: r.meta.compensation_range_to,
+        compensationFrom: r.meta.compensation_range_from[0],
+        compensationTo: r.meta.compensation_range_to[0],
         currency: r.meta.compensation_currency,
         period: r.meta.compensation_period,
-        isCommissionIncluded: r.meta.is_commission_included,
+        isCommissionIncluded: Boolean(r.meta.is_commission_included[0]),
         street: r.meta.street_address,
         reasonToWork: r.meta.why_work_at_this_company,
         skills: r.skills,
@@ -42,9 +42,31 @@ $(() => {
         emailsToInform: r.meta.emails_to_inform,
         options: r.meta.additional_options,
       }
-
-      console.log(r)
       console.log(job)
+      let skills = job.skills.map((item) => {
+        return '<li data-key="' + item + '"><span>' + item + '</span><span class="field-skills-close"></span></li>'
+      })
+
+      job.options.forEach((item) => {
+        $('#' + item).attr('checked', 'checked')
+      })
+
+      job.benefits.forEach((item) => {
+        $('#' + item).attr('checked', 'checked')
+      })
+      $('#post-job-title').val(job.title)
+      $('#post-job-location').val(job.jobLocation.join(', '))
+      $('#employment-type').val(job.employmentType)
+      $('#post-job-description').val(job.jobDescription)
+      $('#compensation_from').val(job.compensationFrom)
+      $('#compensation_to').val(job.compensationTo)
+      $('#post-job-address').val(job.street)
+      $('.field-skills-list').html(skills.join(''))
+      $('#post-job-company').val(job.companyName)
+      $('#post-job-company-description').val(job.companyDesc)
+      $('#post-job-why').val(job.reasonToWork)
+      if (job.isCommissionIncluded)
+        $('#post-job-commission').attr('checked', 'checked')
     })
   })
 

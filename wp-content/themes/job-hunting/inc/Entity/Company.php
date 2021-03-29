@@ -51,6 +51,7 @@ class Company extends UserAbstract
                     'numberposts' => -1,
                     'fields' => 'ids',
                     'post_type' => 'vacancy',
+                    'post_status' => 'any',
                 ]
             );
         }
@@ -89,13 +90,13 @@ class Company extends UserAbstract
     {
         if (!$this->candidates) {
             $vacancies = $this->getVacancies();
-            foreach ($vacancies as $vacancy){
-                $applied  = get_field('applied', $vacancy);
-                if($applied){
+            foreach ($vacancies as $vacancy) {
+                $applied = get_field('applied', $vacancy);
+                if ($applied) {
                     $resumes = [];
-                    foreach ($applied as $candidate){
-                        $resume  = new Candidate(get_user_by('id', $candidate));
-                        if($resume->isPublished()){
+                    foreach ($applied as $candidate) {
+                        $resume = new Candidate(get_user_by('id', $candidate));
+                        if ($resume->isPublished()) {
                             $resumes[] = $resume;
                         }
                     }
