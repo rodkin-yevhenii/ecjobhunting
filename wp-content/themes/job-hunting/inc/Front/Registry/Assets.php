@@ -25,16 +25,33 @@ class Assets
     private function scripts()
     {
         wp_enqueue_script('libs', $this->baseSrc . 'js/index/libs.js', [], '1.0', true);
-        wp_enqueue_script($this->handle, $this->baseSrc . 'js/index/scripts.js', ['libs'], '1.0', true);
+        wp_enqueue_script($this->handle, $this->baseSrc . 'js/index/general.js', ['libs'], '1.0', true);
+
+        if(is_user_logged_in()){
+            wp_enqueue_script('api', $this->baseSrc . 'js/index/api.js', [], '1.0', true);
+        }
+
+        if(current_user_can('employer')){
+            wp_enqueue_script('vacancies', $this->baseSrc . 'js/index/vacancies.js', [$this->handle], '1.0', true);
+        }
     }
 
     private function localizeScripts()
     {
+        if(is_user_logged_in()){
+            $credentials = get_userdata(get_current_user_id());
+            $basic = base64_encode("{$credentials->user_login}:{$credentials->user_pass}");
+        } else
+        {
+            $basic = '';
+        }
+
         wp_localize_script(
             $this->handle,
             'siteSettings',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
+                '_basic'=>$basic
             ]
         );
     }

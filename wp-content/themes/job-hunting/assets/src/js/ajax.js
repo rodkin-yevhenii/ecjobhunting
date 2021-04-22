@@ -1,5 +1,4 @@
 $(() => {
-
   const ajaxUrl = window.siteSettings.ajaxurl
   const $publishJobFrom = $('.publish-job-form')
   const $duplicateJobFrom = $('.duplicate-job-form')

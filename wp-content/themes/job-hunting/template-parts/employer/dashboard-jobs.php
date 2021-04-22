@@ -3,7 +3,7 @@
 use EcJobHunting\Entity\Company;
 
 $company = new Company(wp_get_current_user());
-if(!$company){
+if (!$company) {
     return;
 }
 $jobs = $company->getVacancies();
@@ -31,7 +31,8 @@ $jobs = $company->getVacancies();
         </div>
         <div class="row">
             <div class="col-12">
-                <?php if ($jobs):
+                <?php
+                if ($jobs):
                     global $post;
                     foreach ($jobs as $post):
                         setup_postdata($post);
@@ -45,4 +46,17 @@ $jobs = $company->getVacancies();
             </div>
         </div>
     </div>
+</div>
+<div class="js-job-forms">
+    <div class="js-job-forms_edit">
+        <div class="ec-job-modal is-hidden">
+            <div class="modal-content">
+                <span class="title">Edit Job</span>
+                <span class="close">&times;</span>
+                <?php get_template_part('template-parts/vacancy/form'); ?>
+            </div>
+        </div>
+    </div>
+    <div class="js-job-forms_duplicate"></div>
+    <div class="js-job-forms_confirm"></div>
 </div>

@@ -1820,3 +1820,10 @@ form {
     background-color: #fff;
   }
 }
+
+.is-hidden{
+  display: none;
+  opacity: 0;
+  position: absolute;
+  left: -10000;
+}

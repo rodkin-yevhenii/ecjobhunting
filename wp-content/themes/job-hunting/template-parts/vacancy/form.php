@@ -104,10 +104,10 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
         <div class="col-12 col-md-7">
             <div class="field-prices">
                 <label><span>$</span>
-                    <input class="field-text" type="text">
+                    <input class="field-text" type="text" id="compensation_from">
                 </label><span>to</span>
                 <label><span>$</span>
-                    <input class="field-text" type="text">
+                    <input class="field-text" type="text" id="compensation_to">
                 </label>
             </div>
             <div class="d-md-flex justify-content-md-between mt-3 mt-md-4 align-items-start flex-wrap">

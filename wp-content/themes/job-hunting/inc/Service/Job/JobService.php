@@ -8,6 +8,7 @@ use EcJobHunting\Front\EcResponse;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Interfaces\AjaxResponse;
 use WP_Query;
+use WP_REST_Posts_Controller;
 
 class JobService
 {
@@ -34,6 +35,10 @@ class JobService
             //duplicate job
             add_action('wp_ajax_load_more', [$this, 'loadMoreItems']);
             add_action('wp_ajax_nopriv_load_more', [$this, 'loadMoreItems']);
+
+            //edit job
+            add_action('wp_ajax_edit_job', [$this, 'editJobAjax']);
+            add_action('wp_ajax_nopriv_edit_job', [$this, 'editJobAjax']);
         }
     }
 
@@ -53,8 +58,8 @@ class JobService
                 'post_author' => (int)$_POST['author'] ?? get_current_user_id(),
                 'post_type' => 'vacancy',
                 'meta_input' => [
-                    'compensation_range_from' => $_POST['compensationFrom'] ?? 0,
-                    'compensation_range_to' => $_POST['compensationTo'] ?? 0,
+                    'compensation_range_from' => filter_var($_POST['compensationFrom'], FILTER_SANITIZE_NUMBER_FLOAT) ?? 0,
+                    'compensation_range_to' => filter_var($_POST['compensationTo'], FILTER_SANITIZE_NUMBER_FLOAT) ?? 0,
                     'street_address' => $_POST['street'] ?? '',
                     'hiring_company' => $_POST['company'],
                     'why_work_at_this_company' => $_POST['reasonsToWork'],

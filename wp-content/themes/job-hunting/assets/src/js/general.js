@@ -1,5 +1,4 @@
 $(() => {
-
   const wrapper = $('.wrapper'),
     body = $('body'),
     headerButtonWrapper = $('.header-button-wrapper'),
