@@ -77,7 +77,15 @@ $table_prefix = 'wp_';
  *
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
-define( 'WP_DEBUG', false );
+define('WP_DEBUG', true);
+define('WP_DEBUG_DISPLAY', WP_DEBUG);
+define('WP_DEBUG_LOG', WP_DEBUG);
+
+if (WP_DEBUG) {
+    error_reporting(E_ALL);
+}
+
+/* Contact Form 7 auto <p> settings */
 define('WPCF7_AUTOP', false);
 
 /* That's all, stop editing! Happy publishing. */
