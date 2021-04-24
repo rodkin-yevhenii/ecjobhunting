@@ -14,7 +14,7 @@ abstract class UserAbstract implements SiteUser
     public function __construct($user)
     {
         $this->user = $user;
-        $this->id = $this->user->id ?? null;
+        $this->id = $this->user->ID ?? null;
     }
 
     public function getUserId()
