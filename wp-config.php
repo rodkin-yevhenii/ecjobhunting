@@ -78,6 +78,7 @@ $table_prefix = 'wp_';
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
 define( 'WP_DEBUG', false );
+define('WPCF7_AUTOP', false);
 
 /* That's all, stop editing! Happy publishing. */
 
