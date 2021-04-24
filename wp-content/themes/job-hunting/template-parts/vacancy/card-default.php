@@ -18,8 +18,22 @@ if(!$vacancy){
         <li class="color-secondary"><?php echo $vacancy->getLocation(); ?></li>
     </ul>
     <ul>
-        <li class="color-secondary"><?php echo sprintf(__('Pay %1$s to %2$s %3$s', 'ecjobhunting'),$vacancy->getCompensationFrom(), $vacancy->getCompensationTo(), $vacancy->getCompensationPeriodName()); ?></li>
+        <li class="color-secondary">
+            <?php echo sprintf(
+                    __('Pay %1$s to %2$s %3$s', 'ecjobhunting'),
+                    $vacancy->getCompensationFrom(),
+                    $vacancy->getCompensationTo(),
+                    $vacancy->getCompensationPeriodName()
+            ); ?>
+        </li>
     </ul>
-    <?php the_excerpt(); ?>
+    <?php if (!empty($vacancy->getEmploymentType())) : ?>
+        <ul>
+            <li class="color-secondary">
+                <?php echo $vacancy->getEmploymentType(); ?>
+            </li>
+        </ul>
+    <?php endif;
+    the_excerpt(); ?>
 </div>
 <?php
