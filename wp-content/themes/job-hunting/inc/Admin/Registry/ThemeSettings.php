@@ -24,6 +24,9 @@ class ThemeSettings
                 'top' => 'Top Bar',
                 'employer' => 'Employer',
                 'candidate' => 'Job Seeker',
+                'footer-left' => 'Footer left',
+                'footer-center' => 'Footer center',
+                'footer-right' => 'Footer right',
             ]
         );
     }

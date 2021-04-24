@@ -705,6 +705,103 @@ class AcfFields
                 'description' => '',
             ]
         );
+        acf_add_local_field_group(
+            [
+                'key' => 'group_footer_settings',
+                'title' => 'Footer theme settings',
+                'fields' => [
+                    [
+                        'key' => 'field_about_us_description',
+                        'label' => 'About Us Description',
+                        'name' => 'footer_about_us_description',
+                        'type' => 'textarea',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'default_value' => '',
+                        'placeholder' => '',
+                        'prepend' => '',
+                        'append' => '',
+                        'maxlength' => '',
+                    ],
+                    [
+                        'key' => 'field_site_social_profiles',
+                        'label' => 'Social profiles',
+                        'name' => 'site_social_profiles',
+                        'type' => 'repeater',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'collapsed' => '',
+                        'min' => 0,
+                        'max' => 0,
+                        'layout' => 'table',
+                        'button_label' => '',
+                        'sub_fields' => [
+                            [
+                                'key' => 'field_site_social_network_name',
+                                'label' => 'Social Network Name',
+                                'name' => 'site_social_network_name',
+                                'type' => 'text',
+                                'instructions' => '',
+                                'required' => 1,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '50',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'default_value' => '',
+                                'placeholder' => '',
+                            ],
+                            [
+                                'key' => 'field_site_social_profile_url',
+                                'label' => 'Profile Url',
+                                'name' => 'site_social_profile_url',
+                                'type' => 'url',
+                                'instructions' => '',
+                                'required' => 1,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '50',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'default_value' => '',
+                                'placeholder' => '',
+                            ],
+                        ]
+                    ],
+                ],
+                'location' => [
+                    [
+                        [
+                            'param' => 'options_page',
+                            'operator' => '==',
+                            'value' => 'site-settings',
+                        ],
+                    ],
+                ],
+                'menu_order' => 3,
+                'position' => 'normal',
+                'style' => 'default',
+                'label_placement' => 'top',
+                'instruction_placement' => 'label',
+                'hide_on_screen' => '',
+                'active' => true,
+                'description' => '',
+            ]
+        );
     }
 
     private function cvFields()
