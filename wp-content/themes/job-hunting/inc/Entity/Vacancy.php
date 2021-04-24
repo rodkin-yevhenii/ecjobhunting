@@ -69,12 +69,12 @@ class Vacancy
                 $this->companyName = $fields['hiring_company'] ?? $this->employer->getName();
                 $this->reasonsToWork = $fields['why_work_at_this_company'] ?? '';
                 $this->companyDescription = $fields['hiring_company_description'] ?? '';
-                $this->notifyEmployer = (bool)$fields['emails_to_inform'];
-                $this->isCommissionIncluded = (bool)$fields['is_commission_included'];
+                $this->notifyEmployer = (bool) ($fields['emails_to_inform'] ?? true);
+                $this->isCommissionIncluded = (bool) ($fields['is_commission_included'] ?? false);
                 $this->agreementOptions = $fields['additional_options'] ?? [];
-                $this->benefits = (array)$fields['benefits'] ?? [];
-                $this->visitors = (int)$fields['visitors'] ?? 0;
-                $this->candidates = (array)$fields['applied'] ?? [];
+                $this->benefits = isset($fields['benefits']) ? (array)$fields['benefits'] : [];
+                $this->visitors = (int) ($fields['visitors'] ?? 0);
+                $this->candidates = (array) ($fields['applied'] ?? []);
                 $this->currency = ucwords($fields['compensation_currency'] ?? 'USD');
                 $this->compensationPeriod = $fields['compensation_period'] ?? 'annualy';
 
