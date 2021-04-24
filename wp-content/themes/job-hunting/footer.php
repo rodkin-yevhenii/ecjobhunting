@@ -89,7 +89,11 @@ $siteProfiles = get_field('site_social_profiles', 'option');
                                 $networkName = trim($profile['site_social_network_name']);
                                 $networkName = strtolower($networkName); ?>
                                 <li>
-                                    <a href="<?php echo $profile['site_social_profile_url'] ?>">
+                                    <a
+                                            href="<?php echo $profile['site_social_profile_url'] ?>"
+                                            target="_blank"
+                                            rel="nofollow noopener noreferrer"
+                                    >
                                         <i class="fa fa-<?php echo $networkName; ?>"></i>
                                     </a>
                                 </li>
