@@ -7,7 +7,7 @@ if (!$vacancy) {
     return;
 }
 ?>
-    <div class="results-item">
+    <div class="results-item" id="<?php the_ID(); ?>">
         <div class="container-fluid">
             <div class="row d-flex justify-content-xl-center">
                 <div class="col d-none d-md-block col-md-2 col-xl-1">
