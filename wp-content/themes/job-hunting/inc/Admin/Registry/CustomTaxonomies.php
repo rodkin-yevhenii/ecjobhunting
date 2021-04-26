@@ -41,8 +41,8 @@ class CustomTaxonomies
                 'capabilities' => [],
                 'meta_box_cb' => null,
                 'show_admin_column' => false,
-                'show_in_rest' => null,
-                'rest_base' => null,
+                'show_in_rest' => true,
+                'rest_base' => 'job-types',
             ]
         );
     }
@@ -76,8 +76,7 @@ class CustomTaxonomies
                 'capabilities' => [],
                 'meta_box_cb' => null,
                 'show_admin_column' => false,
-                'show_in_rest' => null,
-                'rest_base' => null,
+                'show_in_rest' => true,
             ]
         );
     }
@@ -111,8 +110,8 @@ class CustomTaxonomies
                 'capabilities' => [],
                 'meta_box_cb' => null,
                 'show_admin_column' => false,
-                'show_in_rest' => null,
-                'rest_base' => null,
+                'show_in_rest' => true,
+                'rest_base' => 'locations',
             ]
         );
     }
@@ -147,8 +146,8 @@ class CustomTaxonomies
                 'capabilities' => [],
                 'meta_box_cb' => null,
                 'show_admin_column' => false,
-                'show_in_rest' => null,
-                'rest_base' => null,
+                'show_in_rest' => true,
+                'rest_base' => 'jobCategories',
             ]
         );
     }
