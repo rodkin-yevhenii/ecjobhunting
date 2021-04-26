@@ -679,7 +679,7 @@ class AcfFields
                             ],
                             [
                                 'key' => 'field_5ff88d0fc50cc',
-                                'label' => 'Currency',
+                                'label' => 'Currency SSD',
                                 'name' => 'currency',
                                 'type' => 'repeater',
                                 'instructions' => '',
@@ -697,15 +697,15 @@ class AcfFields
                                 'button_label' => 'Add currency',
                                 'sub_fields' => [
                                     [
-                                        'key' => 'field_5ff88d1bc50cd',
-                                        'label' => 'Currency Name',
-                                        'name' => 'name',
+                                        'key' => 'field_currency_symbol',
+                                        'label' => 'Currency symbol',
+                                        'name' => 'symbol',
                                         'type' => 'text',
                                         'instructions' => '',
                                         'required' => 0,
                                         'conditional_logic' => 0,
                                         'wrapper' => [
-                                            'width' => '',
+                                            'width' => '20',
                                             'class' => '',
                                             'id' => '',
                                         ],
@@ -847,7 +847,7 @@ class AcfFields
                         ],
                     ],
                 ],
-                'menu_order' => 0,
+                'menu_order' => 1,
                 'position' => 'normal',
                 'style' => 'default',
                 'label_placement' => 'top',
