@@ -547,6 +547,37 @@ class AcfFields
                         'default_value' => '',
                         'placeholder' => '',
                     ],
+                    [
+                        'key' => 'field_search_tab',
+                        'label' => 'Search Settings',
+                        'name' => '',
+                        'type' => 'tab',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'placement' => 'top',
+                        'endpoint' => 0,
+                    ],
+                    [
+                        'key' => 'field_search_page_url',
+                        'label' => 'Search page URL',
+                        'name' => 'search_page_url',
+                        'type' => 'page_link',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'return_format' => 'url',
+                    ],
                 ],
                 'location' => [
                     [
