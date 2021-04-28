@@ -101,11 +101,33 @@ $(() => {
     if (!$(this).hasClass('active')) {
       $(this).siblings().removeClass('active');
       $(this).addClass('active');
-      const value = $(this).html();
+      let value = $(this).attr('data-select-item-value');
+      const label = $(this).html();
+
+      if (undefined === typeof value) {
+        value = label;
+      }
+
       select.find($('input')).val(value);
-      select.children('[data-select-value]').html(value);
+      select.children('[data-select-value]').html(label);
       select.removeClass('active');
     }
+  });
+  $(document).ready(() => {
+    const $select = $('div[data-select]');
+    window.test = $select;
+    $select.map((i, item) => {
+      const currentSelect = $(item);
+      let value = currentSelect.find('li.active').attr('data-select-item-value');
+      const label = currentSelect.find('li.active').html();
+
+      if (undefined === typeof value) {
+        value = label;
+      }
+
+      currentSelect.find('input').val(value);
+      currentSelect.children('[data-select-value]').html(label);
+    });
   });
   $(document).on('click', '.custom-handler div', function () {
     const handler = $(this).parents('.custom-handler'),
