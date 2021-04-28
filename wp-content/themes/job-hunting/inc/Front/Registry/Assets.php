@@ -26,6 +26,7 @@ class Assets
     {
         wp_enqueue_script('libs', $this->baseSrc . 'js/index/libs.js', [], '1.0', true);
         wp_enqueue_script($this->handle, $this->baseSrc . 'js/index/general.js', ['libs'], '1.0', true);
+        wp_enqueue_script('theme-ajax', $this->baseSrc . 'js/index/ajax.js', [$this->handle], '1.0', true);
 
         if(is_user_logged_in()){
             wp_enqueue_script('api', $this->baseSrc . 'js/index/api.js', [], '1.0', true);
