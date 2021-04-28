@@ -1,17 +1,37 @@
 <?php
+
+use EcJobHunting\Entity\Vacancy;
+
 $fields = get_fields();
 $publishDates = $fields['posted_dates'] ?? [];
 $compensation = $fields['minimum_salary'] ?? [];
 $employmentTypes = get_terms(['taxonomy' => 'type', 'hide_empty' => false,]);
 $categories = get_terms(['taxonomy' => 'job-category', 'hide_empty' => false,]);
-$companies = get_users(
+$companies = [];
+$vacancies = get_posts(
     [
-        'role' => 'employer',
+        'post_type' => 'vacancy',
+        'post_status' => 'publish',
         'number' => -1,
-        'fields' => ['ID', 'display_name'],
-        'orderby' => 'nicename'
+        'meta_query' => [
+            'key' => 'hiring_company',
+            'compare' => 'EXISTS'
+        ],
+        'fields' => 'ids',
     ]
 );
+
+foreach ($vacancies as $id) {
+    $vacancy = new Vacancy($id);
+
+    if (!$vacancy) {
+        continue;
+    }
+
+    $companies[] = $vacancy->getCompanyName();
+}
+
+$companies = array_unique($companies);
 
 if (! is_array($employmentTypes)) {
     $employmentTypes = [];
@@ -22,7 +42,15 @@ if (! is_array($categories)) {
 }
 ?>
 <form class="filter" data-dropdown="filter" action="<?php the_permalink() ?>;" method="get">
-    <?php if ($publishDates) : ?>
+    <?php if (!empty($_GET['s'])) : ?>
+        <input type="hidden" name="s" id="s" value="<?php echo $_GET['s']; ?>">
+    <?php endif;
+
+    if (!empty($_GET['location'])) : ?>
+        <input type="hidden" name="location" id="location" value="<?php echo $_GET['location']; ?>">
+    <?php endif;
+
+    if ($publishDates) : ?>
         <div class="ys-select" data-select><span data-select-value><?php _e('Posted anytime', 'ecjobhunting'); ?></span>
             <ul>
                 <li <?php echo empty($_GET['publish-date']) ? 'class="active"' : ''; ?> data-select-item data-select-item-value="">
@@ -120,12 +148,12 @@ if (! is_array($categories)) {
                 </li>
                 <?php foreach ($companies as $company) : ?>
                     <li
-                        <?php echo !empty($_GET['company']) && $_GET['company'] == $company->ID
+                        <?php echo !empty($_GET['company']) && $_GET['company'] == $company
                             ? 'class="active"' : ''; ?>
                         data-select-item
-                        data-select-item-value="<?php echo $company->ID; ?>"
+                        data-select-item-value="<?php echo $company; ?>"
                     >
-                        <?php echo $company->display_name; ?>
+                        <?php echo $company; ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
