@@ -4,6 +4,7 @@ $(() => {
   const $duplicateJobFrom = $('.duplicate-job-form')
   const $vacancyHolder = $('.js-vacancies')
   const $loadMoreBtn = $('.js-load-more')
+  const $filterLoadMoreBtn = $('.js-filter-load-more')
   const $registerForm = $('.registerform')
 
   function postJobAjax (data, $messageContainer) {
@@ -60,6 +61,76 @@ $(() => {
           $btn.fadeOut()
         }
       }
+    })
+  }
+
+  function filterLoadMore($holder, $btn) {
+    const paged = $holder.attr('data-paged')
+    const per_page = $holder.attr('data-perpage')
+    const s = $('#s').val()
+    const location = $('#location').val()
+    const publish_date = $('#publish-date').val()
+    const compensation = $('#compensation').val()
+    const employment_type = $('#employment-type').val()
+    const category = $('#category').val()
+    const company = $('#company').val()
+    const data = {
+      action: 'filter_load_more',
+      paged,
+      s,
+      location,
+      publish_date,
+      compensation,
+      employment_type,
+      category,
+      company
+    }
+
+    const success = (response) => {
+      switch (response.status) {
+        case 501:
+        case 204:
+          console.log(response.status, response.message)
+          $btn.fadeOut()
+          return
+        case 200:
+          if (response.isEnd) {
+            $btn.fadeOut()
+          }
+          $vacancyHolder.append(response.html)
+          $vacancyHolder.attr('data-paged', response.paged)
+          break
+        default:
+          console.log('Unknown error')
+      }
+    }
+
+    const error = (error) => {
+      console.log(error)
+    }
+
+    ajaxRequest(
+      data,
+      () => {},
+      success,
+      error
+    )
+  }
+
+  function ajaxRequest(
+    data,
+    beforeCallback = () => {},
+    successCallback = () => {},
+    errorCallback = () => {}
+  ) {
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data: data,
+      dataType: 'json',
+      before: beforeCallback,
+      success: successCallback,
+      error: errorCallback,
     })
   }
 
@@ -148,6 +219,10 @@ $(() => {
       $btn.fadeOut()
     }
     loadMoreAjax($vacancyHolder, $loadMoreBtn)
+  })
+
+  $filterLoadMoreBtn.on('click', (e) => {
+    filterLoadMore($vacancyHolder, $filterLoadMoreBtn)
   })
 
   $registerForm.on('submit', (e) => {

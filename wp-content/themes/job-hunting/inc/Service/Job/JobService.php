@@ -7,6 +7,7 @@ namespace EcJobHunting\Service\Job;
 use EcJobHunting\Front\EcResponse;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Interfaces\AjaxResponse;
+use PHPMailer\PHPMailer\Exception;
 use WP_Query;
 use WP_REST_Posts_Controller;
 
@@ -32,9 +33,13 @@ class JobService
             add_action('wp_ajax_duplicate_job', [$this, 'duplicateJobAjax']);
             add_action('wp_ajax_nopriv_duplicate_job', [$this, 'duplicateJobAjax']);
 
-            //duplicate job
+            //load more jobs
             add_action('wp_ajax_load_more', [$this, 'loadMoreItems']);
             add_action('wp_ajax_nopriv_load_more', [$this, 'loadMoreItems']);
+
+            //load more filtered jobs
+            add_action('wp_ajax_filter_load_more', [$this, 'filterLoadMoreCallback']);
+            add_action('wp_ajax_nopriv_filter_load_more', [$this, 'filterLoadMoreCallback']);
 
             //edit job
             add_action('wp_ajax_edit_job', [$this, 'editJobAjax']);
@@ -199,6 +204,52 @@ class JobService
                 )->setStatus(204)->send();
             }
         } catch (\Exception $ex) {
+            $this->response
+                ->setMessage($ex->getMessage())
+                ->setStatus(501)
+                ->send();
+        }
+    }
+
+    public function filterLoadMoreCallback(): void
+    {
+        try {
+            if (empty($_POST['paged'])) {
+                $this->response
+                    ->setMessage('Paged data is required')
+                    ->setStatus(204)
+                    ->send();
+            }
+
+            $perPage = (int) get_option( 'posts_per_page' );
+            $paged = (int) $_POST['paged'];
+            $filtersValues['s'] = $_POST['s'] ?? '';
+            $filtersValues['location'] = $_POST['location'] ?? '';
+            $filtersValues['compensation'] = (int) ($_POST['compensation'] ?? 0);
+            $filtersValues['employment-type'] = (int) ($_POST['employment_type'] ?? 0);
+            $filtersValues['category'] = (int) ($_POST['category'] ?? 0);
+            $filtersValues['company'] = $_POST['company'] ?? '';
+
+            $filter = new JobFilter($filtersValues, ++$paged);
+
+            if ($filter->getFoundJobs() === 0) {
+                $this->response
+                    ->setMessage('No items found')
+                    ->setStatus(204)
+                    ->setIsEnd(true)
+                    ->send();
+            }
+
+            $this->response
+                ->setMessage('Returned vacancies html')
+                ->setStatus(200)
+                ->setResponseBody($filter->render())
+                ->setPaged($paged)
+                ->setTotal($filter->getFoundJobs())
+                ->setIsEnd($filter->getFoundJobs() <= $perPage * $paged)
+                ->send();
+
+        } catch (Exception $ex) {
             $this->response
                 ->setMessage($ex->getMessage())
                 ->setStatus(501)

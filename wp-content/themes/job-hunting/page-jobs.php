@@ -35,7 +35,6 @@ get_header(); ?>
                 <div class="col-12 col-xl-8 order-xl-0">
                     <div
                         class="vacancies js-vacancies"
-                        data-perpage="<?php echo get_query_var('posts_per_page', 12); ?>"
                         data-paged="1"
                     >
                         <?php if ($jobsFilter->getFoundJobs() > 0) :
