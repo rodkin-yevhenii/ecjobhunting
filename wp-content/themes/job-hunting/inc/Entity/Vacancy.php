@@ -66,7 +66,7 @@ class Vacancy
                 $this->compensationRange = !empty($fields['compensation_range']) ? $fields['compensation_range'] : $this->compensationRange;
                 $this->streetAddress = !empty($fields['street_address']) ? $fields['street_address'] : '';
 
-                $this->companyName = $fields['hiring_company'] ?? $this->employer->getName();
+                $this->companyName = $fields['hiring_company'] ?? '';
                 $this->reasonsToWork = $fields['why_work_at_this_company'] ?? '';
                 $this->companyDescription = $fields['hiring_company_description'] ?? '';
                 $this->notifyEmployer = (bool) ($fields['emails_to_inform'] ?? true);
