@@ -4,9 +4,9 @@
 namespace EcJobHunting\Service\Job;
 
 
-use EcJobHunting\Front\EcResponse;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Interfaces\AjaxResponse;
+use EcJobHunting\Service\Job\Response\JobsResponse;
 use PHPMailer\PHPMailer\Exception;
 use WP_Query;
 use WP_REST_Posts_Controller;
@@ -44,13 +44,16 @@ class JobService
             //edit job
             add_action('wp_ajax_edit_job', [$this, 'editJobAjax']);
             add_action('wp_ajax_nopriv_edit_job', [$this, 'editJobAjax']);
+
+            add_action('wp_ajax_update_bookmark', [$this, 'updateBookmark']);
+            add_action('wp_ajax_nopriv_update_bookmark', [$this, 'updateBookmark']);
         }
     }
 
     public function __construct()
     {
         $this->jobSettings = SiteSettings::getJobSettings();
-        $this->response = new EcResponse();
+        $this->response = new JobsResponse();
     }
 
     public function createNewJobAjax()
@@ -211,6 +214,9 @@ class JobService
         }
     }
 
+    /**
+     * Load more ajax call for jobs filter page.
+     */
     public function filterLoadMoreCallback(): void
     {
         try {
@@ -249,6 +255,52 @@ class JobService
                 ->setIsEnd($filter->getFoundJobs() <= $perPage * $paged)
                 ->send();
 
+        } catch (Exception $ex) {
+            $this->response
+                ->setMessage($ex->getMessage())
+                ->setStatus(501)
+                ->send();
+        }
+    }
+
+    /**
+     * Add / Remove user jobs bookmark.
+     */
+    public function updateBookmark(): void
+    {
+
+        try {
+            if (empty($_POST['id'])) {
+                $this->response
+                    ->setMessage('ID data is required')
+                    ->setStatus(204)
+                    ->send();
+            }
+
+            $id = (int) $_POST['id'];
+            $userId = get_current_user_id();
+            $jobBookmarks = get_user_meta($userId, 'jobs_bookmarks', true);
+
+            if (!is_array($jobBookmarks)) {
+                $jobBookmarks = [];
+            }
+
+            if (array_key_exists($id, $jobBookmarks)) {
+                unset($jobBookmarks[$id]);
+                $isAdd = false;
+            } else {
+                $jobBookmarks[$id] = $id;
+                $isAdd = true;
+            }
+
+            update_user_meta($userId, 'jobs_bookmarks', $jobBookmarks);
+
+            $this->response
+                ->setMessage( $isAdd ? 'Added to bookmarks' : 'Removed from bookmarks')
+                ->setStatus(200)
+                ->setId($id)
+                ->setIsAdded($isAdd)
+                ->send();
         } catch (Exception $ex) {
             $this->response
                 ->setMessage($ex->getMessage())

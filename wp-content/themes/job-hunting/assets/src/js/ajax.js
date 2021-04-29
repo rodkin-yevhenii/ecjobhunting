@@ -6,6 +6,7 @@ $(() => {
   const $loadMoreBtn = $('.js-load-more')
   const $filterLoadMoreBtn = $('.js-filter-load-more')
   const $registerForm = $('.registerform')
+  const $addBookmarkBtn = $('.add-bookmark')
 
   function postJobAjax (data, $messageContainer) {
     $.ajax({
@@ -133,6 +134,35 @@ $(() => {
       error: errorCallback,
     })
   }
+
+  $addBookmarkBtn.on('click', (event) => {
+    event.preventDefault()
+    const $btn = $(event.currentTarget)
+    window.btn = $btn
+    const id = $btn.parents('.vacancies-item').attr('id')
+    const isAdded = $btn.attr('data-is-added')
+    const $icon = $btn.children('i.fa')
+    const data = {
+      action: 'update_bookmark',
+      id,
+      isAdded
+    }
+
+    const success = (response) => {
+      console.log(response)
+      if (response.isAdded) {
+        $icon.removeClass('color-grey').addClass('color-gold')
+      } else {
+        $icon.removeClass('color-gold').addClass('color-grey')
+      }
+    }
+
+    const error = (error) => {
+      console.log(error)
+    }
+
+    ajaxRequest(data, () => {}, success, error)
+  })
 
   $publishJobFrom.on('click', '[data-select-item]', function () {
     const select = $(this).parents('[data-select]')
