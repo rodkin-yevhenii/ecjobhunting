@@ -261,6 +261,7 @@ $(() => {
 
     const validator = $form.validate({
       rules: {
+        email: "required",
         password: "required",
         pwd_confirmation: {
           equalTo: ".password"
@@ -277,7 +278,7 @@ $(() => {
         pwd_confirmation: "<small>Password doesn't match</small>"
       }
     });
-    console.log(validator)
+
     if (!validator.form()) {
       return
     }
@@ -287,15 +288,31 @@ $(() => {
       email: $form.find("input[name='email']").val(),
       username: $form.find("input[name='username']").val(),
       password: $form.find("input[name='pwd']").val(),
-      role: $form.find("input[name='role']").val()
+      pwd_confirmation: $form.find("input[name='pwd_confirmation']").val(),
+      role: $form.find("input[name='role']").val(),
+      nonce: $form.find("input[name='nonce']").val()
     }
-    console.log(data)
+
     $.ajax({
       type: 'POST',
       url: ajaxUrl,
       data: data,
+      dataType: 'json',
       success: function (response) {
-        console.log(response)
+        const $message = $('.results-content__message')
+        $message.html(response.message)
+
+        if (response.status === 200) {
+          $message.removeClass('alert-danger d-none')
+          $message.addClass('alert-success d-block')
+
+          setTimeout(() => {
+            window.location.href = '/login/'
+          }, 3000)
+        } else {
+          $message.removeClass('alert-success d-none')
+          $message.addClass('alert-danger d-block')
+        }
       }
     })
   })

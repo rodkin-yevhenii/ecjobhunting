@@ -24,6 +24,7 @@ get_header(); ?>
                         ); ?></li>
                 </ul>
                 <div class="results-content">
+                    <div class="col-12 mb-2 py-2 text-center d-none results-content__message">The email has already taken</div>
                     <div data-tab-content="candidate" <?php echo $tab === 'candidate' ? 'class="active"' : ''; ?>>
                         <form class="registerform" method="post" autocomplete="off">
                             <label class="field-label" for="email"><?php _e(
@@ -43,6 +44,7 @@ get_header(); ?>
                             <input type="submit" name="wp-submit"
                                    class="btn btn-primary" value="<?php _e('Sign Up', 'ecjobhunting'); ?>">
                             <input type="hidden" name="role" value="candidate"/>
+                            <?php echo wp_nonce_field('sign_up', 'nonce'); ?>
                         </form>
                     </div>
                     <div data-tab-content="employer" <?php echo $tab === 'employer' ? 'class="active"' : ''; ?>>
@@ -64,6 +66,7 @@ get_header(); ?>
                             <input type="submit" name="wp-submit"
                                    class="btn btn-primary" value="<?php _e('Sign Up', 'ecjobhunting'); ?>">
                             <input type="hidden" name="role" value="employer"/>
+                            <?php echo wp_nonce_field('sign_up', 'nonce'); ?>
                         </form>
                     </div>
                 </div>
