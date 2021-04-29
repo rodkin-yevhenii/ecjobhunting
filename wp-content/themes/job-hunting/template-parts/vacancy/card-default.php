@@ -1,16 +1,27 @@
 <?php
 
+use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Entity\Vacancy;
 
 $vacancy = new Vacancy(get_the_ID());
+$user = new Candidate(wp_get_current_user());
+$bookmarks = $user->getJobsBookmarks();
+
 if(!$vacancy){
     return;
 }
+
+if (in_array($vacancy->getId(), $bookmarks)) {
+    $issAdded = true;
+} else {
+    $issAdded = false;
+}
+
 ?>
 <div class="vacancies-item" id="<?php the_ID(); ?>">
     <div class="vacancies-header">
         <a href="<?php echo $vacancy->getPermalink(); ?>"><h3><?php echo $vacancy->getTitle(); ?></h3></a>
-        <a class="add-bookmark"><i class="fa fa-star color-grey"></i><span
+        <a class="add-bookmark"><i class="fa fa-star color-<?php echo $issAdded ? 'gold' : 'grey'; ?>"></i><span
                 class="color-primary">save job for later</span></a>
     </div>
     <ul>

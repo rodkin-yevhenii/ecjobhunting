@@ -50,6 +50,7 @@ class Vacancy
         $vacancy = get_post($id);
         if ($vacancy) {
             // Basic Data
+            $this->id = $id;
             $this->title = $vacancy->post_title;
             $this->description = strip_tags($vacancy->post_content);
             $this->author = $vacancy->post_author;

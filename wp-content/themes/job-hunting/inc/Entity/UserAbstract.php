@@ -46,4 +46,20 @@ abstract class UserAbstract implements SiteUser
     {
         // TODO: Implement setPassword() method.
     }
+
+    /**
+     * Get user jobs bookmarks.
+     *
+     * @return array
+     */
+    public function getJobsBookmarks(): array
+    {
+        $jobBookmarks = get_user_meta($this->id, 'jobs_bookmarks', true);
+
+        if (!is_array($jobBookmarks)) {
+            $jobBookmarks = [];
+        }
+
+        return $jobBookmarks;
+    }
 }
