@@ -110,21 +110,16 @@ class Registration
                 ->send();
         }
 
-        $id = wp_insert_user(
-            [
-                'user_email' => $email,
-                'user_login' => $login,
-                'user_pass' => $password,
-                'role' => $role,
-                'show_admin_bar_front' => false,
-            ]
-        );
+        $id = wp_create_user($login, $password, $email);
 
         if (is_wp_error($id)) {
             $this->response->setStatus(406)
                 ->setMessage(__('An error has occurred. Try again later or contact your administrator.', 'ecjobhunting'))
                 ->send();
         }
+
+        $user = new \WP_User($id);
+        $user->set_role($role);
 
         $this->response->setStatus(200)
             ->setMessage(__('User registered successfully', 'ecjobhunting'))
