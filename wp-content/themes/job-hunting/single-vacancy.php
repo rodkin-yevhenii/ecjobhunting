@@ -66,14 +66,15 @@ get_header(); ?>
                             <div class="vacancy-info">
                                 <h2 class="vacancy-company no-decor"><?php echo $vacancy->getCompanyName(); ?></h2>
                                 <span class="color-secondary"><?php echo nicetime($vacancy->getDatePosted()); ?></span>
-                                <div class="social mt-4"><span>Share this job:</span>
-                                    <ul>
-                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-envelope-o"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-chain"></i></a></li>
-                                    </ul>
-                                </div>
+<!--                                //TODO Add block with share links to vacancy single-->
+<!--                                <div class="social mt-4"><span>Share this job:</span>-->
+<!--                                    <ul>-->
+<!--                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>-->
+<!--                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>-->
+<!--                                        <li><a href="#"><i class="fa fa-envelope-o"></i></a></li>-->
+<!--                                        <li><a href="#"><i class="fa fa-chain"></i></a></li>-->
+<!--                                    </ul>-->
+<!--                                </div>-->
                             </div>
                         </div>
                     </div>
