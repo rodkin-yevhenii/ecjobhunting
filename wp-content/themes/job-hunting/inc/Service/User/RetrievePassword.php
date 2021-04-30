@@ -77,21 +77,24 @@ class RetrievePassword
             $key = esc_attr($_REQUEST['key']);
             $login = esc_attr($_REQUEST['login']);
             $user = check_password_reset_key( $key, $login );
-            $redirect_url = home_url( 'forgot-password' );
 
             if ( ! $user || is_wp_error( $user ) ) {
+                $redirect_url = home_url( 'forgot-password' );
+
                 if ( $user && $user->get_error_code() === 'expired_key' ) {
                     $redirect_url = add_query_arg( 'errors', 'expiredkey', $redirect_url );
                 } else {
                     $redirect_url = add_query_arg( 'errors', 'invalidkey', $redirect_url );
                 }
+
                 wp_redirect($redirect_url);
                 exit;
             }
 
+            $redirect_url = home_url('login');
+
             try {
                 UserService::resetPassword($user, $_POST['pwd'], $_POST['pwd_confirmation']);
-                $redirect_url = home_url('login');
                 $redirect_url = add_query_arg( 'password', 'changed', $redirect_url );
                 wp_redirect(home_url($redirect_url));
                 exit;
