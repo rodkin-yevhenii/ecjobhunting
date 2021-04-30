@@ -14,8 +14,16 @@ get_header(); ?>
                         </p>
                     <?php else: ?>
                         <h1 class="no-decor mb-4"><?php _e('Login', 'ecjobhunting'); ?></h1>
-                        <p><?php _e("Don't have an account?", 'ecjobhunting'); ?> (<a
-                                    href="<?php echo SIGNUP_URL; ?>"><?php _e("Sign Up", 'ecjobhunting'); ?></a>)</p>
+                        <?php if ($_REQUEST['password'] ?? '' === 'changed') : ?>
+                            <p class="alert-success text-center p-2">
+                                <?php _e("Your password has been changed. You can sign in now.", 'ecjobhunting'); ?>
+                            </p>
+                        <?php else : ?>
+                            <p>
+                                <?php _e("Don't have an account?", 'ecjobhunting'); ?>
+                                (<a href="<?php echo SIGNUP_URL; ?>"><?php _e("Sign Up", 'ecjobhunting'); ?></a>)
+                            </p>
+                        <?php endif; ?>
                         <form action="<?php echo site_url('wp-login.php'); ?>" name="loginform" method="post">
                             <label class="field-label" for="user_login"><?php _e(
                                     'Username or Email Address',
