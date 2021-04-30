@@ -13,14 +13,6 @@ use Exception;
 class RetrievePassword
 {
     /**
-     * RetrievePassword constructor.
-     */
-    public function __construct()
-    {
-
-    }
-
-    /**
      * Register hooks.
      */
     public function __invoke()
