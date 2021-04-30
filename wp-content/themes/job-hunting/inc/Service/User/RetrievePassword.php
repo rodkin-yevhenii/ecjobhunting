@@ -92,8 +92,8 @@ class RetrievePassword
             }
 
             try {
-                $redirect_url = home_url('login');
                 UserService::resetPassword($user, $_POST['pwd'], $_POST['pwd_confirmation']);
+                $redirect_url = home_url('login');
                 $redirect_url = add_query_arg( 'password', 'changed', $redirect_url );
                 wp_redirect(home_url($redirect_url));
                 exit;
