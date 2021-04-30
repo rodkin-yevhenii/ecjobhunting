@@ -202,6 +202,7 @@ class AcfFields
                         'prepend' => '',
                         'append' => '',
                         'maxlength' => '',
+                        'new_lines' => 'wpautop',
                     ],
                     [
                         'key' => 'field_5fecd781c41cc',
@@ -221,6 +222,7 @@ class AcfFields
                         'prepend' => '',
                         'append' => '',
                         'maxlength' => '',
+                        'new_lines' => 'wpautop',
                     ],
 
                     [
