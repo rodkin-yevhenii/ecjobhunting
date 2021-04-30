@@ -11,7 +11,7 @@ class SiteSettings
     public function __construct()
     {
         $logo = get_field('logo', 'option');
-        $this->logoUrl = empty($logo) ? IMG_URI . 'logo-2x.jpg' : wp_get_attachment_image_url($logo);
+        $this->logoUrl = empty($logo) ? IMG_URI . 'logo-2X.jpg' : wp_get_attachment_image_url($logo);
         $this->contactUsUrl = get_field('contact_us_url', 'option');
     }
 
