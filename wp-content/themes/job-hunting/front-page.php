@@ -24,7 +24,13 @@ $latestCompanies = get_users(
 );
 $counts = count_users();
 get_header(); ?>
-    <form class="hero" role="search" method="get" id="searchform" class="searchform" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+    <form
+        role="search"
+        method="get"
+        id="searchform"
+        class="hero searchform"
+        action="<?php echo get_field('search_page_url', 'option'); ?>"
+    >
         <div class="container">
             <div class="row d-flex justify-content-xl-center">
                 <div class="col-12">
