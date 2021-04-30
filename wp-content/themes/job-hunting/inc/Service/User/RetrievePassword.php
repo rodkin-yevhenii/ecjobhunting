@@ -3,7 +3,6 @@
 namespace EcJobHunting\Service\User;
 
 use Exception;
-use WP_User;
 
 /**
  * Class RetrievePassword
@@ -13,8 +12,6 @@ use WP_User;
  */
 class RetrievePassword
 {
-    private array $errors = [];
-
     /**
      * RetrievePassword constructor.
      */
@@ -38,8 +35,6 @@ class RetrievePassword
 
     /**
      * Change lost password page url.
-     *
-     * @return string
      */
     public function redirectToCustomLostPasswordPage(): void
     {
@@ -153,6 +148,14 @@ class RetrievePassword
             case 'invalid_email':
             case 'invalidcombo':
                 return __( 'There are no users registered with this email address.', 'ecjobhunting' );
+            case 'password_reset_mismatch':
+                return __( "The two passwords you entered don't match.", 'ecjobhunting' );
+
+            case 'password_reset_empty':
+                return __( "Sorry, we don't accept empty passwords.", 'ecjobhunting' );
+
+            default:
+                return '';
         }
     }
 }
