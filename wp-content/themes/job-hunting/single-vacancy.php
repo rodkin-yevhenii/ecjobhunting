@@ -50,12 +50,12 @@ get_header(); ?>
                                 <?php endif; ?>
 
                                 <?php if ($vacancy->getReasonsToWork()): ?>
-                                    <h3><?php _e('Why Work at This Company?', 'ecjobhunting')?></h3>
+                                    <h4><?php _e('Why Work at This Company?', 'ecjobhunting')?></h4>
                                     <p class="mb-4"><?php echo $vacancy->getReasonsToWork(); ?></p>
                                 <?php endif; ?>
 
                                 <?php if ($vacancy->getReasonsToWork()): ?>
-                                    <h3><?php _e('About The Penso Agency:', 'ecjobhunting')?></h3>
+                                    <h4><?php _e('About The Penso Agency:', 'ecjobhunting')?></h4>
                                     <p class="mb-4"><?php echo $vacancy->getCompanyDescription(); ?></p>
                                 <?php endif; ?>
                             </article>
