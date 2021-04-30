@@ -113,11 +113,11 @@ class UserService
     public static function resetPassword(WP_User $user, string $pwd, string $pwdConfirmation): void
     {
         if (empty($pwd)) {
-            throw new Exception('', 'password_reset_empty');
+            throw new Exception('password_reset_empty');
         }
 
         if ($pwdConfirmation && $pwd !== $pwdConfirmation) {
-            throw new Exception('', 'password_reset_mismatch');
+            throw new Exception('password_reset_mismatch');
         }
 
         reset_password($user, $pwd);

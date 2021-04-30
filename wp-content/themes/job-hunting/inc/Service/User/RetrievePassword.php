@@ -104,7 +104,7 @@ class RetrievePassword
             } catch (Exception $exception) {
                 $redirect_url = add_query_arg('key', esc_attr($_REQUEST['key']), $redirect_url);
                 $redirect_url = add_query_arg('login', esc_attr($_REQUEST['login']), $redirect_url);
-                $redirect_url = add_query_arg('errors', 'password_reset_mismatch', $redirect_url);
+                $redirect_url = add_query_arg('errors', $exception->getMessage(), $redirect_url);
                 wp_redirect($redirect_url);
                 exit;
             }
