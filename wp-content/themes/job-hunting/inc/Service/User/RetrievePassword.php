@@ -79,13 +79,12 @@ class RetrievePassword
             'POST' == $_SERVER['REQUEST_METHOD']
             && isset($_POST['pwd'], $_POST['pwd_confirmation'], $_REQUEST['key'], $_REQUEST['login'])
         ) {
-            $key = $_REQUEST['key'];
-            $login = $_REQUEST['login'];
+            $key = esc_attr($_REQUEST['key']);
+            $login = esc_attr($_REQUEST['login']);
             $user = check_password_reset_key( $key, $login );
+            $redirect_url = home_url( 'forgot-password' );
 
             if ( ! $user || is_wp_error( $user ) ) {
-                $redirect_url = home_url( 'forgot-password' );
-
                 if ( $user && $user->get_error_code() === 'expired_key' ) {
                     $redirect_url = add_query_arg( 'errors', 'expiredkey', $redirect_url );
                 } else {
@@ -102,8 +101,8 @@ class RetrievePassword
                 wp_redirect(home_url('login'));
                 exit;
             } catch (Exception $exception) {
-                $redirect_url = add_query_arg('key', esc_attr($_REQUEST['key']), $redirect_url);
-                $redirect_url = add_query_arg('login', esc_attr($_REQUEST['login']), $redirect_url);
+                $redirect_url = add_query_arg('key', $key, $redirect_url);
+                $redirect_url = add_query_arg('login', $login, $redirect_url);
                 $redirect_url = add_query_arg('errors', $exception->getMessage(), $redirect_url);
                 wp_redirect($redirect_url);
                 exit;
