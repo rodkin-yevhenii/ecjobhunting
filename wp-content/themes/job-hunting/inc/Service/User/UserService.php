@@ -116,7 +116,7 @@ class UserService
             throw new Exception('password_reset_empty');
         }
 
-        if ($pwdConfirmation && $pwd !== $pwdConfirmation) {
+        if ($pwd !== $pwdConfirmation) {
             throw new Exception('password_reset_mismatch');
         }
 
