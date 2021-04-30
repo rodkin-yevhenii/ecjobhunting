@@ -155,19 +155,3 @@ function getActivateProfileIcon()
 {
     return "<img src='" . IMG_URI . "icons/active.png' alt='activate Icon' />";
 }
-
-function getCurrencySymbol(string $currencyName): string
-{
-    $fields = get_field('post_new_job', 'option');
-    $currencies = $fields['currency'] ?? [];
-
-    foreach ($currencies as $currency) {
-        $name = $currency['name'] ?? null;
-
-        if (strtolower($name) === strtolower($currencyName)) {
-            return $currency['symbol'];
-        }
-    }
-
-    return '';
-}

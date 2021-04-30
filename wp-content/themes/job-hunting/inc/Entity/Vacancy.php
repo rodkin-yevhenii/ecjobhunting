@@ -2,8 +2,8 @@
 
 namespace EcJobHunting\Entity;
 
-use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Service\User\UserService;
+use EcJobHunting\Service\Vacancy\VacancyService;
 
 class Vacancy
 {
@@ -89,6 +89,22 @@ class Vacancy
         } else {
             $this->employer = UserService::getUser();
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCommissionIncluded(): bool
+    {
+        return $this->isCommissionIncluded;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotifyEmployer(): bool
+    {
+        return $this->notifyEmployer;
     }
 
     public function getStatus()
@@ -235,7 +251,10 @@ class Vacancy
      */
     public function getCompensationTo()
     {
-        return is_numeric($this->compensationTo) ? number_format($this->compensationTo, 2, '.', '') : 0.00;
+        return VacancyService::getCurrencySymbol($this->currency) . (
+            is_numeric($this->compensationTo)
+                ? number_format($this->compensationTo, 0, '.', ',') : 0.00
+            );
     }
 
     /**
@@ -243,7 +262,10 @@ class Vacancy
      */
     public function getCompensationFrom()
     {
-        return is_numeric($this->compensationFrom) ? number_format($this->compensationFrom, 2, '.', '') : 0.00;
+        return VacancyService::getCurrencySymbol($this->currency) . (
+            is_numeric($this->compensationFrom)
+                ? number_format($this->compensationFrom, 0, '.', ',' ) : 0.00
+            );
     }
 
     /**

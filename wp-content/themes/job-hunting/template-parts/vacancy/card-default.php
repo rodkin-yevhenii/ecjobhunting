@@ -31,11 +31,10 @@ if (in_array($vacancy->getId(), $bookmarks)) {
     <ul>
         <li class="color-secondary">
             <?php echo sprintf(
-                    __('Pay %4$s%1$s to %4$s%2$s %3$s', 'ecjobhunting'),
-                    number_format($vacancy->getCompensationFrom(), 0, '.', ','),
-                    number_format($vacancy->getCompensationTo(), 0, '.', ','),
-                    $vacancy->getCompensationPeriodName(),
-                    getCurrencySymbol($vacancy->getCurrency())
+                    __('Pay %1$s to %2$s %3$s', 'ecjobhunting'),
+                    $vacancy->getCompensationFrom(),
+                    $vacancy->getCompensationTo(),
+                    $vacancy->getCompensationPeriodName()
             ); ?>
         </li>
     </ul>
