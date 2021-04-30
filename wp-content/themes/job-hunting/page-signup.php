@@ -41,6 +41,7 @@ get_header(); ?>
                                 <input class="field-text password" type="password" name="pwd" required></label>
                             <label class="field-label" for="pwd_confirmation">Confirm Password
                                 <input class="field-text" type="password" name="pwd_confirmation" required></label>
+                            <p class="description"><?php echo wp_get_password_hint(); ?></p>
                             <input type="submit" name="wp-submit"
                                    class="btn btn-primary" value="<?php _e('Sign Up', 'ecjobhunting'); ?>">
                             <input type="hidden" name="role" value="candidate"/>
@@ -63,6 +64,7 @@ get_header(); ?>
                                 <input class="field-text" type="password" name="pwd" required></label>
                             <label class="field-label pwd_confirmation" for="pwd_confirmation">Confirm Password
                                 <input class="field-text" type="password" name="pwd_confirmation" required></label>
+                            <p class="description"><?php echo wp_get_password_hint(); ?></p>
                             <input type="submit" name="wp-submit"
                                    class="btn btn-primary" value="<?php _e('Sign Up', 'ecjobhunting'); ?>">
                             <input type="hidden" name="role" value="employer"/>

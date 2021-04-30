@@ -5,6 +5,8 @@ namespace EcJobHunting\Service\User;
 use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Entity\Company;
 use EcJobHunting\Entity\EcJobUser;
+use Exception;
+use WP_User;
 
 class UserService
 {
@@ -97,5 +99,27 @@ class UserService
             return new Company($user);
         }
         return new EcJobUser($user);
+    }
+
+    /**
+     * Reset user password.
+     *
+     * @param WP_User $user
+     * @param string $pwd
+     * @param string $pwdConfirmation
+     *
+     * @throws Exception    Passwords empty or it are different.
+     */
+    public static function resetPassword(WP_User $user, string $pwd, string $pwdConfirmation): void
+    {
+        if (empty($pwd)) {
+            throw new Exception('', 'password_reset_empty');
+        }
+
+        if ($pwdConfirmation && $pwd !== $pwdConfirmation) {
+            throw new Exception('', 'password_reset_mismatch');
+        }
+
+        reset_password($user, $pwd);
     }
 }
