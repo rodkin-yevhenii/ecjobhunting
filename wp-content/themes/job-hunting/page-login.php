@@ -2,6 +2,15 @@
 /**
  * Template Name: Login
  */
+
+use EcJobHunting\Service\User\Login;
+
+$errors = [];
+
+if (!empty($_REQUEST['errors'])) {
+    $errors = explode(',', $_REQUEST['errors']);
+}
+
 get_header(); ?>
     <section class="account mt-3">
         <div class="container">
@@ -23,14 +32,19 @@ get_header(); ?>
                                 <?php _e("Don't have an account?", 'ecjobhunting'); ?>
                                 (<a href="<?php echo SIGNUP_URL; ?>"><?php _e("Sign Up", 'ecjobhunting'); ?></a>)
                             </p>
-                        <?php endif; ?>
+                            <?php foreach ($errors as $error) : ?>
+                                <p class="alert-danger text-center p-2">
+                                    <?php echo Login::getErrorMessage($error); ?>
+                                </p>
+                            <?php endforeach;
+                        endif; ?>
                         <form action="<?php echo site_url('wp-login.php'); ?>" name="loginform" method="post">
                             <label class="field-label" for="user_login"><?php _e(
                                     'Username or Email Address',
                                     'ecjobhunting'
                                 ); ?></label>
                             <input class="field-text" type="text" name="log" id="user_login">
-                            <label class="field-label" for="pwd">Password</label>
+                            <label class="field-label" for="user_pass">Password</label>
                             <input class="field-text" type="password" name="pwd" id="user_pass">
                             <br/>
                             <fieldset><input name="rememberme" type="checkbox" id="rememberme" value="forever">

@@ -5,9 +5,8 @@ namespace EcJobHunting;
 use EcJobHunting\Admin\AdminInit;
 use EcJobHunting\Admin\Registry\UserRoles;
 use EcJobHunting\Front\FrontInit;
-use EcJobHunting\Front\SiteSettings;
-use EcJobHunting\Service\Job\Job;
 use EcJobHunting\Service\Job\JobService;
+use EcJobHunting\Service\User\Login;
 use EcJobHunting\Service\User\Registration;
 use EcJobHunting\Service\User\RetrievePassword;
 use EcJobHunting\Service\Widget\WidgetInit;
@@ -46,6 +45,7 @@ final class ThemeInit
     {
         add_action('init', new FrontInit());
         add_action('init', new JobService());
+        add_action('init', new Login());
         add_action('init', new Registration());
         add_action('init', new RetrievePassword());
     }
