@@ -39,8 +39,9 @@ class Vacancy
 
     //statistic
     private array $candidates = [];
+    private array $visitors = [];
     private int $candidatesNumber = 0;
-    private int $visitors = 0;
+    private int $visitorsNumber = 0;
 
     //
     private $fieldsObject;
@@ -78,8 +79,10 @@ class Vacancy
                 $this->isCommissionIncluded = (bool)($fields['is_commission_included'] ?? false);
                 $this->agreementOptions = $fields['additional_options'] ?? [];
                 $this->benefits = isset($fields['benefits']) ? (array)$fields['benefits'] : [];
-                $this->visitors = (int)($fields['visitors'] ?? 0);
+                $this->visitors = (array)($fields['visitors'] ?? []);
                 $this->candidates = (array)($fields['applied'] ?? []);
+                $this->visitorsNumber = count($this->visitors);
+                $this->candidatesNumber = count($this->candidates);
                 $this->currency = ucwords($fields['compensation_currency'] ?? 'USD');
                 $this->compensationPeriod = $fields['compensation_period'] ?? 'annualy';
 
@@ -115,9 +118,17 @@ class Vacancy
     /**
      * @return int|mixed
      */
-    public function getVisitors()
+    public function getVisitors(): array
     {
         return $this->visitors;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVisitorsNumber(): int
+    {
+        return $this->visitorsNumber;
     }
 
     /**
@@ -233,7 +244,7 @@ class Vacancy
     /**
      * @return array|mixed
      */
-    public function getCandidates()
+    public function getCandidates(): array
     {
         return $this->candidates;
     }
