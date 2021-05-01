@@ -4,6 +4,7 @@
 namespace EcJobHunting\Service\Job;
 
 
+use EcJobHunting\Entity\Vacancy;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Interfaces\AjaxResponse;
 use EcJobHunting\Service\Job\Response\JobsResponse;
@@ -47,6 +48,10 @@ class JobService
 
             add_action('wp_ajax_update_bookmark', [$this, 'updateBookmark']);
             add_action('wp_ajax_nopriv_update_bookmark', [$this, 'updateBookmark']);
+
+            // Apply job
+            add_action('wp_ajax_apply_job', [$this, 'applyJobAjaxCallback']);
+            add_action('wp_ajax_nopriv_apply_job', [$this, 'applyJobAjaxCallback']);
         }
     }
 
@@ -326,5 +331,43 @@ class JobService
             $this->benefits = $this->jobSettings['benefits'];
         }
         return $this->benefits;
+    }
+
+    public function applyJobAjaxCallback(): void
+    {
+        if (empty($_POST['vacancyId'])) {
+            $this->response
+                ->setStatus(204)
+                ->setMessage(__('ID data is required', 'ecjobhunting'))
+                ->send();
+        }
+
+        $action = $_POST['action'] ?? '';
+        $vacancy = new Vacancy((int) $_POST['vacancyId']);
+        $userId = get_current_user_id();
+
+        if (!$vacancy) {
+            $this->response
+                ->setStatus(204)
+                ->setMessage(__('Incorrect vacancy ID', 'ecjobhunting'))
+                ->send();
+        }
+
+        $candidates = $vacancy->getCandidates();
+
+        if (!in_array($userId, $candidates)) {
+            $candidates[] = $userId;
+            $this->response->setMessage('applied');
+        } else {
+            $key = array_search($userId, $candidates);
+            unset($candidates[$key]);
+            $this->response->setMessage('revoked');
+        }
+
+        update_field('applied', $candidates, $vacancy->getId());
+
+        $this->response
+            ->setStatus(200)
+            ->send();
     }
 }

@@ -7,6 +7,9 @@ $(() => {
   const $filterLoadMoreBtn = $('.js-filter-load-more')
   const $registerForm = $('.registerform')
   const $addBookmarkBtn = $('.add-bookmark')
+  const $applyBtn = $('.js-apply')
+  const $revokeBtn = $('.js-revoke')
+  const $dismissBtn = $('.js-dismiss')
 
   function postJobAjax (data, $messageContainer) {
     $.ajax({
@@ -134,6 +137,67 @@ $(() => {
       error: errorCallback,
     })
   }
+
+  $applyBtn.on('click', (event) => {
+    event.preventDefault()
+
+    const $btn = $(event.currentTarget);
+    const text = {
+      apply: $btn.attr('data-apply-text'),
+      revoke: $btn.attr('data-revoke-text')
+    }
+    const data = {
+      action: 'apply_job',
+      vacancyId: $btn.attr('data-vacancy-id')
+    }
+
+    ajaxRequest(
+      data,
+      () => {},
+      (response) => {
+        if (response.status !== 200) {
+          console.error(response.status, response.message)
+          return
+        }
+
+        if (response.message === 'applied') {
+          $btn.text(text.revoke)
+        } else {
+          $btn.text(text.apply)
+        }
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
+  })
+
+  // $revokeBtn.on('click', (event) => {
+  //   const $btnRevoke = $(event.currentTarget);
+  //   const $holder = $btnRevoke.parent()
+  //   const $btnApply = $holder.find('.js-apply')
+  //   const data = {
+  //     action: 'revoke_job',
+  //     vacancyId: $btnRevoke.attr('data-vacancy-id')
+  //   }
+  //
+  //   ajaxRequest(
+  //     data,
+  //     () => {},
+  //     (response) => {
+  //       if (response.status === 200) {
+  //         $btnRevoke.fadeOut(0)
+  //         $btnApply.fadeIn(500)
+  //
+  //         return
+  //       }
+  //       console.error(response.status, response.message)
+  //     },
+  //     (error) => {
+  //       console.error(error)
+  //     }
+  //   )
+  // })
 
   $addBookmarkBtn.on('click', (event) => {
     event.preventDefault()

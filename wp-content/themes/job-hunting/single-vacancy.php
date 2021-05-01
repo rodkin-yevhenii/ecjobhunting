@@ -7,6 +7,10 @@
 use EcJobHunting\Entity\Vacancy;
 
 $vacancy = new Vacancy(get_the_ID());
+$user = wp_get_current_user();
+$appliedUsersList = $vacancy->getCandidates();
+$isApplied = in_array($user->ID, $appliedUsersList);
+
 get_header(); ?>
     <main>
         <?php if (have_posts() && $vacancy): the_post();
@@ -59,14 +63,29 @@ get_header(); ?>
                                     <p class="mb-4"><?php echo $vacancy->getCompanyDescription(); ?></p>
                                 <?php endif; ?>
                             </article>
-                            <div class="vacancy-footer"><a class="btn btn-primary btn-lg" href="#">Apply Now</a></div>
+                            <div class="vacancy-footer">
+                                <?php if (in_array('candidate', $user->roles)) : ?>
+                                    <button
+                                        class="btn btn-primary btn-lg js-apply"
+                                        data-vacancy-id="<?php echo $vacancy->getId(); ?>"
+                                        data-apply-text="<?php _e('Apply Now', 'ecjobhunting'); ?>"
+                                        data-revoke-text="<?php _e('Revoke confirmation', 'ecjobhunting'); ?>"
+                                    >
+                                        <?php echo !$isApplied
+                                            ? __('Apply Now', 'ecjobhunting')
+                                            : __('Revoke confirmation', 'ecjobhunting');
+                                        ?>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+<!--TODO Clarify with client what should do button "Am I Qualified?"-->
                         </div>
                         <div class="col-12 col-xl-3 my-5 d-md-flex d-xl-block">
                             <div class="vacancy-image"><img src="<?php echo $employer->getPhoto(); ?>" alt="<?php echo $employer->getName(); ?>"></div>
                             <div class="vacancy-info">
                                 <h2 class="vacancy-company no-decor"><?php echo $vacancy->getCompanyName(); ?></h2>
                                 <span class="color-secondary"><?php echo nicetime($vacancy->getDatePosted()); ?></span>
-<!--                                //TODO Add block with share links to vacancy single-->
+<!--TODO Add block with share links to vacancy single-->
 <!--                                <div class="social mt-4"><span>Share this job:</span>-->
 <!--                                    <ul>-->
 <!--                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>-->
