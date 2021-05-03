@@ -1,19 +1,47 @@
-<?php use EcJobHunting\Service\User\UserService;
+<?php
 
-$candidate = UserService::getUser(get_current_user_id()); ?>
-<div class="container">
+use EcJobHunting\Service\User\UserService;
+
+$currentUserId = get_current_user_id();
+$error = '';
+
+try {
+    do_action('ecjob-save-new-data', $currentUserId);
+} catch (Exception $exception) {
+    $error = $exception->getMessage();
+}
+
+$candidate = UserService::getUser($currentUserId);
+
+?>
+<div
+    id="candidate"
+    class="container"
+    data-user-id="<?php echo $currentUserId; ?>"
+    data-cv-id="<?php echo $candidate->getCvId(); ?>"
+>
     <div class="row d-md-block d-xl-flex my-3 my-md-4 my-xl-5 clearfix">
         <div class="col-12 order-0 col-md-5 float-md-left col-xl-3">
             <div class="profile-item">
                 <div class="profile-header">
-                    <button class="profile-edit-link" type="button" data-toggle="modal" data-target="#edit">Edit
+                    <button
+                        class="profile-edit-link js-profile-edit-link"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#edit"
+                        data-heading="<?php _e('About Me', 'ecjobhunting'); ?>"
+                        data-form-id="#about_me"
+                    >
+                        <?php _e('Edit', 'ecjobhunting'); ?>
                     </button>
                     <h2 class="no-decor"><?php _e('About Me', 'ecjobhunting'); ?></h2>
                 </div>
-                <form class="profile-photo">
-                    <div class="profile-photo-image"><img src="<?php echo $candidate->getPhoto(); ?>" alt="photo">
+                <form class="profile-photo" action="" method="post" id="avatar-form" enctype="multipart/form-data">
+                    <div class="profile-photo-image">
+                        <img src="<?php echo $candidate->getPhoto(); ?>" alt="photo">
                     </div>
-                    <input type="file" id="profile-photo">
+                    <input type="file" name="avatar" id="profile-photo" accept=".jpg,.jpeg,.png" value=" ">
+                    <?php wp_nonce_field( 'upload_avatar', 'upload_avatar_nonce' ); ?>
                     <label for="profile-photo">+</label>
                 </form>
                 <div class="profile-name">
@@ -88,6 +116,11 @@ $candidate = UserService::getUser(get_current_user_id()); ?>
             </div>
         </div>
         <div class="col-12 order-2 col-md-7 float-md-right col-xl-6 order-xl-1 mb-5">
+            <?php if ($error): ?>
+                <div class="alert-danger text-center p-2 mt-4">
+                    <?php echo $error; ?>
+                </div>
+            <?php endif; ?>
             <div class="profile-activation">
                 <h3>Let Employers Find You</h3>
                 <div class="custom-handler <?php echo $candidate->isPublished() ? "active" : ""; ?>">
@@ -218,38 +251,6 @@ $candidate = UserService::getUser(get_current_user_id()); ?>
 </div>
 <div class="modal fade" id="edit" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <form class="modal-content">
-            <div class="modal-header">
-                <h2 class="no-decor">Lorem ipsum</h2>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="profile-photo">
-                    <div class="profile-photo-image"><img src="<?php echo $candidate->getPhoto(); ?>" alt="photo">
-                    </div>
-                    <input type="file" id="profile-photo-modal">
-                    <label for="profile-photo-modal">Add Profile Photo</label>
-                </div>
-                <label class="field-label" for="edit-name">Full Name</label>
-                <input class="field-text" type="text" id="edit-name">
-                <label class="field-label" for="edit-headline">Headline (optional)</label>
-                <input class="field-text" type="text" id="edit-headline">
-                <label class="field-label" for="edit-location">Location</label>
-                <input class="field-text" type="text" id="edit-location">
-                <label class="field-label" for="edit-zip">ZIP / Postal Code</label>
-                <input class="field-text" type="text" id="edit-zip">
-                <fieldset>
-                    <input type="checkbox" id="edit-checkbox">
-                    <label for="edit-checkbox">I am willing to relocate</label>
-                </fieldset>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" type="submit">Save</button>
-                <button class="btn btn-outline-primary" type="button" data-dismiss="modal" aria-label="Close">
-                    Cancel
-                </button>
-            </div>
-        </form>
+        <?php get_template_part('template-parts/candidate/dashboard/modal-forms/form', 'about-me'); ?>
     </div>
 </div>

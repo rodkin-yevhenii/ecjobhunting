@@ -5,7 +5,7 @@ use EcJobHunting\Service\User\UserService;
 get_header();
 
 if (UserService::isCandidate()) {
-    get_template_part('template-parts/candidate/dashboard');
+    get_template_part('template-parts/candidate/dashboard/dashboard');
 } elseif (UserService::isEmployer()) {
     $type = $_GET['type'] ?? '';
     switch ($type) {
