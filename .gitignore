@@ -20,3 +20,5 @@ node_modules/
 *.idea/
 /package-lock.json
 /wp-config.php
+/wp-content/themes/job-hunting/vendor/
+/wp-content/themes/job-hunting/composer.lock

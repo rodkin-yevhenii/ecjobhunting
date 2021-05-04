@@ -1,13 +1,16 @@
 {
-  "name": "valovenko/ecjobhunting",
-  "authors": [
-    {
-      "name": "Alina Valovenko"
+    "name": "valovenko/ecjobhunting",
+    "authors": [
+        {
+            "name": "Alina Valovenko"
+        }
+    ],
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "EcJobHunting\\": "inc/"
+        }
     }
-  ],
-  "autoload": {
-    "psr-4": {
-      "EcJobHunting\\": "inc/"
-    }
-  }
 }
