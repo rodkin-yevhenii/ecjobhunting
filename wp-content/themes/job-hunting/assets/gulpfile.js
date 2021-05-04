@@ -59,6 +59,7 @@ gulp.task('scripts', function (done) {
       'src/js/ajax.js',
       'src/js/api.js',
       'src/js/vacancies.js',
+      'src/js/cv.js',
     ]
   }
   Object.keys(scripts).forEach(name => {

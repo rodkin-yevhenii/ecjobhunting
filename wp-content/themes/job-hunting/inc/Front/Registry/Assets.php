@@ -32,6 +32,10 @@ class Assets
             wp_enqueue_script('api', $this->baseSrc . 'js/index/api.js', [], '1.0', true);
         }
 
+        if (current_user_can('candidate') && is_page('dashboard')) {
+            wp_enqueue_script('dashboard-candidate', $this->baseSrc . 'js/index/cv.js', [$this->handle], '1.0', true);
+        }
+
         if(current_user_can('employer')){
             wp_enqueue_script('vacancies', $this->baseSrc . 'js/index/vacancies.js', [$this->handle], '1.0', true);
         }
