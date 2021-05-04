@@ -1,9 +1,12 @@
 <?php
 
-
 namespace EcJobHunting\Front\Registry;
 
-
+/**
+ * Class Assets
+ *
+ * @package EcJobHunting\Front\Registry
+ */
 class Assets
 {
     private string $handle = 'ec-job-hunt';
@@ -28,7 +31,7 @@ class Assets
         wp_enqueue_script($this->handle, $this->baseSrc . 'js/index/general.js', ['libs'], '1.0', true);
         wp_enqueue_script('theme-ajax', $this->baseSrc . 'js/index/ajax.js', [$this->handle], '1.0', true);
 
-        if(is_user_logged_in()){
+        if (is_user_logged_in()) {
             wp_enqueue_script('api', $this->baseSrc . 'js/index/api.js', [], '1.0', true);
         }
 
@@ -36,18 +39,17 @@ class Assets
             wp_enqueue_script('dashboard-candidate', $this->baseSrc . 'js/index/cv.js', [$this->handle], '1.0', true);
         }
 
-        if(current_user_can('employer')){
+        if (current_user_can('employer')) {
             wp_enqueue_script('vacancies', $this->baseSrc . 'js/index/vacancies.js', [$this->handle], '1.0', true);
         }
     }
 
     private function localizeScripts()
     {
-        if(is_user_logged_in()){
+        if (is_user_logged_in()) {
             $credentials = get_userdata(get_current_user_id());
             $basic = base64_encode("{$credentials->user_login}:{$credentials->user_pass}");
-        } else
-        {
+        } else {
             $basic = '';
         }
 
@@ -56,7 +58,7 @@ class Assets
             'siteSettings',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
-                '_basic'=>$basic
+                '_basic' => $basic
             ]
         );
     }
