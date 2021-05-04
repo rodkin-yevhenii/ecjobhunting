@@ -1,0 +1,73 @@
+<?php
+
+namespace EcJobHunting\Service\Cv;
+
+use Exception;
+
+/**
+ * Class CvService
+ *
+ * @author Yevhenii Rodkin <rodkin.yevhenii@gmail.com>
+ * @package EcJobHunting\Service\Cv
+ */
+class CvService
+{
+    /**
+     * Register hooks
+     */
+    public function __invoke()
+    {
+        add_action('ecjob-save-new-data', [$this, 'updateAvatar']);
+    }
+
+    /**
+     * Save user avatar
+     *
+     * @param int $userId
+     * @throws Exception
+     */
+    public function updateAvatar(int $userId): void
+    {
+        if (
+            get_current_user_id() !== $userId
+            || empty($_FILES['avatar'])
+            || !wp_verify_nonce($_POST['upload_avatar_nonce'] ?? '', 'upload_avatar')
+        ) {
+            return;
+        }
+
+        if (!is_admin()) {
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        }
+
+        preg_match('/^(.{1,})\.[a-zA-Z]+$/', $_FILES['avatar']['name'], $matches);
+
+        $images = get_posts(
+            [
+                'post_mime_type' => 'image',
+                'post_type' => 'attachment',
+                'name' => $matches[1],
+                'numberposts' => 1,
+                'fields' => 'ids'
+            ]
+        );
+
+        if (!empty($images)) {
+            $imgId = $images[0];
+        } else {
+            $imgId = media_handle_upload('avatar', 0);
+        }
+
+        if ($imgId === (int)get_field('photo', "user_$userId")) {
+            return;
+        }
+
+        if (is_wp_error($imgId)) {
+            throw new Exception(__('Avatar updating was failed.', 'ecjobhunting'));
+        }
+
+        update_field('photo', $imgId, "user_$userId");
+    }
+}

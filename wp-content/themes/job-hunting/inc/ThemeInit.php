@@ -5,6 +5,7 @@ namespace EcJobHunting;
 use EcJobHunting\Admin\AdminInit;
 use EcJobHunting\Admin\Registry\UserRoles;
 use EcJobHunting\Front\FrontInit;
+use EcJobHunting\Service\Cv\CvService;
 use EcJobHunting\Service\Job\JobService;
 use EcJobHunting\Service\User\Login;
 use EcJobHunting\Service\User\Registration;
@@ -48,6 +49,7 @@ final class ThemeInit
         add_action('init', new Login());
         add_action('init', new Registration());
         add_action('init', new RetrievePassword());
+        add_action('init', new CvService());
     }
 
     private function registerWidgets()
