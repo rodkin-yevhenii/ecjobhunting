@@ -2,6 +2,7 @@
 
 namespace EcJobHunting\Service\Cv;
 
+use EcJobHunting\Service\Cv\Ajax\AjaxFormAboutMe;
 use Exception;
 
 /**
@@ -18,6 +19,16 @@ class CvService
     public function __invoke()
     {
         add_action('ecjob-save-new-data', [$this, 'updateAvatar']);
+
+        $this->registerAjaxControllers();
+    }
+
+    /**
+     * Register ajax controllers.
+     */
+    private function registerAjaxControllers(): void
+    {
+        new AjaxFormAboutMe();
     }
 
     /**

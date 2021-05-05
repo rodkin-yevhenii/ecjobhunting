@@ -30,7 +30,7 @@ $candidate = UserService::getUser($currentUserId);
                         data-toggle="modal"
                         data-target="#edit"
                         data-heading="<?php _e('About Me', 'ecjobhunting'); ?>"
-                        data-form-id="#about_me"
+                        data-form-id="about_me"
                     >
                         <?php _e('Edit', 'ecjobhunting'); ?>
                     </button>
@@ -41,13 +41,22 @@ $candidate = UserService::getUser($currentUserId);
                         <img src="<?php echo $candidate->getPhoto(); ?>" alt="photo">
                     </div>
                     <input type="file" name="avatar" id="profile-photo" accept=".jpg,.jpeg,.png" value=" ">
-                    <?php wp_nonce_field( 'upload_avatar', 'upload_avatar_nonce' ); ?>
+                    <?php wp_nonce_field('upload_avatar', 'upload_avatar_nonce'); ?>
                     <label for="profile-photo">+</label>
                 </form>
                 <div class="profile-name">
-                    <strong><?php echo $candidate->getName() ?></strong>
-                    <span><?php echo $candidate->getHeadline() ?></span>
-                    <span><?php echo $candidate->getLocation() ?></span>
+                    <strong id="cv_full_name"><?php echo $candidate->getName() ?></strong>
+                    <span id="cv_headline"><?php echo $candidate->getHeadline() ?></span>
+                    <span class="d-flex justify-content-center">
+                        <span id="cv_location" class="mr-2"><?php echo $candidate->getLocation() ?></span>
+                        <span id="cv_zip"><?php echo $candidate->getZipCode() ?></span>
+                    </span>
+                    <span
+                        id="ready_to_relocate"
+                        class="<?php echo $candidate->isReadyToRelocate() ? '' : 'd-none"'; ?>"
+                    >
+                        <?php _e('I am willing to relocate', 'ecjobhunting'); ?>
+                    </span>
                 </div>
             </div>
             <div class="profile-item">
@@ -59,7 +68,7 @@ $candidate = UserService::getUser($currentUserId);
                     <li>
                         <div class="profile-icon"><?php echo getEnvelopIcon(); ?></div>
                         <span><?php echo $candidate->getEmail(); ?></span>
-                        <?php if (!$candidate->isEmailConfirmed()): ?>
+                        <?php if (!$candidate->isEmailConfirmed()) : ?>
                             <span class="color-red">Verify your email to receive application updates from employers.</span>
                             <button class="btn btn-primary">Resend Confirmation</button>
                         <?php endif; ?>
@@ -68,7 +77,7 @@ $candidate = UserService::getUser($currentUserId);
                         <div class="profile-icon"><?php echo getPhoneIcon(); ?></div>
                         <?php if ($candidate->getPhoneNumber()) : ?>
                             <span><?php echo $candidate->getPhoneNumber(); ?></span>
-                        <?php else: ?>
+                        <?php else : ?>
                             <a href="#">Add Phone Number</a>
                         <?php endif; ?>
                     </li>
@@ -84,7 +93,7 @@ $candidate = UserService::getUser($currentUserId);
                         <div class="profile-icon"><?php echo getEnvelopIcon(); ?></div>
                         <?php if ($candidate->getWebSite()) : ?>
                             <span><?php echo $candidate->getWebSite(); ?></span>
-                        <?php else: ?>
+                        <?php else : ?>
                             <a href="#">Add Website</a>
                         <?php endif; ?>
                     </li>
@@ -92,7 +101,7 @@ $candidate = UserService::getUser($currentUserId);
                         <div class="profile-icon"><?php echo getTwitterIcon(); ?></div>
                         <?php if ($candidate->getTwitter()) : ?>
                             <span><?php echo $candidate->getTwitter(); ?></span>
-                        <?php else: ?>
+                        <?php else : ?>
                             <a href="#">Add Twitter Profile</a>
                         <?php endif; ?>
                     </li>
@@ -100,7 +109,7 @@ $candidate = UserService::getUser($currentUserId);
                         <div class="profile-icon"><?php echo getLinkedinIcon(); ?></div>
                         <?php if ($candidate->getLinkedin()) : ?>
                             <span><?php echo $candidate->getLinkedin(); ?></span>
-                        <?php else: ?>
+                        <?php else : ?>
                             <a href="#">Add LinkedIn Profile</a>
                         <?php endif; ?>
                     </li>
@@ -108,7 +117,7 @@ $candidate = UserService::getUser($currentUserId);
                         <div class="profile-icon"><?php echo getFacebookIcon(); ?></div>
                         <?php if ($candidate->getFacebook()) : ?>
                             <span><?php echo $candidate->getFacebook(); ?></span>
-                        <?php else: ?>
+                        <?php else : ?>
                             <a href="#">Add Facebook Profile</a>
                         <?php endif; ?>
                     </li>
@@ -116,7 +125,7 @@ $candidate = UserService::getUser($currentUserId);
             </div>
         </div>
         <div class="col-12 order-2 col-md-7 float-md-right col-xl-6 order-xl-1 mb-5">
-            <?php if ($error): ?>
+            <?php if ($error) : ?>
                 <div class="alert-danger text-center p-2 mt-4">
                     <?php echo $error; ?>
                 </div>
@@ -126,12 +135,13 @@ $candidate = UserService::getUser($currentUserId);
                 <div class="custom-handler <?php echo $candidate->isPublished() ? "active" : ""; ?>">
                     <div></div>
                 </div>
-                <p><?php if ($candidate->isPublished()):
+                <p>
+                    <?php if ($candidate->isPublished()) :
                         _e(
                             'Public: Your profile is publicly accessible.',
                             'ecjobhunting'
                         );
-                    else:
+                    else :
                         _e(
                             'Private: Your profile is not publicly accessible. However, it is viewable as a part of your
                         applications.',
@@ -140,7 +150,7 @@ $candidate = UserService::getUser($currentUserId);
                     endif; ?>
                 </p>
             </div>
-            <?php if ($candidate->getSummary()): ?>
+            <?php if ($candidate->getSummary()) : ?>
                 <div class="profile-item">
                     <div class="profile-header">
                         <h2 class="no-decor">Executive Summary</h2>
@@ -155,10 +165,13 @@ $candidate = UserService::getUser($currentUserId);
                     <p><a href="#">Add Work Experience</a></p>
                 </div>
                 <?php if (!empty($candidate->getExperience())) :
-                    foreach ($candidate->getExperience() as $experience): ?>
-                        <div class="profile-subitem"><span><?php echo getDatePeriod(
+                    foreach ($candidate->getExperience() as $experience) : ?>
+                        <div class="profile-subitem">
+                            <span>
+                                <?php echo getDatePeriod(
                                     $experience['period']
-                                ); ?></span>
+                                ); ?>
+                            </span>
                             <h3><?php echo $experience['job_position']; ?></h3>
                             <strong><?php echo $experience['company_name']; ?></strong>
                             <button class="btn btn-outline-secondary">Edit</button>
@@ -173,11 +186,12 @@ $candidate = UserService::getUser($currentUserId);
                 </div>
                 <p><a href="#">Add Education</a></p>
                 <?php if (!empty($candidate->getEducation())) :
-                    foreach ($candidate->getEducation() as $education): ?>
+                    foreach ($candidate->getEducation() as $education) : ?>
                         <div class="profile-subitem"><span><?php echo getDatePeriod($education['period']); ?></span>
                             <h3><?php echo $education['name']; ?></h3>
                             <?php echo $education['degree'] ? "<strong>{$education['degree']}</strong>" : ""; ?>
-                            <?php echo $education['fields_of_study'] ? "<strong>{$education['fields_of_study']}</strong>" : ""; ?>
+                            <?php echo $education['fields_of_study']
+                                ? "<strong>{$education['fields_of_study']}</strong>" : ""; ?>
                             <button class="btn btn-outline-secondary">Edit</button>
                             <?php echo $education['description'] ? "<p>{$education['description']}</p>" : ""; ?>
                         </div>
@@ -193,7 +207,7 @@ $candidate = UserService::getUser($currentUserId);
                 <button class="btn btn-outline-secondary btn-full">Request References</button>
             </div>
             <div class="profile-item">
-                <?php if ($candidate->getSummary()): ?>
+                <?php if ($candidate->getSummary()) : ?>
                     <p><a href="#">Add Executive Summary</a></p>
                 <?php endif; ?>
                 <p><a href="#">Add Objective</a></p>

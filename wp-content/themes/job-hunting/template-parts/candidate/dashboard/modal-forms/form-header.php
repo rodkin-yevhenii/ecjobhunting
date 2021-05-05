@@ -4,3 +4,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
+<div class="notification js-notification p-3 text-center d-none">
+    <div class="alert-danger p-3 text-center js-error-message"></div>
+    <div class="alert-success p-3 text-center js-success-message"></div>
+</div>

@@ -7,6 +7,7 @@ class Candidate extends UserAbstract
     private ?int $cvId;
     private bool $isPublished = false;
     private ?array $fields;
+    private string $name;
     private string $headline;
     private string $location;
     private string $zipCode;
@@ -57,7 +58,16 @@ class Candidate extends UserAbstract
         return $this->cvId;
     }
 
-    // TODO Clarify with client Where needs to be displayed on FRONT
+    public function getName()
+    {
+        if (empty($this->name)) {
+            $user = \get_user_by('id', $this->getUserId());
+            $this->name = $this->fields['full_name'] ?? $user->display_name;
+        }
+
+        return $this->name;
+    }
+
     public function getHeadline()
     {
         if (empty($this->headline)) {
@@ -69,9 +79,17 @@ class Candidate extends UserAbstract
 
     public function getLocation()
     {
-        if (empty($this->location)) {
-            $this->location = $this->fields['location'] ?? '';
+        if (!empty($this->location)) {
+            return $this->location;
         }
+
+        $terms = wp_get_post_terms($this->cvId, 'location', ['fields' => 'names']);
+
+        if (is_wp_error($terms) || empty($terms)) {
+            return '';
+        }
+
+        $this->location = $terms[0];
 
         return $this->location;
     }
