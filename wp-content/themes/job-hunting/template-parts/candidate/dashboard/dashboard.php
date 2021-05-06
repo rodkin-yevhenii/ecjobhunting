@@ -218,7 +218,5 @@ $candidate = UserService::getUser($currentUserId);
 </div>
 <div class="modal fade" id="edit" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <?php get_template_part('template-parts/candidate/dashboard/modal-forms/form', 'about-me'); ?>
-        <?php get_template_part('template-parts/candidate/dashboard/modal-forms/form', 'contacts'); ?>
     </div>
 </div>

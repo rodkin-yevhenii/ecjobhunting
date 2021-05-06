@@ -11,7 +11,7 @@ if (!$candidate) {
         type="button"
         data-toggle="modal"
         data-target="#edit"
-        data-heading="<?php _e('Contact Information', 'ecjobhunting'); ?>"
+        data-action="load_contacts_form"
         data-form-id="contacts"
     >
         <?php _e('Edit', 'ecjobhunting'); ?>

@@ -51,69 +51,39 @@ class CvController {
    */
   showForm (event) {
     event.preventDefault()
-
-    $('.js-notification').addClass('d-none').removeClass('alert-danger', 'alert-success')
-
     const $edit = $(event.currentTarget)
-    const formId = $edit.attr('data-form-id')
-    const formHeading = $edit.attr('data-heading')
-
-    // Hide any active form
-    $('.modal-dialog').find('form').map((index, item) => {
-      const $form = $(item)
-      $form.hide()
-    })
-
-    // Show form by id attribute
-    switch (formId) {
-      case 'about_me':
-        this.fillFormAboutMe()
-        break
-      case 'contacts':
-        this.fillFormContacts()
-        break
-    }
-
-    $('.js-header-text').text(formHeading)
-    $('#' + formId).show()
-  }
-
-  /**
-   * Fill "About me" form by Ajax.
-   */
-  fillFormAboutMe () {
-    const $notification = $('.js-notification')
+    const $holder = $('.modal-dialog')
     const data = {
-      action: 'load_about_me_form',
-      cvId: this.cvId,
+      action: $edit.attr('data-action'),
+      formId: $edit.attr('data-form-id'),
     }
 
     this
-      .sendAjax(data)
+      .sendAjax(
+        data,
+        () => {
+          $holder.html(
+            '<div class="text-center" style="min-height:400px">\n' +
+            '    <div class="spinner-border text-success" style="position: absolute;left: 50%;top: 50%" role="status">\n' +
+            '        <span class="sr-only">Loading...</span>\n' +
+            '    </div>\n' +
+            '</div>'
+          )
+        }
+      )
       .done(
         request => {
-          const $notification = $('.js-notification')
-
           if (request.status !== 200) {
-            $notification.text(request.message).addClass('alert-danger').removeClass('d-none', 'alert-warning', 'alert-success')
+            console.error('Form loading failed.', request.message)
             return
           }
 
-          $notification.addClass('d-none').removeClass('alert-danger', 'alert-warning', 'alert-success')
-
-          $('#edit_full_name').val(request.data.fullName)
-          $('#edit_headline').val(request.data.headline)
-          $('#edit_location').val(request.data.location)
-          $('#edit_zip').val(request.data.zip)
-
-          if (request.data.isReadyToRelocate) {
-            $('#edit_ready_to_relocate').attr('checked', 'checked')
-          }
+          $holder.html(request.html)
         }
       )
       .fail(
         error => {
-          $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
+          console.error('Form loading failed.', error)
         }
       )
   }
@@ -154,37 +124,6 @@ class CvController {
           setTimeout(() => {
             $notification.addClass('d-none').removeClass('alert-success')
           }, 3000)
-        }
-      )
-      .fail(
-        error => {
-          $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
-        }
-      )
-  }
-
-  fillFormContacts () {
-    const $notification = $('.js-notification')
-    const data = {
-      action: 'load_contacts_form',
-      cvId: this.cvId,
-    }
-
-    this
-      .sendAjax(data)
-      .done(
-        request => {
-          const $notification = $('.js-notification')
-
-          if (request.status !== 200) {
-            $notification.text(request.message).addClass('alert-danger').removeClass('d-none', 'alert-warning', 'alert-success')
-            return
-          }
-
-          $notification.addClass('d-none').removeClass('alert-danger', 'alert-warning', 'alert-success')
-
-          $('#edit_phone').val(request.data.phone)
-          $('#edit_email').val(request.data.email)
         }
       )
       .fail(
@@ -237,18 +176,19 @@ class CvController {
   }
 
   /**
-   * Ajax request.
-   * The function return promise.
+   * Ajax request. The function return promise.
    *
-   * @param data
+   * @param data        Object with data
+   * @param beforeSend  Callback
    * @returns {*|jQuery|{getAllResponseHeaders: function(): *|null, abort: function(*=): this, setRequestHeader: function(*=, *): this, readyState: number, getResponseHeader: function(*): null|*, overrideMimeType: function(*): this, statusCode: function(*=): this}}
    */
-  sendAjax(data) {
+  sendAjax(data, beforeSend = () => {}) {
     return $.ajax({
       type: 'POST',
       url: siteSettings.ajaxurl,
       data,
       dataType: 'json',
+      beforeSend,
     })
   }
 }
