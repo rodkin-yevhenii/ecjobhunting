@@ -43,6 +43,13 @@ class AjaxFormAboutMe extends AjaxFormAbstract
                 ->send();
         }
 
+        if (empty($_POST['user'])) {
+            $this->response
+                ->setStatus(204)
+                ->setMessage(__('User is required', 'ecjobhunting'))
+                ->send();
+        }
+
         $cvId = (int)$_POST['cvId'];
         $data = [
             'full_name' => $_POST['fullName'],
@@ -67,9 +74,19 @@ class AjaxFormAboutMe extends AjaxFormAbstract
         update_field('zip_code', $data['zip_code'], $cvId);
         update_field('relocate', $data['relocate'], $cvId);
 
+        $candidate = UserService::getUser($_POST['userId']);
+
+        ob_start();
+        get_template_part(
+            'template-parts/candidate/dashboard/blocs/block',
+            'about-me',
+            ['candidate' => $candidate]
+        );
+
         $this->response
             ->setStatus(200)
             ->setMessage(__('Profile updated', 'ecjobhunting'))
+            ->setResponseBody(ob_get_clean())
             ->send();
     }
 

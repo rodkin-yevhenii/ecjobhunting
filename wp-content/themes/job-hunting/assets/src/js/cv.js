@@ -127,6 +127,7 @@ class CvController {
     event.preventDefault()
 
     const $notification = $('.js-notification')
+    const $holder = $('#about-me-holder')
     const data = {
       action: 'save_about_me_form',
       cvId: this.cvId,
@@ -148,17 +149,7 @@ class CvController {
           }
 
           $notification.text(request.message).addClass('alert-success').removeClass('d-none', 'alert-danger')
-
-          $('#cv_full_name').text(data.fullName)
-          $('#cv_headline').text(data.headline)
-          $('#cv_location').text(data.location)
-          $('#cv_zip').text(data.zip)
-
-          if (data.isReadyToRelocate) {
-            $('#ready_to_relocate').removeClass('d-none')
-          } else {
-            $('#ready_to_relocate').addClass('d-none')
-          }
+          $holder.html(request.html)
 
           setTimeout(() => {
             $notification.addClass('d-none').removeClass('alert-success')
