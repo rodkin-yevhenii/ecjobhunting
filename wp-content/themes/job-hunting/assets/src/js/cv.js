@@ -103,6 +103,9 @@ class CvController {
       case 'contacts':
         data = this.getFormContactsData()
         break
+      case 'websites':
+        data = this.getFormWebsitesData()
+        break
     }
 
     this
@@ -164,6 +167,24 @@ class CvController {
       holderId: 'contacts-holder',
       phone: $('#phone').val(),
       email: $('#public_email').val(),
+    }
+  }
+
+  /**
+   * Generate "contact information" form data for ajax request.
+   *
+   * @returns {{cvId: *, phone: (*|jQuery), action: string, user: *, holderId: string, email: (*|jQuery)}}
+   */
+  getFormWebsitesData () {
+    return  {
+      action: 'save_websites_form',
+      cvId: this.cvId,
+      user: this.candidateId,
+      holderId: 'websites-holder',
+      website: $('#website').val(),
+      twitter: $('#twitter').val(),
+      linkedin: $('#linkedin').val(),
+      facebook: $('#facebook').val(),
     }
   }
 

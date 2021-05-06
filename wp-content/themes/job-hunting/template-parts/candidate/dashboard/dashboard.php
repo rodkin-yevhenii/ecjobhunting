@@ -36,45 +36,12 @@ $candidate = UserService::getUser($currentUserId);
                     ['candidate' => $candidate]
                 ); ?>
             </div>
-            <div class="profile-item">
-                <div class="profile-header">
-                    <button class="profile-edit-link">Edit</button>
-                    <h2 class="no-decor">Websites</h2>
-                </div>
-                <ul>
-                    <li>
-                        <div class="profile-icon"><?php echo getEnvelopIcon(); ?></div>
-                        <?php if ($candidate->getWebSite()) : ?>
-                            <span><?php echo $candidate->getWebSite(); ?></span>
-                        <?php else : ?>
-                            <a href="#">Add Website</a>
-                        <?php endif; ?>
-                    </li>
-                    <li>
-                        <div class="profile-icon"><?php echo getTwitterIcon(); ?></div>
-                        <?php if ($candidate->getTwitter()) : ?>
-                            <span><?php echo $candidate->getTwitter(); ?></span>
-                        <?php else : ?>
-                            <a href="#">Add Twitter Profile</a>
-                        <?php endif; ?>
-                    </li>
-                    <li>
-                        <div class="profile-icon"><?php echo getLinkedinIcon(); ?></div>
-                        <?php if ($candidate->getLinkedin()) : ?>
-                            <span><?php echo $candidate->getLinkedin(); ?></span>
-                        <?php else : ?>
-                            <a href="#">Add LinkedIn Profile</a>
-                        <?php endif; ?>
-                    </li>
-                    <li>
-                        <div class="profile-icon"><?php echo getFacebookIcon(); ?></div>
-                        <?php if ($candidate->getFacebook()) : ?>
-                            <span><?php echo $candidate->getFacebook(); ?></span>
-                        <?php else : ?>
-                            <a href="#">Add Facebook Profile</a>
-                        <?php endif; ?>
-                    </li>
-                </ul>
+            <div class="profile-item" id="websites-holder">
+                <?php get_template_part(
+                    'template-parts/candidate/dashboard/blocs/block',
+                    'websites',
+                    ['candidate' => $candidate]
+                ); ?>
             </div>
         </div>
         <div class="col-12 order-2 col-md-7 float-md-right col-xl-6 order-xl-1 mb-5">
