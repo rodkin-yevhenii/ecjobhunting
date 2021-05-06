@@ -24,6 +24,9 @@ class CvController {
     this.registerActions()
   }
 
+  /**
+   * Register handlers for DOM actions.
+   */
   registerActions () {
     // Upload avatar
     $(document).on('change', '#profile-photo', () => {
@@ -37,6 +40,12 @@ class CvController {
     $(document).on('submit', '#about_me', this.saveFormAboutMe.bind(this))
   }
 
+  /**
+   * Show open modal window with different forms on
+   * candidate dashboard page.
+   *
+   * @param event
+   */
   showForm (event) {
     event.preventDefault()
 
@@ -63,6 +72,9 @@ class CvController {
     $('#' + formId).show()
   }
 
+  /**
+   * Fill "About me" form by Ajax.
+   */
   fillFormAboutMe () {
     const $notification = $('.js-notification')
     const data = {
@@ -100,6 +112,11 @@ class CvController {
       )
   }
 
+  /**
+   * Save "About me" form by Ajax.
+   *
+   * @param event
+   */
   saveFormAboutMe (event) {
     event.preventDefault()
 
@@ -149,6 +166,13 @@ class CvController {
       )
   }
 
+  /**
+   * Ajax request.
+   * The function return promise.
+   *
+   * @param data
+   * @returns {*|jQuery|{getAllResponseHeaders: function(): *|null, abort: function(*=): this, setRequestHeader: function(*=, *): this, readyState: number, getResponseHeader: function(*): null|*, overrideMimeType: function(*): this, statusCode: function(*=): this}}
+   */
   sendAjax(data) {
     return $.ajax({
       type: 'POST',
