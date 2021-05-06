@@ -37,16 +37,17 @@ if (!$candidate) {
         <?php if ($candidate->getPhoneNumber()) : ?>
             <span><?php echo $candidate->getPhoneNumber(); ?></span>
         <?php else : ?>
-            <button
+            <a
+                href="#"
                 class="profile-edit-link js-profile-edit-link"
                 type="button"
                 data-toggle="modal"
                 data-target="#edit"
-                data-heading="<?php _e('Contact Information', 'ecjobhunting'); ?>"
+                data-action="load_contacts_form"
                 data-form-id="contacts"
             >
                 <?php _e('Add Phone Number', 'ecjobhunting'); ?>
-            </button>
+            </a>
         <?php endif; ?>
     </li>
 </ul>

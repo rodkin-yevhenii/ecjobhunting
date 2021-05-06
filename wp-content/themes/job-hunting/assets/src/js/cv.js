@@ -37,10 +37,7 @@ class CvController {
     $(document).on('click', '.js-profile-edit-btn, .js-profile-edit-link', this.showForm.bind(this))
 
     // Save form in modal window
-    $(document).on('submit', '#about_me', this.saveFormAboutMe.bind(this))
-
-    // Save form in modal window
-    $(document).on('submit', '#contacts', this.saveFormContacts.bind(this))
+    $(document).on('submit', 'form.modal-content', this.submitForm.bind(this))
   }
 
   /**
@@ -89,28 +86,30 @@ class CvController {
   }
 
   /**
-   * Save "About me" form by Ajax.
+   * Save form data by Ajax.
    *
    * @param event
    */
-  saveFormAboutMe (event) {
+  submitForm (event) {
     event.preventDefault()
 
     const $notification = $('.js-notification')
-    const $holder = $('#about-me-holder')
-    const data = {
-      action: 'save_about_me_form',
-      cvId: this.cvId,
-      user: this.candidateId,
-      fullName: $('#edit_full_name').val(),
-      headline: $('#edit_headline').val(),
-      location: $('#edit_location').val(),
-      zip: $('#edit_zip').val(),
-      isReadyToRelocate:  $('#edit_ready_to_relocate').prop('checked'),
+    let data = {}
+
+    switch (event.currentTarget.id) {
+      case 'about-me':
+        data = this.getFormAboutMeData()
+        break
+      case 'contacts':
+        data = this.getFormContactsData()
+        break
     }
 
     this
-      .sendAjax(data)
+      .sendAjax(
+        data,
+        () => {}
+      )
       .done(
         request => {
           if (request.status !== 200) {
@@ -119,7 +118,7 @@ class CvController {
           }
 
           $notification.text(request.message).addClass('alert-success').removeClass('d-none', 'alert-danger')
-          $holder.html(request.html)
+          $(`#${data.holderId}`).html(request.html)
 
           setTimeout(() => {
             $notification.addClass('d-none').removeClass('alert-success')
@@ -134,45 +133,38 @@ class CvController {
   }
 
   /**
-   * Save "Contacts" form by Ajax.
+   * Generate "about me" form data for ajax request.
    *
-   * @param event
+   * @returns {{cvId: *, zip: (*|jQuery), isReadyToRelocate: (*|jQuery), action: string, fullName: (*|jQuery), location: (*|jQuery), user: *, holderId: string, headline: (*|jQuery)}}
    */
-  saveFormContacts (event) {
-    event.preventDefault()
+  getFormAboutMeData () {
+    return  {
+      action: 'save_about_me_form',
+      cvId: this.cvId,
+      user: this.candidateId,
+      holderId: 'about-me-holder',
+      fullName: $('#name').val(),
+      headline: $('#headline').val(),
+      location: $('#location').val(),
+      zip: $('#zip').val(),
+      isReadyToRelocate: $('#is-ready-to-relocate').prop('checked'),
+    }
+  }
 
-    const $notification = $('.js-notification')
-    const $holder = $('#contacts-holder')
-    const data = {
+  /**
+   * Generate "contact information" form data for ajax request.
+   *
+   * @returns {{cvId: *, phone: (*|jQuery), action: string, user: *, holderId: string, email: (*|jQuery)}}
+   */
+  getFormContactsData () {
+    return  {
       action: 'save_contacts_form',
       cvId: this.cvId,
       user: this.candidateId,
-      phone: $('#edit_phone').val(),
-      email: $('#edit_email').val(),
+      holderId: 'contacts-holder',
+      phone: $('#phone').val(),
+      email: $('#public_email').val(),
     }
-
-    this
-      .sendAjax(data)
-      .done(
-        request => {
-          if (request.status !== 200) {
-            $notification.text(request.message).addClass('alert-danger').removeClass('d-none', 'alert-success')
-            return
-          }
-
-          $notification.text(request.message).addClass('alert-success').removeClass('d-none', 'alert-danger')
-          $holder.html(request.html)
-
-          setTimeout(() => {
-            $notification.addClass('d-none').removeClass('alert-success')
-          }, 3000)
-        }
-      )
-      .fail(
-        () => {
-          $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
-        }
-      )
   }
 
   /**

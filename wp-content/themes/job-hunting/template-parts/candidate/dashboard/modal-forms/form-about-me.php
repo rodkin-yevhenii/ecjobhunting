@@ -37,9 +37,9 @@ if (!$candidate) {
         <input class="field-text" type="text" id="zip" value="<?php echo $candidate->getZipCode(); ?>">
 
         <fieldset>
-            <input type="checkbox" id="edit_ready_to_relocate" <?php echo $candidate->isReadyToRelocate()
+            <input type="checkbox" id="is-ready-to-relocate" <?php echo $candidate->isReadyToRelocate()
                 ? 'checked' : ''; ?>>
-            <label for="edit_ready_to_relocate">
+            <label for="is-ready-to-relocate">
                 <?php _e('I am willing to relocate', 'ecjobhunting'); ?>
             </label>
         </fieldset>
