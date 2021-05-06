@@ -38,6 +38,9 @@ class CvController {
 
     // Save form in modal window
     $(document).on('submit', '#about_me', this.saveFormAboutMe.bind(this))
+
+    // Save form in modal window
+    $(document).on('submit', '#contacts', this.saveFormContacts.bind(this))
   }
 
   /**
@@ -65,6 +68,9 @@ class CvController {
     switch (formId) {
       case 'about_me':
         this.fillFormAboutMe()
+        break
+      case 'contacts':
+        this.fillFormContacts()
         break
     }
 
@@ -161,6 +167,79 @@ class CvController {
       )
       .fail(
         error => {
+          $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
+        }
+      )
+  }
+
+  fillFormContacts () {
+    const $notification = $('.js-notification')
+    const data = {
+      action: 'load_contacts_form',
+      cvId: this.cvId,
+    }
+
+    this
+      .sendAjax(data)
+      .done(
+        request => {
+          const $notification = $('.js-notification')
+
+          if (request.status !== 200) {
+            $notification.text(request.message).addClass('alert-danger').removeClass('d-none', 'alert-warning', 'alert-success')
+            return
+          }
+
+          $notification.addClass('d-none').removeClass('alert-danger', 'alert-warning', 'alert-success')
+
+          $('#edit_phone').val(request.data.phone)
+          $('#edit_email').val(request.data.email)
+        }
+      )
+      .fail(
+        error => {
+          $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
+        }
+      )
+  }
+
+  /**
+   * Save "Contacts" form by Ajax.
+   *
+   * @param event
+   */
+  saveFormContacts (event) {
+    event.preventDefault()
+
+    const $notification = $('.js-notification')
+    const $holder = $('#contacts-holder')
+    const data = {
+      action: 'save_contacts_form',
+      cvId: this.cvId,
+      user: this.candidateId,
+      phone: $('#edit_phone').val(),
+      email: $('#edit_email').val(),
+    }
+
+    this
+      .sendAjax(data)
+      .done(
+        request => {
+          if (request.status !== 200) {
+            $notification.text(request.message).addClass('alert-danger').removeClass('d-none', 'alert-success')
+            return
+          }
+
+          $notification.text(request.message).addClass('alert-success').removeClass('d-none', 'alert-danger')
+          $holder.html(request.html)
+
+          setTimeout(() => {
+            $notification.addClass('d-none').removeClass('alert-success')
+          }, 3000)
+        }
+      )
+      .fail(
+        () => {
           $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
         }
       )

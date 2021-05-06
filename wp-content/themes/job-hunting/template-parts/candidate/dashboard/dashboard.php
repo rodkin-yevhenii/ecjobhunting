@@ -59,29 +59,12 @@ $candidate = UserService::getUser($currentUserId);
                     </span>
                 </div>
             </div>
-            <div class="profile-item">
-                <div class="profile-header">
-                    <button class="profile-edit-link">Edit</button>
-                    <h2 class="no-decor">Contact Information</h2>
-                </div>
-                <ul>
-                    <li>
-                        <div class="profile-icon"><?php echo getEnvelopIcon(); ?></div>
-                        <span><?php echo $candidate->getEmail(); ?></span>
-                        <?php if (!$candidate->isEmailConfirmed()) : ?>
-                            <span class="color-red">Verify your email to receive application updates from employers.</span>
-                            <button class="btn btn-primary">Resend Confirmation</button>
-                        <?php endif; ?>
-                    </li>
-                    <li>
-                        <div class="profile-icon"><?php echo getPhoneIcon(); ?></div>
-                        <?php if ($candidate->getPhoneNumber()) : ?>
-                            <span><?php echo $candidate->getPhoneNumber(); ?></span>
-                        <?php else : ?>
-                            <a href="#">Add Phone Number</a>
-                        <?php endif; ?>
-                    </li>
-                </ul>
+            <div class="profile-item" id="contacts-holder">
+                <?php get_template_part(
+                    'template-parts/candidate/dashboard/blocs/block',
+                    'contact-information',
+                    ['candidate' => $candidate]
+                ); ?>
             </div>
             <div class="profile-item">
                 <div class="profile-header">
@@ -266,5 +249,6 @@ $candidate = UserService::getUser($currentUserId);
 <div class="modal fade" id="edit" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <?php get_template_part('template-parts/candidate/dashboard/modal-forms/form', 'about-me'); ?>
+        <?php get_template_part('template-parts/candidate/dashboard/modal-forms/form', 'contacts'); ?>
     </div>
 </div>

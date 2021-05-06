@@ -3,6 +3,7 @@
 namespace EcJobHunting\Service\Cv;
 
 use EcJobHunting\Service\Cv\Ajax\AjaxFormAboutMe;
+use EcJobHunting\Service\Cv\Ajax\AjaxFormContacts;
 use Exception;
 
 /**
@@ -29,6 +30,7 @@ class CvService
     private function registerAjaxControllers(): void
     {
         new AjaxFormAboutMe();
+        new AjaxFormContacts();
     }
 
     /**
