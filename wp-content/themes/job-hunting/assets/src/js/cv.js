@@ -4,13 +4,14 @@ $(() => {
   const cvId = $pageHolder.attr('data-cv-id')
   const candidateId = $pageHolder.attr('data-user-id')
 
-  new CvController(cvId, candidateId)
+  new CvController(cvId, candidateId, siteSettings.nonce)
 })
 
 class CvController {
-  constructor(cvId, candidateId) {
+  constructor(cvId, candidateId, nonce) {
     this.cvId = cvId
     this.candidateId = candidateId
+    this.nonce = nonce
 
     this.fillFormCalbacks = {
       about_me: this.fillFormAboutMe
@@ -38,6 +39,8 @@ class CvController {
 
     // Save form in modal window
     $(document).on('submit', 'form.modal-content', this.submitForm.bind(this))
+
+    $(document).on('click', '#profile-activation-switcher', this.profileActivationToggle.bind(this))
   }
 
   /**
@@ -131,6 +134,70 @@ class CvController {
       .fail(
         error => {
           $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
+        }
+      )
+  }
+
+  profileActivationToggle (event) {
+    const $switcher = $('#profile-activation-switcher')
+    const isSwitcherActive = !$switcher.hasClass('active')
+    const $spinner = $('.profile-activation__spinner')
+    const $notification = $('#profile-notification')
+    const $textHolder = $('.profile-activation__text')
+    const data = {
+      action: 'profile_activation',
+      user: this.candidateId,
+      nonce: this.nonce
+    }
+
+    console.log(isSwitcherActive)
+
+    this
+      .sendAjax(
+        data,
+        () => {
+          $spinner.toggleClass('d-none')
+          $switcher.toggleClass('d-none')
+          $notification.addClass('d-none').removeClass('alert-danger')
+        }
+      )
+      .done(
+        request => {
+          if (request.status !== 200) {
+            $notification.html(request.message).addClass('alert-danger').removeClass('d-none')
+
+            if (isSwitcherActive) {
+              $switcher.addClass('active')
+            } else {
+              $switcher.removeClass('active')
+            }
+
+            return
+          }
+
+          $textHolder.text(request.data.message)
+          if (request.data.status === 'publish') {
+            $switcher.addClass('active')
+          } else {
+            $switcher.removeClass('active');
+          }
+        }
+      )
+      .fail(
+        error => {
+          $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
+
+          if (isSwitcherActive) {
+            $switcher.addClass('active')
+          } else {
+            $switcher.removeClass('active')
+          }
+        }
+      )
+      .always(
+        () => {
+          $spinner.toggleClass('d-none')
+          $switcher.toggleClass('d-none')
         }
       )
   }

@@ -30,6 +30,7 @@ class Candidate extends UserAbstract
         $cvs = get_posts(
             [
                 'post_type' => 'cv',
+                'post_status' => ['publish', 'draft'],
                 'numberposts' => 1,
                 'fields' => 'ids',
                 'author' => $this->getUserId(),

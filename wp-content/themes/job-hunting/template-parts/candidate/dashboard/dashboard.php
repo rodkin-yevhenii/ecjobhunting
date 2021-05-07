@@ -45,30 +45,22 @@ $candidate = UserService::getUser($currentUserId);
             </div>
         </div>
         <div class="col-12 order-2 col-md-7 float-md-right col-xl-6 order-xl-1 mb-5">
-            <?php if ($error) : ?>
-                <div class="alert-danger text-center p-2 mt-4">
-                    <?php echo $error; ?>
-                </div>
-            <?php endif; ?>
+            <?php
+            if ($error) :
+                $classes = 'alert-danger';
+            else :
+                $classes = 'd-none';
+            endif;
+            ?>
+            <div id="profile-notification" class="text-center p-2 mt-4 <?php echo $classes; ?>">
+                <?php echo $error; ?>
+            </div>
             <div class="profile-activation">
-                <h3>Let Employers Find You</h3>
-                <div class="custom-handler <?php echo $candidate->isPublished() ? "active" : ""; ?>">
-                    <div></div>
-                </div>
-                <p>
-                    <?php if ($candidate->isPublished()) :
-                        _e(
-                            'Public: Your profile is publicly accessible.',
-                            'ecjobhunting'
-                        );
-                    else :
-                        _e(
-                            'Private: Your profile is not publicly accessible. However, it is viewable as a part of your
-                        applications.',
-                            'ecjobhunting'
-                        );
-                    endif; ?>
-                </p>
+                <?php get_template_part(
+                    'template-parts/candidate/dashboard/blocs/block',
+                    'activation',
+                    ['candidate' => $candidate]
+                ); ?>
             </div>
             <?php if ($candidate->getSummary()) : ?>
                 <div class="profile-item">
