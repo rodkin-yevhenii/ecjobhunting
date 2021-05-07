@@ -59,7 +59,7 @@ class Assets
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
                 '_basic' => $basic,
-                'nonce' => wp_create_nonce('ecjob_nonce_field')
+                'nonce' => wp_create_nonce('ecjob_nonce')
             ]
         );
     }

@@ -62,15 +62,16 @@ $candidate = UserService::getUser($currentUserId);
                     ['candidate' => $candidate]
                 ); ?>
             </div>
-            <?php if ($candidate->getSummary()) : ?>
-                <div class="profile-item">
-                    <div class="profile-header">
-                        <h2 class="no-decor">Executive Summary</h2>
-                        <p><?php echo $candidate->getSummary(); ?></p>
-                        <button class="btn btn-outline-secondary">Edit</button>
-                    </div>
-                </div>
-            <?php endif; ?>
+            <?php if ($candidate->getSummary()) :
+                $classes = 'd-none';
+            endif; ?>
+            <div id="executive-summary-holder" class="profile-item">
+                <?php get_template_part(
+                    'template-parts/candidate/dashboard/blocs/block',
+                    'executive-summary',
+                    ['candidate' => $candidate]
+                ); ?>
+            </div>
             <div class="profile-item">
                 <div class="profile-header">
                     <h2 class="no-decor">Work Experience</h2>

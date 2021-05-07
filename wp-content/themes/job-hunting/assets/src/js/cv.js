@@ -13,14 +13,6 @@ class CvController {
     this.candidateId = candidateId
     this.nonce = nonce
 
-    this.fillFormCalbacks = {
-      about_me: this.fillFormAboutMe
-    }
-
-    this.saveFormCalbacks = {
-      about_me: this.saveFormAboutMe
-    }
-
     // Register DOM actions handlers
     this.registerActions()
   }
@@ -55,6 +47,7 @@ class CvController {
     const $holder = $('.modal-dialog')
     const data = {
       action: $edit.attr('data-action'),
+      nonce: this.nonce,
       formId: $edit.attr('data-form-id'),
     }
 
@@ -109,6 +102,9 @@ class CvController {
       case 'websites':
         data = this.getFormWebsitesData()
         break
+      case 'executive-summary':
+        data = this.getFormExecutiveSummaryData()
+        break
     }
 
     this
@@ -132,13 +128,13 @@ class CvController {
         }
       )
       .fail(
-        error => {
+        () => {
           $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
         }
       )
   }
 
-  profileActivationToggle (event) {
+  profileActivationToggle () {
     const $switcher = $('#profile-activation-switcher')
     const isSwitcherActive = !$switcher.hasClass('active')
     const $spinner = $('.profile-activation__spinner')
@@ -146,11 +142,9 @@ class CvController {
     const $textHolder = $('.profile-activation__text')
     const data = {
       action: 'profile_activation',
+      nonce: this.nonce,
       user: this.candidateId,
-      nonce: this.nonce
     }
-
-    console.log(isSwitcherActive)
 
     this
       .sendAjax(
@@ -184,7 +178,7 @@ class CvController {
         }
       )
       .fail(
-        error => {
+        () => {
           $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
 
           if (isSwitcherActive) {
@@ -210,6 +204,7 @@ class CvController {
   getFormAboutMeData () {
     return  {
       action: 'save_about_me_form',
+      nonce: this.nonce,
       cvId: this.cvId,
       user: this.candidateId,
       holderId: 'about-me-holder',
@@ -229,6 +224,7 @@ class CvController {
   getFormContactsData () {
     return  {
       action: 'save_contacts_form',
+      nonce: this.nonce,
       cvId: this.cvId,
       user: this.candidateId,
       holderId: 'contacts-holder',
@@ -240,11 +236,28 @@ class CvController {
   /**
    * Generate "contact information" form data for ajax request.
    *
+   * @returns {{cvId: *, summary: (*|jQuery), action: string, nonce: *, user: *, holderId: string}}
+   */
+  getFormExecutiveSummaryData () {
+    return  {
+      action: 'save_executive_summary_form',
+      nonce: this.nonce,
+      cvId: this.cvId,
+      user: this.candidateId,
+      holderId: 'executive-summary-holder',
+      summary: $('#summary').val(),
+    }
+  }
+
+  /**
+   * Generate "contact information" form data for ajax request.
+   *
    * @returns {{cvId: *, phone: (*|jQuery), action: string, user: *, holderId: string, email: (*|jQuery)}}
    */
   getFormWebsitesData () {
     return  {
       action: 'save_websites_form',
+      nonce: this.nonce,
       cvId: this.cvId,
       user: this.candidateId,
       holderId: 'websites-holder',
