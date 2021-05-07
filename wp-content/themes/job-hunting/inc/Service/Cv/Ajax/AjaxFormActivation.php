@@ -26,6 +26,13 @@ class AjaxFormActivation extends AjaxFormAbstract
      */
     public function saveCallback(): void
     {
+        if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'ecjob_nonce')) {
+            $this->response
+                ->setStatus(403)
+                ->setMessage(__('Access forbidden', 'ecjobhunting'))
+                ->send();
+        }
+
         if (empty($_POST['user'])) {
             $this->response
                 ->setStatus(204)
