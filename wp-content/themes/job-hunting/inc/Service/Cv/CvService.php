@@ -7,6 +7,7 @@ use EcJobHunting\Service\Cv\Ajax\AjaxFormActivation;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormContacts;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormExecutiveSummary;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWebsites;
+use EcJobHunting\Service\Cv\Ajax\AjaxFormWorkExperience;
 use Exception;
 
 /**
@@ -37,6 +38,7 @@ class CvService
         new AjaxFormWebsites();
         new AjaxFormActivation();
         new AjaxFormExecutiveSummary();
+        new AjaxFormWorkExperience();
     }
 
     /**

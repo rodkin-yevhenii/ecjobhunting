@@ -32,7 +32,14 @@ class CvController {
     // Save form in modal window
     $(document).on('submit', 'form.modal-content', this.submitForm.bind(this))
 
+    // Delete subitem
+    $(document).on('click', '.js-profile-delete-subitem-btn, .js-profile-delete-subitem-link', this.deleteSubItem.bind(this))
+
+    // Activate / Deactivate profile
     $(document).on('click', '#profile-activation-switcher', this.profileActivationToggle.bind(this))
+
+    // Load work-experience form
+    $(document).on('load-work-experience-form', this.applyDateMask.bind(this, ['to', 'from']))
   }
 
   /**
@@ -49,6 +56,7 @@ class CvController {
       action: $edit.attr('data-action'),
       nonce: this.nonce,
       formId: $edit.attr('data-form-id'),
+      rowNumber: $edit.attr('data-row-number')
     }
 
     this
@@ -72,6 +80,7 @@ class CvController {
           }
 
           $holder.html(request.html)
+          $(document).trigger(`load-${data.formId}-form`)
         }
       )
       .fail(
@@ -105,6 +114,9 @@ class CvController {
       case 'executive-summary':
         data = this.getFormExecutiveSummaryData()
         break
+      case 'work-experience':
+        data = this.getForWorkExperienceData()
+        break
     }
 
     this
@@ -130,6 +142,45 @@ class CvController {
       .fail(
         () => {
           $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
+        }
+      )
+  }
+
+  deleteSubItem (event) {
+    event.preventDefault()
+
+    const $notification = $('#profile-notification')
+    const $btn = $(event.currentTarget)
+    const blockId = $btn.attr('data-block-id')
+    const $holder = $(`#${blockId}-holder`)
+    const data = {
+      action: 'delete_profile_subitem',
+      nonce: this.nonce,
+      cvId: this.cvId,
+      blockId: $btn.attr('data-block-id'),
+      rowNumber: $btn.attr('data-row-number')
+    }
+
+    this
+      .sendAjax(
+        data,
+        () => {
+          $notification.addClass('d-none').removeClass('alert-danger')
+        }
+      )
+      .done(
+        request => {
+          if (request.status !== 200) {
+            $notification.html(request.message).addClass('alert-danger').removeClass('d-none')
+            return
+          }
+
+          $holder.html(request.html)
+        }
+      )
+      .fail(
+        () => {
+          $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none')
         }
       )
   }
@@ -269,6 +320,43 @@ class CvController {
   }
 
   /**
+   * Generate "Work Experience" form data for ajax request.
+   *
+   * @returns {{cvId: *, do_action: (*|jQuery), action: string, from: (*|jQuery), company: (*|jQuery), to: (*|jQuery), position: (*|jQuery), nonce: *, user: *, holderId: string, work_order: (*|jQuery)}}
+   */
+  getForWorkExperienceData () {
+    return  {
+      action: 'save_profile_subitem',
+      nonce: this.nonce,
+      cvId: this.cvId,
+      user: this.candidateId,
+      holderId: 'work-experience-holder',
+      from: $('#from').val(),
+      to: $('#to').val(),
+      position: $('#position').val(),
+      company: $('#company').val(),
+      description: $('#description').val(),
+      rowNumber: $('#row_number').val(),
+      doAction: $('#do_action').val(),
+    }
+  }
+
+  /**
+   * Generate repeater sub item data.
+   *
+   * @returns {{cvId: *, do_action: (*|jQuery), action: string, from: (*|jQuery), company: (*|jQuery), to: (*|jQuery), position: (*|jQuery), nonce: *, user: *, holderId: string, work_order: (*|jQuery)}}
+   */
+  getDeleteSubItemData ($btn) {
+    return  {
+      action: 'delete_profile_subitem',
+      nonce: this.nonce,
+      cvId: this.cvId,
+      blockId: $btn.attr('data-block-id'),
+      rowNumber: $btn.attr('data-row-number'),
+    }
+  }
+
+  /**
    * Ajax request. The function return promise.
    *
    * @param data        Object with data
@@ -282,6 +370,24 @@ class CvController {
       data,
       dataType: 'json',
       beforeSend,
+    })
+  }
+
+  applyDateMask(ids) {
+    const mask = {
+      mask: Date,
+      lazy: false,
+      overwrite: true,
+      autofix: true,
+      blocks: {
+        d: {mask: IMask.MaskedRange, placeholderChar: 'd', from: 1, to: 31, maxLength: 2},
+        m: {mask: IMask.MaskedRange, placeholderChar: 'm', from: 1, to: 12, maxLength: 2},
+        Y: {mask: IMask.MaskedRange, placeholderChar: 'y', from: 1900, to: 2100, maxLength: 4}
+      }
+    }
+
+    ids.forEach(element => {
+      IMask(document.getElementById(element), mask)
     })
   }
 }

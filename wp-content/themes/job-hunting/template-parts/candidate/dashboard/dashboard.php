@@ -12,6 +12,7 @@ try {
 }
 
 $candidate = UserService::getUser($currentUserId);
+$isOwner = $currentUserId === $candidate->getUserId();
 
 ?>
 <div
@@ -72,26 +73,12 @@ $candidate = UserService::getUser($currentUserId);
                     ['candidate' => $candidate]
                 ); ?>
             </div>
-            <div class="profile-item">
-                <div class="profile-header">
-                    <h2 class="no-decor">Work Experience</h2>
-                    <p><a href="#">Add Work Experience</a></p>
-                </div>
-                <?php if (!empty($candidate->getExperience())) :
-                    foreach ($candidate->getExperience() as $experience) : ?>
-                        <div class="profile-subitem">
-                            <span>
-                                <?php echo getDatePeriod(
-                                    $experience['period']
-                                ); ?>
-                            </span>
-                            <h3><?php echo $experience['job_position']; ?></h3>
-                            <strong><?php echo $experience['company_name']; ?></strong>
-                            <button class="btn btn-outline-secondary">Edit</button>
-                            <p><?php echo $experience['description']; ?></p>
-                        </div>
-                    <?php endforeach;
-                endif; ?>
+            <div id="work-experience-holder" class="profile-item">
+                <?php get_template_part(
+                    'template-parts/candidate/dashboard/blocs/block',
+                    'work-experience',
+                    ['candidate' => $candidate, 'isOwner' => $isOwner]
+                ); ?>
             </div>
             <div class="profile-item">
                 <div class="profile-header">
@@ -178,5 +165,10 @@ $candidate = UserService::getUser($currentUserId);
 </div>
 <div class="modal fade" id="edit" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
+        <?php get_template_part(
+            'template-parts/candidate/dashboard/modal-forms/form',
+            'work-experience',
+            ['candidate' => $candidate]
+        ); ?>
     </div>
 </div>
