@@ -1,0 +1,126 @@
+import $ from "jquery";
+import AjaxRequest from "../ajax/ajax-request";
+
+export default class ComponentAbstract {
+
+  /**
+   * ComponentSimpleAbstract constructor
+   *
+   * @param cvId
+   * @param candidateId
+   * @param nonce
+   */
+  constructor(cvId, candidateId, nonce) {
+    this.cvId = cvId
+    this.candidateId = candidateId
+    this.nonce = nonce
+    this.actions = []
+  }
+
+  /**
+   * Register handlers for DOM actions.
+   */
+  registerActions () {
+    this.actions.forEach(item => {
+      $(document).on(item.action, item.elements, item.callback)
+    })
+  }
+
+  /**
+   * Show open modal window with different forms on
+   * candidate dashboard page.
+   *
+   * @param event
+   */
+  showForm (event) {
+    event.preventDefault()
+
+    const $edit = $(event.currentTarget)
+    const $holder = $('.modal-dialog')
+    const data = this.getShowFormAjaxData($edit)
+    const ajax = new AjaxRequest(data)
+
+    ajax.beforeSend = () => {
+      $holder.html(
+        '<div class="text-center" style="min-height:400px">\n' +
+        '    <div class="spinner-border text-success" style="position: absolute;left: 50%;top: 50%" role="status">\n' +
+        '        <span class="sr-only">Loading...</span>\n' +
+        '    </div>\n' +
+        '</div>'
+      )
+    }
+
+    ajax.send()
+      .done(
+        request => {
+          if (request.status !== 200) {
+            console.error('Form loading failed.', request.message)
+            return
+          }
+
+          $holder.html(request.html)
+          $(document).trigger(`load-${data.formId}-form`)
+          console.log(`Run "load-${data.formId}-form" action`)
+        }
+      )
+      .fail(
+        error => {
+          console.error('Form loading failed.', error)
+        }
+      )
+  }
+
+  /**
+   * Save form data by Ajax.
+   *
+   * @param event
+   */
+  submitForm (event) {
+    event.preventDefault()
+
+    const $notification = $('.js-notification')
+    const data = this.getSaveFormAjaxData()
+    const ajax = new AjaxRequest(data)
+
+    ajax.send()
+      .done(
+        request => {
+          if (request.status !== 200) {
+            $notification.text(request.message).addClass('alert-danger').removeClass('d-none', 'alert-success')
+            return
+          }
+
+          $notification.text(request.message).addClass('alert-success').removeClass('d-none', 'alert-danger')
+          $(`#${data.holderId}`).html(request.html)
+
+          setTimeout(() => {
+            $notification.addClass('d-none').removeClass('alert-success')
+          }, 3000)
+        }
+      )
+      .fail(
+        () => {
+          $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
+        }
+      )
+  }
+
+  /**
+   * Get prepared data object for show form ajax request.
+   *
+   * @param $btn    Edit button (jQuery object).
+   * @returns {{}}  Data object for show form ajax request.
+   */
+  getShowFormAjaxData ($btn) {
+    return {}
+  }
+
+  /**
+   * Get prepared data object for save form ajax request.
+   *
+   * @returns {{}}    Data object for save form ajax request
+   */
+  getSaveFormAjaxData () {
+    return {}
+  }
+}
