@@ -13,7 +13,8 @@ const gulp = require('gulp'),
   sourcemaps = require('gulp-sourcemaps'),
   gulpif = require('gulp-if'),
   argv = require('yargs').argv,
-  cleanCSS = require('gulp-clean-css')
+  cleanCSS = require('gulp-clean-css'),
+  webpackStream = require('webpack-stream');
 
 gulp.task('markup', function () {
   return gulp.src('src/pug/pages/*.pug')
@@ -64,7 +65,36 @@ gulp.task('scripts', function (done) {
   }
   Object.keys(scripts).forEach(name => {
     gulp.src(scripts[name])
-      .pipe(babel())
+      // .pipe(babel())
+      .pipe(webpackStream({
+        output: {
+          filename: '[name].js',
+        },
+        entry: {
+          general: './src/js/general.js',
+          ajax: './src/js/ajax.js',
+          api: './src/js/api.js',
+          vacancies: './src/js/vacancies.js',
+          cv: './src/js/cv.js',
+        },
+        module: {
+          rules: [
+            {
+              test: /\.(js)$/,
+              exclude: /(node_modules)/,
+              loader: 'babel-loader',
+              query: {
+                presets: ['@babel/preset-env'],
+                plugins: []
+              }
+            }
+          ]
+        },
+        externals: {
+          jquery: 'jQuery'
+        },
+        mode: 'development'
+      }))
       .pipe(gulpif(argv.prod, uglify()))
       .pipe(gulp.dest(`public/js/${name}`))
       .pipe(gulpif(argv.dev, browsersync.reload({
