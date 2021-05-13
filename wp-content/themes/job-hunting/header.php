@@ -4,17 +4,16 @@ use EcJobHunting\Entity\EcJobUser;
 use EcJobHunting\Service\User\UserService;
 
 global $ec_site;
-$user = new EcJobUser(wp_get_current_user());
 ?>
-    <!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="<?php bloginfo('charset'); ?>">
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <?php wp_head(); ?>
-    </head>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <?php wp_head(); ?>
+</head>
 <body <?php body_class(); ?>>
 <div class="wrapper">
     <header class="header">
@@ -42,7 +41,9 @@ $user = new EcJobUser(wp_get_current_user());
                         ]
                     ); ?>
                 <?php endif; ?>
-                <?php if (is_user_logged_in()): ?>
+                <?php if (is_user_logged_in()):
+                    $user = new EcJobUser(wp_get_current_user());
+                    ?>
                     <div class="col d-none d-md-block col-md-4 col-xl-3 header-account-wrapper">
                         <div class="header-account">
                             <div class="header-account-image">
