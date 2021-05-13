@@ -6,6 +6,7 @@ $currentUserId = get_current_user_id();
 $error = '';
 
 try {
+    do_action('candidate_email_verification');
     do_action('ecjob-save-new-data', $currentUserId);
 } catch (Exception $exception) {
     $error = $exception->getMessage();
@@ -27,21 +28,21 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 <?php get_template_part(
                     'template-parts/candidate/dashboard/blocs/block',
                     'about-me',
-                    ['candidate' => $candidate]
+                    ['candidate' => $candidate, 'isOwner' => $isOwner]
                 ); ?>
             </div>
             <div class="profile-item" id="contacts-holder">
                 <?php get_template_part(
                     'template-parts/candidate/dashboard/blocs/block',
                     'contact-information',
-                    ['candidate' => $candidate]
+                    ['candidate' => $candidate, 'isOwner' => $isOwner]
                 ); ?>
             </div>
             <div class="profile-item" id="websites-holder">
                 <?php get_template_part(
                     'template-parts/candidate/dashboard/blocs/block',
                     'websites',
-                    ['candidate' => $candidate]
+                    ['candidate' => $candidate, 'isOwner' => $isOwner]
                 ); ?>
             </div>
         </div>
@@ -60,7 +61,7 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 <?php get_template_part(
                     'template-parts/candidate/dashboard/blocs/block',
                     'activation',
-                    ['candidate' => $candidate]
+                    ['candidate' => $candidate, 'isOwner' => $isOwner]
                 ); ?>
             </div>
             <?php if ($candidate->getSummary()) :
@@ -70,7 +71,7 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 <?php get_template_part(
                     'template-parts/candidate/dashboard/blocs/block',
                     'executive-summary',
-                    ['candidate' => $candidate]
+                    ['candidate' => $candidate, 'isOwner' => $isOwner]
                 ); ?>
             </div>
             <div id="work-experience-holder" class="profile-item">
@@ -80,23 +81,12 @@ $isOwner = $currentUserId === $candidate->getUserId();
                     ['candidate' => $candidate, 'isOwner' => $isOwner]
                 ); ?>
             </div>
-            <div class="profile-item">
-                <div class="profile-header">
-                    <h2 class="no-decor">Education</h2>
-                </div>
-                <p><a href="#">Add Education</a></p>
-                <?php if (!empty($candidate->getEducation())) :
-                    foreach ($candidate->getEducation() as $education) : ?>
-                        <div class="profile-subitem"><span><?php echo getDatePeriod($education['period']); ?></span>
-                            <h3><?php echo $education['name']; ?></h3>
-                            <?php echo $education['degree'] ? "<strong>{$education['degree']}</strong>" : ""; ?>
-                            <?php echo $education['fields_of_study']
-                                ? "<strong>{$education['fields_of_study']}</strong>" : ""; ?>
-                            <button class="btn btn-outline-secondary">Edit</button>
-                            <?php echo $education['description'] ? "<p>{$education['description']}</p>" : ""; ?>
-                        </div>
-                    <?php endforeach;
-                endif; ?>
+            <div id="education-holder" class="profile-item">
+                <?php get_template_part(
+                    'template-parts/candidate/dashboard/blocs/block',
+                    'education',
+                    ['candidate' => $candidate, 'isOwner' => $isOwner]
+                ); ?>
             </div>
             <div class="profile-item">
                 <div class="profile-header">
@@ -165,10 +155,5 @@ $isOwner = $currentUserId === $candidate->getUserId();
 </div>
 <div class="modal fade" id="edit" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <?php get_template_part(
-            'template-parts/candidate/dashboard/modal-forms/form',
-            'work-experience',
-            ['candidate' => $candidate]
-        ); ?>
     </div>
 </div>

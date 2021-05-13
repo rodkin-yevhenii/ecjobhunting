@@ -5,6 +5,7 @@ namespace EcJobHunting\Service\Cv;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormAboutMe;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormActivation;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormContacts;
+use EcJobHunting\Service\Cv\Ajax\AjaxFormEducation;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormExecutiveSummary;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWebsites;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWorkExperience;
@@ -26,6 +27,8 @@ class CvService
         add_action('ecjob-save-new-data', [$this, 'updateAvatar']);
 
         $this->registerAjaxControllers();
+
+        new EmailConfirmation();
     }
 
     /**
@@ -39,6 +42,7 @@ class CvService
         new AjaxFormActivation();
         new AjaxFormExecutiveSummary();
         new AjaxFormWorkExperience();
+        new AjaxFormEducation();
     }
 
     /**

@@ -14,6 +14,8 @@ class Candidate extends UserAbstract
     private bool $relocate = false;
     private string $phoneNumber;
     private string $email;
+    private string $newEmail;
+    private string $hash;
     private bool $isEmailConfirmed;
     private string $webSite;
     private string $twitter;
@@ -128,6 +130,30 @@ class Candidate extends UserAbstract
         }
 
         return $this->email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNewEmail(): string
+    {
+        if (empty($this->newEmail)) {
+            $this->newEmail = $this->fields['new_email'] ?? '';
+        }
+
+        return $this->newEmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHash(): string
+    {
+        if (empty($this->hash)) {
+            $this->hash = $this->fields['hash'] ?? '';
+        }
+
+        return $this->hash;
     }
 
     /**

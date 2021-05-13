@@ -1,10 +1,16 @@
+import AjaxRequest from "./components/ajax/ajax-request";
+import ComponentEducation from "./components/cv/component-education";
+import ComponentContacts from "./components/cv/component-contacts";
+import $ from 'jquery'
+
 $(() => {
   const { siteSettings } = window
   const $pageHolder = $('#candidate')
   const cvId = $pageHolder.attr('data-cv-id')
   const candidateId = $pageHolder.attr('data-user-id')
 
-  new CvController(cvId, candidateId, siteSettings.nonce)
+  new ComponentEducation(cvId, candidateId, siteSettings.nonce)
+  new ComponentContacts(cvId, candidateId, siteSettings.nonce)
 })
 
 class CvController {
@@ -27,10 +33,10 @@ class CvController {
     })
 
     // Show form in modal window
-    $(document).on('click', '.js-profile-edit-btn, .js-profile-edit-link', this.showForm.bind(this))
+    // $(document).on('click', '.js-profile-edit-btn, .js-profile-edit-link', this.showForm.bind(this))
 
     // Save form in modal window
-    $(document).on('submit', 'form.modal-content', this.submitForm.bind(this))
+    // $(document).on('submit', 'form.modal-content', this.submitForm.bind(this))
 
     // Delete subitem
     $(document).on('click', '.js-profile-delete-subitem-btn, .js-profile-delete-subitem-link', this.deleteSubItem.bind(this))
@@ -59,19 +65,18 @@ class CvController {
       rowNumber: $edit.attr('data-row-number')
     }
 
-    this
-      .sendAjax(
-        data,
-        () => {
-          $holder.html(
-            '<div class="text-center" style="min-height:400px">\n' +
-            '    <div class="spinner-border text-success" style="position: absolute;left: 50%;top: 50%" role="status">\n' +
-            '        <span class="sr-only">Loading...</span>\n' +
-            '    </div>\n' +
-            '</div>'
-          )
-        }
+    const ajax = new AjaxRequest(data)
+    ajax.beforeSend = () => {
+      $holder.html(
+        '<div class="text-center" style="min-height:400px">\n' +
+        '    <div class="spinner-border text-success" style="position: absolute;left: 50%;top: 50%" role="status">\n' +
+        '        <span class="sr-only">Loading...</span>\n' +
+        '    </div>\n' +
+        '</div>'
       )
+    }
+
+    ajax.send(data)
       .done(
         request => {
           if (request.status !== 200) {
@@ -363,15 +368,6 @@ class CvController {
    * @param beforeSend  Callback
    * @returns {*|jQuery|{getAllResponseHeaders: function(): *|null, abort: function(*=): this, setRequestHeader: function(*=, *): this, readyState: number, getResponseHeader: function(*): null|*, overrideMimeType: function(*): this, statusCode: function(*=): this}}
    */
-  sendAjax(data, beforeSend = () => {}) {
-    return $.ajax({
-      type: 'POST',
-      url: siteSettings.ajaxurl,
-      data,
-      dataType: 'json',
-      beforeSend,
-    })
-  }
 
   applyDateMask(ids) {
     const mask = {

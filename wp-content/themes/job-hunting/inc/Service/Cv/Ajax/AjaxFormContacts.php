@@ -2,7 +2,9 @@
 
 namespace EcJobHunting\Service\Cv\Ajax;
 
+use EcJobHunting\Service\Cv\EmailConfirmation;
 use EcJobHunting\Service\User\UserService;
+use mysql_xdevapi\Exception;
 
 /**
  * Class AjaxFormContacts
@@ -23,6 +25,9 @@ class AjaxFormContacts extends AjaxFormAbstract
 
         add_action('wp_ajax_load_contacts_form', [$this, 'getCallback']);
         add_action('wp_ajax_nopriv_load_contacts_form', [$this, 'getCallback']);
+
+        add_action('wp_ajax_send_email_confirmation', [$this, 'sendEmailConfirmationCallback']);
+        add_action('wp_ajax_nopriv_send_email_confirmation', [$this, 'sendEmailConfirmationCallback']);
     }
 
     /**
@@ -44,7 +49,7 @@ class AjaxFormContacts extends AjaxFormAbstract
                 ->send();
         }
 
-        if (empty($_POST['email'])) {
+        if (empty($_POST['new_email'])) {
             $this->response
                 ->setStatus(204)
                 ->setMessage(__('Email is required', 'ecjobhunting'))
@@ -59,13 +64,9 @@ class AjaxFormContacts extends AjaxFormAbstract
         }
 
         $cvId = (int)$_POST['cvId'];
-        $data = [
-            'phone' => $_POST['phone'] ?? '',
-            'public_email' => $_POST['email'],
-        ];
 
-        update_field('public_email', $data['public_email'], $cvId);
-        update_field('phone', $data['phone'], $cvId);
+        update_field('new_email', $_POST['new_email'], $cvId);
+        update_field('phone', $_POST['phone'] ?? '', $cvId);
         update_field('is_email_confirmed', false, $cvId);
 
         $candidate = UserService::getUser($_POST['userId']);
@@ -74,13 +75,51 @@ class AjaxFormContacts extends AjaxFormAbstract
         get_template_part(
             'template-parts/candidate/dashboard/blocs/block',
             'contact-information',
-            ['candidate' => $candidate]
+            ['candidate' => $candidate, 'isOwner' => true]
         );
 
-        $this->response
-            ->setStatus(200)
-            ->setMessage(__('Profile updated', 'ecjobhunting'))
-            ->setResponseBody(ob_get_clean())
-            ->send();
+        try {
+            EmailConfirmation::sendCvEmailConfirmation();
+
+            $this->response
+                ->setStatus(200)
+                ->setMessage(__('Profile updated', 'ecjobhunting'))
+                ->setResponseBody(ob_get_clean())
+                ->send();
+        } catch (Exception $exception) {
+            $this->response
+                ->setMessage($exception->getMessage())
+                ->setStatus($exception->getCode())
+                ->send();
+        }
+    }
+
+    /**
+     * Send email with verification code.
+     *
+     * @throws \Exception
+     */
+    public function sendEmailConfirmationCallback(): void
+    {
+        if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'ecjob_nonce')) {
+            $this->response
+                ->setStatus(403)
+                ->setMessage(__('Access forbidden', 'ecjobhunting'))
+                ->send();
+        }
+
+        try {
+            EmailConfirmation::sendCvEmailConfirmation();
+
+            $this->response
+                ->setStatus(200)
+                ->setMessage(__('Confirmation mail was sent', 'ecjobhunting'))
+                ->send();
+        } catch (Exception $exception) {
+            $this->response
+                ->setMessage($exception->getMessage())
+                ->setStatus($exception->getCode())
+                ->send();
+        }
     }
 }

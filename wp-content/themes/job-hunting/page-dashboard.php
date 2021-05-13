@@ -2,11 +2,16 @@
 
 use EcJobHunting\Service\User\UserService;
 
+if (!is_user_logged_in() || !UserService::isCandidate() && UserService::isEmployer()) {
+    wp_redirect('/', 301);
+    wp_die();
+}
+
 get_header();
 
 if (UserService::isCandidate()) {
     get_template_part('template-parts/candidate/dashboard/dashboard');
-} elseif (UserService::isEmployer()) {
+} else {
     $type = $_GET['type'] ?? '';
     switch ($type) {
         case 'jobs':
@@ -19,7 +24,5 @@ if (UserService::isCandidate()) {
             get_template_part('template-parts/employer/dashboard');
             break;
     }
-} else {
-    wp_redirect('/', 301);
 }
 get_footer();
