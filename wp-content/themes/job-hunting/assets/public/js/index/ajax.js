@@ -5,7 +5,6 @@ $(() => {
   const $vacancyHolder = $('.js-vacancies');
   const $loadMoreBtn = $('.js-load-more');
   const $filterLoadMoreBtn = $('.js-filter-load-more');
-  const $registerForm = $('.registerform');
   const $addBookmarkBtn = $('.add-bookmark');
   const $applyBtn = $('.js-apply');
   const $revokeBtn = $('.js-revoke');
@@ -297,17 +296,31 @@ $(() => {
   $filterLoadMoreBtn.on('click', e => {
     filterLoadMore($vacancyHolder, $filterLoadMoreBtn);
   });
-  $registerForm.on('submit', e => {
+  $(document).on('submit', '#register-candidate-form, #register-employer-form', e => {
     e.preventDefault();
     const $form = $(e.currentTarget);
-    const validator = $form.validate({
-      rules: {
+    const isEmployer = 'register-employer-form' === $form.attr('id');
+
+    if (isEmployer) {
+      const rules = {
         email: "required",
         password: "required",
-        pwd_confirmation: {
-          equalTo: ".password"
+        employer_pwd_confirmation: {
+          equalTo: ".employer_pwd"
         }
-      },
+      };
+    } else {
+      const rules = {
+        email: "required",
+        password: "required",
+        candidate_pwd_confirmation: {
+          equalTo: ".candidate_pwd"
+        }
+      };
+    }
+
+    const validator = $form.validate({
+      rules: this.rules,
       highlight: function (element) {
         $(element).parent().addClass('form-invalid');
       },
@@ -328,8 +341,8 @@ $(() => {
       action: 'register_user',
       email: $form.find("input[name='email']").val(),
       username: $form.find("input[name='username']").val(),
-      password: $form.find("input[name='pwd']").val(),
-      pwd_confirmation: $form.find("input[name='pwd_confirmation']").val(),
+      password: isEmployer ? $form.find("input[name='employer_pwd']").val() : $form.find("input[name='candidate_pwd']").val(),
+      pwd_confirmation: isEmployer ? $form.find("input[name='employer_pwd_confirmation']").val() : $form.find("input[name='candidate_pwd_confirmation']").val(),
       role: $form.find("input[name='role']").val(),
       nonce: $form.find("input[name='nonce']").val()
     };
