@@ -1,0 +1,17 @@
+.notification-popup {
+    position: absolute;
+    top: -9999px;
+    left: 5%;
+    width: 90%;
+    z-index: 1050;
+
+    &.show {
+        top: 20px;
+
+        @include more-768 {
+            top: 20px;
+            left: calc(50% - 250px);
+            width: 500px;
+        }
+    }
+}

@@ -2,8 +2,15 @@ import $ from 'jquery'
 
 export default class NotificationPopup {
   constructor() {
+    this.allowedTypes = [
+      'alert-primary',
+      'alert-secondary',
+      'alert-success',
+      'alert-danger',
+      'alert-warning',
+      'alert-info'
+    ]
     this.popup = $('#notification-popup')
-    this.textContainer = this.popup.find('.content')
 
     this.registerActions()
   }
@@ -12,6 +19,7 @@ export default class NotificationPopup {
     this.popup.on('show.bs.modal', function () {
           setTimeout(() => {
             this.popup.modal('hide')
+            this.restore()
           }, 5000)
       }.bind(this)
     )
@@ -23,9 +31,7 @@ export default class NotificationPopup {
    * @param message string    Text message.
    */
   success(message) {
-    this.textContainer.text(message)
-    this.setAlertType('success')
-    this.popup.modal('show')
+    this.customNotification(message, 'success')
   }
 
   /**
@@ -34,9 +40,7 @@ export default class NotificationPopup {
    * @param message   Text message.
    */
   error(message) {
-    this.textContainer.text(message)
-    this.setAlertType('danger')
-    this.popup.modal('show')
+    this.customNotification(message, 'danger')
   }
 
   /**
@@ -45,18 +49,37 @@ export default class NotificationPopup {
    * @param message   Text message.
    */
   warning(message) {
-    this.textContainer.text(message)
-    this.setAlertType('warning')
+    this.customNotification(message, 'warning')
+  }
+
+  /**
+   * Show notification.
+   *
+   * @param message   Text message.
+   * @param type      Alert type: primary, secondary, success, danger, warning, info.
+   */
+  customNotification(message, type) {
+    this.popup.find('.content').text(message)
+    this.setAlertType(type)
     this.popup.modal('show')
   }
 
+  /**
+   * Set notification type.
+   *
+   * @param type   Alert type: primary, secondary, success, danger, warning, info.
+   */
   setAlertType(type) {
     const alert = this.popup.find('.alert')
 
-    if (!['warning', 'success', 'danger'].includes(type)) {
-      alert.addClass('alert-success')
+    if (!this.allowedTypes.includes(type)) {
+      alert.addClass('alert-secondary')
     }
 
     alert.addClass('alert-' + type)
+  }
+
+  restore () {
+    this.allowedTypes.forEach(item => this.popup.removeClass(item))
   }
 }
