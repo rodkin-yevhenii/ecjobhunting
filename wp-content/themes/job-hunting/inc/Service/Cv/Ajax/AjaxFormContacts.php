@@ -4,7 +4,7 @@ namespace EcJobHunting\Service\Cv\Ajax;
 
 use EcJobHunting\Service\Cv\EmailConfirmation;
 use EcJobHunting\Service\User\UserService;
-use mysql_xdevapi\Exception;
+use Exception;
 
 /**
  * Class AjaxFormContacts
@@ -64,10 +64,17 @@ class AjaxFormContacts extends AjaxFormAbstract
         }
 
         $cvId = (int)$_POST['cvId'];
+        $isEmailUpdated = $_POST['new_email'] !== get_field('public_email', $cvId);
 
-        update_field('new_email', $_POST['new_email'], $cvId);
         update_field('phone', $_POST['phone'] ?? '', $cvId);
-        update_field('is_email_confirmed', false, $cvId);
+
+        if ($isEmailUpdated) {
+            update_field('new_email', $_POST['new_email'], $cvId);
+            update_field('is_email_confirmed', false, $cvId);
+        } else {
+            update_field('new_email', '', $cvId);
+            update_field('is_email_confirmed', true, $cvId);
+        }
 
         $candidate = UserService::getUser($_POST['userId']);
 
@@ -79,7 +86,9 @@ class AjaxFormContacts extends AjaxFormAbstract
         );
 
         try {
-            EmailConfirmation::sendCvEmailConfirmation();
+            if ($isEmailUpdated) {
+                EmailConfirmation::sendCvEmailConfirmation();
+            }
 
             $this->response
                 ->setStatus(200)
@@ -87,6 +96,7 @@ class AjaxFormContacts extends AjaxFormAbstract
                 ->setResponseBody(ob_get_clean())
                 ->send();
         } catch (Exception $exception) {
+            ob_get_clean();
             $this->response
                 ->setMessage($exception->getMessage())
                 ->setStatus($exception->getCode())

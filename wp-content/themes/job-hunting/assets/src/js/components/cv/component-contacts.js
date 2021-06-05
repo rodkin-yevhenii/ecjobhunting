@@ -1,6 +1,7 @@
 import $ from "jquery";
 import ComponentAbstract from "./component-abstract"
 import AjaxRequest from "../ajax/ajax-request";
+import NotificationPopup from "../notification-popup";
 
 export default class ComponentContacts extends ComponentAbstract {
   /**
@@ -70,36 +71,27 @@ export default class ComponentContacts extends ComponentAbstract {
       action: 'send_email_confirmation',
       nonce: this.nonce
     }
-
     const ajax = new AjaxRequest(data)
-    ajax.beforeSend = () => {
-      $('#profile-notification')
-        .addClass('d-none')
-    }
+    const notification = new NotificationPopup()
+
     ajax
       .send()
       .done(response => {
         if (200 !== parseInt(response.status)) {
-          $('#profile-notification')
-            .text(response.message)
-            .addClass('alert-danger')
+          notification.error(response.message)
 
           return
         }
 
+        notification.success(response.message)
         $('.js-verification-text')
-          .addClass('color-primary')
-          .removeClass('color-red')
-          .text(response.message)
+          .remove()
 
         $('.js-resend-email-confirmation')
           .remove()
       })
       .fail(error => {
-        $('#profile-notification')
-          .text(error.statusText)
-          .addClass('alert-danger')
-          .removeClass('d-none')
+        notification.error(error.statusText)
       })
   }
 

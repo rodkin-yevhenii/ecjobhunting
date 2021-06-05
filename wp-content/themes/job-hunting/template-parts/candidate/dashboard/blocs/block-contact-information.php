@@ -32,7 +32,7 @@ if (!$candidate) {
             <span><?php echo $candidate->getNewEmail(); ?></span>
             <?php
             if ($isOwner) : ?>
-                <span class="color-red">
+                <span class="color-red js-verification-text">
                     <?php _e(
                         'Verify your email to receive application updates from employers.',
                         'ecjobhunting'
