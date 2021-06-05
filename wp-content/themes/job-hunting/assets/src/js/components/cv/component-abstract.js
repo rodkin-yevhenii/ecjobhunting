@@ -16,7 +16,6 @@ export default class ComponentAbstract {
     this.candidateId = candidateId
     this.nonce = nonce
     this.actions = []
-    this.alert = new Alert('#form-error')
   }
 
   /**
@@ -82,22 +81,23 @@ export default class ComponentAbstract {
 
     const data = this.getSaveFormAjaxData()
     const ajax = new AjaxRequest(data)
+    const alert = new Alert('#form-error')
 
     ajax.send()
       .done(
         response => {
           if (response.status !== 200) {
-            this.alert.error(response.message)
+            alert.error(response.message)
             return
           }
 
-          this.alert.success(response.message)
+          alert.success(response.message)
           $(`#${data.holderId}`).html(response.html)
         }
       )
       .fail(
         () => {
-          this.alert.error('Updating failed')
+          alert.error('Updating failed')
         }
       )
   }
