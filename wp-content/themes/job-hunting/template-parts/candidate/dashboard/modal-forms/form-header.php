@@ -8,4 +8,9 @@ $heading = $args['heading'] ?? null;
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<div class="notification js-notification p-3 text-center d-none"></div>
+<div id="form-error" class="alert alert-dismissible" style="display: none" role="alert">
+    <span class="content"></span>
+    <button type="button" class="close" aria-label="Close" >
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
