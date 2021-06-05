@@ -16,7 +16,6 @@ export default class Alert {
       return null
     }
 
-    this.text = this.alert.find('.content')
     this.registerActions()
   }
 
@@ -62,7 +61,7 @@ export default class Alert {
    */
   customAlert(message, type) {
     this.restore()
-    this.text.text(message)
+    this.alert.find('.content').text(message)
     this.setAlertType(type)
     this.alert.show()
   }
