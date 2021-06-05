@@ -1,5 +1,6 @@
 import $ from "jquery";
 import AjaxRequest from "../ajax/ajax-request";
+import Alert from "../alert";
 
 export default class ComponentAbstract {
 
@@ -15,6 +16,7 @@ export default class ComponentAbstract {
     this.candidateId = candidateId
     this.nonce = nonce
     this.actions = []
+    this.alert = new Alert('#form-error')
   }
 
   /**
@@ -36,7 +38,7 @@ export default class ComponentAbstract {
     event.preventDefault()
 
     const $edit = $(event.currentTarget)
-    const $holder = $('.modal-dialog')
+    const $holder = $('#edit .modal-dialog')
     const data = this.getShowFormAjaxData($edit)
     const ajax = new AjaxRequest(data)
 
@@ -52,13 +54,13 @@ export default class ComponentAbstract {
 
     ajax.send()
       .done(
-        request => {
-          if (request.status !== 200) {
-            console.error('Form loading failed.', request.message)
+        response => {
+          if (response.status !== 200) {
+            console.error('Form loading failed.', response.message)
             return
           }
 
-          $holder.html(request.html)
+          $holder.html(response.html)
           $(document).trigger(`load-${data.formId}-form`)
           console.log(`Run "load-${data.formId}-form" action`)
         }
@@ -78,29 +80,24 @@ export default class ComponentAbstract {
   submitForm (event) {
     event.preventDefault()
 
-    const $notification = $('.js-notification')
     const data = this.getSaveFormAjaxData()
     const ajax = new AjaxRequest(data)
 
     ajax.send()
       .done(
-        request => {
-          if (request.status !== 200) {
-            $notification.text(request.message).addClass('alert-danger').removeClass('d-none', 'alert-success')
+        response => {
+          if (response.status !== 200) {
+            this.alert.error(response.message)
             return
           }
 
-          $notification.text(request.message).addClass('alert-success').removeClass('d-none', 'alert-danger')
-          $(`#${data.holderId}`).html(request.html)
-
-          setTimeout(() => {
-            $notification.addClass('d-none').removeClass('alert-success')
-          }, 3000)
+          this.alert.success(response.message)
+          $(`#${data.holderId}`).html(response.html)
         }
       )
       .fail(
         () => {
-          $notification.text('Updating failed').addClass('alert-danger').removeClass('d-none', 'alert-success')
+          this.alert.error('Updating failed')
         }
       )
   }
