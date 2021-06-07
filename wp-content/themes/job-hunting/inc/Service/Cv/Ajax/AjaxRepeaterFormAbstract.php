@@ -70,7 +70,7 @@ abstract class AjaxRepeaterFormAbstract
         ob_start();
         get_template_part(
             'template-parts/candidate/dashboard/blocs/block',
-            'work-experience',
+            $this->formId,
             ['candidate' => $candidate, 'isOwner' => $isOwner]
         );
 

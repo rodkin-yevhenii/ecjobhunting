@@ -40,8 +40,6 @@ export default class ComponentRepeaterAbstract {
         callback: this.saveSubItem.bind(this)
       }
     ]
-
-    this.registerActions()
   }
 
   /**

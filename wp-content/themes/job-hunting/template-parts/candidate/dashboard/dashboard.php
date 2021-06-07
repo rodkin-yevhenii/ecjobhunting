@@ -14,7 +14,7 @@ try {
 
 $candidate = UserService::getUser($currentUserId);
 $isOwner = $currentUserId === $candidate->getUserId();
-$isOwner = false;
+//$isOwner = false;
 
 ?>
 <div
@@ -83,14 +83,17 @@ $isOwner = false;
                         ['candidate' => $candidate, 'isOwner' => $isOwner]
                     ); ?>
                 </div>
+            <?php endif;
+
+            if ($isOwner || !empty($candidate->getEducation())) : ?>
+                <div id="education-holder" class="profile-item">
+                    <?php get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'education',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    ); ?>
+                </div>
             <?php endif; ?>
-            <div id="education-holder" class="profile-item">
-                <?php get_template_part(
-                    'template-parts/candidate/dashboard/blocs/block',
-                    'education',
-                    ['candidate' => $candidate, 'isOwner' => $isOwner]
-                ); ?>
-            </div>
             <div class="profile-item">
                 <div class="profile-header">
                     <h2 class="no-decor">References</h2>

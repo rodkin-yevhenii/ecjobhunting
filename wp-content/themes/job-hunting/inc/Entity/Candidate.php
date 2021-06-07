@@ -253,7 +253,7 @@ class Candidate extends UserAbstract
     public function getEducation(): array
     {
         if (empty($this->education)) {
-            $this->education = $this->fields['education'] ?? [];
+            $this->education = !empty($this->fields['education']) ? $this->fields['education'] : [];
         }
         return $this->education;
     }

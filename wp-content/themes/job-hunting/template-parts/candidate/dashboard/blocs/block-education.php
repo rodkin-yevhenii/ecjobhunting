@@ -14,11 +14,9 @@ if (!$candidate) {
     <p>
         <a
             href="#"
-            class="js-profile-edit-btn"
+            class="js-add-education-subitem"
             data-toggle="modal"
             data-target="#edit"
-            data-action="load_add_subitem_form"
-            data-form-id="education"
         >
             <?php _e('Add Education', 'ecjobhunting'); ?>
         </a>
@@ -34,21 +32,17 @@ if (!$candidate) {
             <?php if ($isOwner) : ?>
                 <div class="profile-subitem__buttons">
                     <button
-                        class="btn btn-outline-secondary js-profile-edit-btn"
+                        class="btn btn-outline-secondary js-edit-education-subitem"
                         type="button"
                         data-toggle="modal"
                         data-target="#edit"
-                        data-action="load_edit_subitem_form"
-                        data-form-id="education"
                         data-row-number="<?php echo $counter; ?>"
                     >
                         <?php _e('Edit', 'ecjobhunting'); ?>
                     </button>
                     <button
-                        class="btn btn-outline-secondary js-profile-delete-subitem-btn"
+                        class="btn btn-outline-secondary js-delete-education-subitem"
                         type="button"
-                        data-action="delete_profile_subitem"
-                        data-block-id="education"
                         data-row-number="<?php echo $counter++; ?>"
                     >
                         <?php _e('Delete', 'ecjobhunting'); ?>
