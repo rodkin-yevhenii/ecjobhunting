@@ -89,7 +89,7 @@ class AjaxFormAboutMe extends AjaxFormAbstract
         get_template_part(
             'template-parts/candidate/dashboard/blocs/block',
             'about-me',
-            ['candidate' => $candidate]
+            ['candidate' => $candidate, 'isOwner' => true]
         );
 
         $this->response
