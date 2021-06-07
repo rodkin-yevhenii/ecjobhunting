@@ -14,6 +14,7 @@ try {
 
 $candidate = UserService::getUser($currentUserId);
 $isOwner = $currentUserId === $candidate->getUserId();
+//$isOwner = false;
 
 ?>
 <div
@@ -74,13 +75,15 @@ $isOwner = $currentUserId === $candidate->getUserId();
                     ['candidate' => $candidate, 'isOwner' => $isOwner]
                 ); ?>
             </div>
-            <div id="work-experience-holder" class="profile-item">
-                <?php get_template_part(
-                    'template-parts/candidate/dashboard/blocs/block',
-                    'work-experience',
-                    ['candidate' => $candidate, 'isOwner' => $isOwner]
-                ); ?>
-            </div>
+            <?php if ($isOwner || !empty($candidate->getExperience())) : ?>
+                <div id="work-experience-holder" class="profile-item">
+                    <?php get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'work-experience',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    ); ?>
+                </div>
+            <?php endif; ?>
             <div id="education-holder" class="profile-item">
                 <?php get_template_part(
                     'template-parts/candidate/dashboard/blocs/block',
@@ -97,9 +100,6 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 <button class="btn btn-outline-secondary btn-full">Request References</button>
             </div>
             <div class="profile-item">
-                <?php if ($isOwner && empty($candidate->getSummary())) : ?>
-
-                <?php endif; ?>
                 <p><a href="#">Add Objective</a></p>
                 <p><a href="#">Add Achievements</a></p>
                 <p><a href="#">Add Certificates and Licenses</a></p>

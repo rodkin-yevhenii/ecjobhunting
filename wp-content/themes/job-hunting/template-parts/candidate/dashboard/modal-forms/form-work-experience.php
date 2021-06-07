@@ -5,7 +5,7 @@
  */
 $candidate = $args['candidate'] ?? null;
 $action = $args['action'] ?? 'add';
-$workOrder = $args['work-order'] ?? 0;
+$workOrder = $args['row'] ?? 0;
 
 if ('edit' === $action) {
     $heading = __('Edit Work Experience', 'ecjobhunting');
@@ -32,7 +32,7 @@ if ('edit' === $action) {
                     class="field-text"
                     type="text"
                     id="from"
-                    value="<?php echo !empty($work['period']['to'])
+                    value="<?php echo !empty($work['period']['from'])
                         ? date('d.m.Y', strtotime($work['period']['from'])) : ''; ?>"
                     required
                 />

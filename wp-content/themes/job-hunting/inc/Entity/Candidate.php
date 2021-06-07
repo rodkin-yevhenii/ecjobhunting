@@ -242,7 +242,7 @@ class Candidate extends UserAbstract
     public function getExperience(): array
     {
         if (empty($this->experience)) {
-            $this->experience = $this->fields['work_experience'] ?? [];
+            $this->experience = !empty($this->fields['work_experience']) ? $this->fields['work_experience'] : [];
         }
         return $this->experience;
     }

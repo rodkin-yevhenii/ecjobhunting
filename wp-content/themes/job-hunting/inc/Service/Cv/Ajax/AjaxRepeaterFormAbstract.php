@@ -15,23 +15,24 @@ abstract class AjaxRepeaterFormAbstract
 {
     protected EcResponse $response;
     protected string $fieldName;
+    protected string $formId = '';
 
     /**
      * AjaxFormAboutMe constructor.
      */
     public function __construct()
     {
-        add_action('wp_ajax_load_edit_subitem_form', [$this, 'getCallback']);
-        add_action('wp_ajax_nopriv_load_edit_subitem_form', [$this, 'getCallback']);
+        add_action("wp_ajax_load_add_{$this->formId}_subitem_form", [$this, 'getCallback']);
+        add_action("wp_ajax_nopriv_load_add_{$this->formId}_subitem_form", [$this, 'getCallback']);
 
-        add_action('wp_ajax_load_add_subitem_form', [$this, 'getCallback']);
-        add_action('wp_ajax_nopriv_load_add_subitem_form', [$this, 'getCallback']);
+        add_action("wp_ajax_load_edit_{$this->formId}_subitem_form", [$this, 'getCallback']);
+        add_action("wp_ajax_nopriv_load_edit_{$this->formId}_subitem_form", [$this, 'getCallback']);
 
-        add_action('wp_ajax_delete_profile_subitem', [$this, 'deleteSubItemCallback']);
-        add_action('wp_ajax_nopriv_delete_profile_subitem', [$this, 'deleteSubItemCallback']);
+        add_action("wp_ajax_delete_{$this->formId}_subitem", [$this, 'deleteSubItemCallback']);
+        add_action("wp_ajax_nopriv_delete_{$this->formId}_subitem", [$this, 'deleteSubItemCallback']);
 
-        add_action('wp_ajax_save_profile_subitem', [$this, 'saveCallback']);
-        add_action('wp_ajax_nopriv_save_profile_subitem', [$this, 'saveCallback']);
+        add_action("wp_ajax_save_{$this->formId}_subitem", [$this, 'saveCallback']);
+        add_action("wp_ajax_nopriv_save_{$this->formId}_subitem", [$this, 'saveCallback']);
 
         $this->response = new EcResponse();
     }
@@ -99,7 +100,7 @@ abstract class AjaxRepeaterFormAbstract
                 ->send();
         }
 
-        if (empty($_POST['rowNumber'])) {
+        if (!isset($_POST['rowNumber'])) {
             $this->response
                 ->setStatus(204)
                 ->setMessage(__('Row number is required', 'ecjobhunting'))
@@ -171,11 +172,11 @@ abstract class AjaxRepeaterFormAbstract
         $candidate = UserService::getUser($currentUserId);
         $isOwner = $currentUserId === $candidate->getUserId();
 
-        if ('load_edit_subitem_form' === $_POST['action']) {
+        if ("load_edit_{$this->formId}_subitem_form" === $_POST['action']) {
             $args = [
                 'candidate' => $candidate,
                 'action' => 'edit',
-                'work-order' => $_POST['rowNumber'] ?? 0,
+                'row' => $_POST['rowNumber'] ?? 0,
                 'isOwner' => $isOwner,
             ];
         } else {

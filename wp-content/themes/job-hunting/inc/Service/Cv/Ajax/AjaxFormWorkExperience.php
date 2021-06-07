@@ -10,13 +10,8 @@ namespace EcJobHunting\Service\Cv\Ajax;
  */
 class AjaxFormWorkExperience extends AjaxRepeaterFormAbstract
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->fieldName = 'work_experience';
-    }
+    protected string $formId = 'work-experience';
+    protected string $fieldName = 'work_experience';
 
     /**
      * Check POST data for save callback
