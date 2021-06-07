@@ -11,6 +11,8 @@ export default class ComponentWorkExperience extends ComponentRepeaterAbstract {
    */
   constructor(cvId, candidateId, nonce) {
     super(cvId, candidateId, nonce, 'work-experience')
+
+    this.registerActions()
   }
 
 
