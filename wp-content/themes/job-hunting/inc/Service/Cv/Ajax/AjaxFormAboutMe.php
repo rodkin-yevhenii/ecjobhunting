@@ -74,6 +74,8 @@ class AjaxFormAboutMe extends AjaxFormAbstract
             }
 
             wp_set_post_terms($cvId, $data['location'], 'location');
+        } else {
+            wp_set_post_terms($cvId, '', 'location');
         }
 
         update_field('full_name', $data['full_name'], $cvId);

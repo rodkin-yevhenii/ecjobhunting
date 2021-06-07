@@ -1,5 +1,6 @@
 import AjaxRequest from "./components/ajax/ajax-request";
 import ComponentEducation from "./components/cv/component-education";
+import ComponentAboutMe from "./components/cv/component-about-me";
 import ComponentContacts from "./components/cv/component-contacts";
 import $ from 'jquery'
 
@@ -10,6 +11,7 @@ $(() => {
   const candidateId = $pageHolder.attr('data-user-id')
 
   new ComponentEducation(cvId, candidateId, siteSettings.nonce)
+  new ComponentAboutMe(cvId, candidateId, siteSettings.nonce)
   new ComponentContacts(cvId, candidateId, siteSettings.nonce)
 })
 
