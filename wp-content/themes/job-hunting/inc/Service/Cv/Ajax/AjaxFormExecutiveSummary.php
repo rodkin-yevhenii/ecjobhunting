@@ -72,7 +72,7 @@ class AjaxFormExecutiveSummary extends AjaxFormAbstract
         get_template_part(
             'template-parts/candidate/dashboard/blocs/block',
             'executive-summary',
-            ['candidate' => $candidate]
+            ['candidate' => $candidate, 'isOwner' => true]
         );
 
         $this->response

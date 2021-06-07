@@ -3,6 +3,7 @@ import ComponentEducation from "./components/cv/component-education";
 import ComponentAboutMe from "./components/cv/component-about-me";
 import ComponentContacts from "./components/cv/component-contacts";
 import ComponentWebsites from "./components/cv/component-websites";
+import ComponentExecutiveSummary from "./components/cv/component-executive-summary";
 import $ from 'jquery'
 
 $(() => {
@@ -15,6 +16,7 @@ $(() => {
   new ComponentAboutMe(cvId, candidateId, siteSettings.nonce)
   new ComponentContacts(cvId, candidateId, siteSettings.nonce)
   new ComponentWebsites(cvId, candidateId, siteSettings.nonce)
+  new ComponentExecutiveSummary(cvId, candidateId, siteSettings.nonce)
 })
 
 class CvController {
