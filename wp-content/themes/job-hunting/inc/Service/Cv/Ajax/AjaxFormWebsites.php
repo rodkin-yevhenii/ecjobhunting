@@ -62,7 +62,7 @@ class AjaxFormWebsites extends AjaxFormAbstract
         get_template_part(
             'template-parts/candidate/dashboard/blocs/block',
             'websites',
-            ['candidate' => $candidate]
+            ['candidate' => $candidate, 'isOwner' => true]
         );
 
         $this->response

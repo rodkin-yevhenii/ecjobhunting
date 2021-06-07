@@ -1,94 +1,75 @@
 <?php
 $candidate = $args['candidate'] ?? null;
+$isOwner = $args['isOwner'] ?? false;
+//$isOwner = false;
 
 if (!$candidate) {
     return;
 }
 ?>
 <div class="profile-header">
-    <button
-        class="profile-edit-link js-profile-edit-link"
-        type="button"
-        data-toggle="modal"
-        data-target="#edit"
-        data-action="load_websites_form"
-        data-form-id="websites"
-    >
-        <?php _e('Edit', 'ecjobhunting'); ?>
-    </button>
+    <?php if ($isOwner) : ?>
+        <button
+            class="profile-edit-link js-edit-websites"
+            type="button"
+            data-toggle="modal"
+            data-target="#edit"
+        >
+            <?php _e('Edit', 'ecjobhunting'); ?>
+        </button>
+    <?php endif; ?>
     <h2 class="no-decor"><?php _e('Websites', 'ecjobhunting'); ?></h2>
 </div>
 <ul>
-    <li>
-        <div class="profile-icon"><?php echo getEnvelopIcon(); ?></div>
-        <?php if ($candidate->getWebSite()) : ?>
-            <span><?php echo $candidate->getWebSite(); ?></span>
-        <?php else : ?>
-            <a
-                href="#"
-                class="profile-edit-link js-profile-edit-link"
-                type="button"
-                data-toggle="modal"
-                data-target="#edit"
-                data-action="load_websites_form"
-                data-form-id="websites"
-            >
-                <?php _e('Add Website', 'ecjobhunting'); ?>
-            </a>
-        <?php endif; ?>
-    </li>
-    <li>
-        <div class="profile-icon"><?php echo getTwitterIcon(); ?></div>
-        <?php if ($candidate->getTwitter()) : ?>
-            <span><?php echo $candidate->getTwitter(); ?></span>
-        <?php else : ?>
-            <a
-                href="#"
-                class="profile-edit-link js-profile-edit-link"
-                type="button"
-                data-toggle="modal"
-                data-target="#edit"
-                data-action="load_websites_form"
-                data-form-id="websites"
-            >
-                <?php _e('Add Twitter Profile', 'ecjobhunting'); ?>
-            </a>
-        <?php endif; ?>
-    </li>
-    <li>
-        <div class="profile-icon"><?php echo getLinkedinIcon(); ?></div>
-        <?php if ($candidate->getLinkedin()) : ?>
-            <span><?php echo $candidate->getLinkedin(); ?></span>
-        <?php else : ?>
-            <a
-                href="#"
-                class="profile-edit-link js-profile-edit-link"
-                type="button"
-                data-toggle="modal"
-                data-target="#edit"
-                data-action="load_websites_form"
-                data-form-id="websites"
-            >
-                <?php _e('Add LinkedIn Profile', 'ecjobhunting'); ?>
-            </a>
-        <?php endif; ?>
-    </li>
-    <li>
-        <div class="profile-icon"><?php echo getFacebookIcon(); ?></div>
-        <?php if ($candidate->getFacebook()) : ?>
-            <span><?php echo $candidate->getFacebook(); ?></span>
-        <?php else : ?>
-            <a
-                href="#"
-                class="profile-edit-link js-profile-edit-link"
-                type="button"
-                data-toggle="modal"
-                data-target="#edit"
-                data-action="load_websites_form"
-                data-form-id="websites"
-            >
-                <?php _e('Add Facebook Profile', 'ecjobhunting'); ?>
-            </a>
-        <?php endif; ?>
-    </li>
+    <?php if ($isOwner || !empty($candidate->getWebSite())) : ?>
+        <li>
+            <div class="profile-icon"><?php echo getEnvelopIcon(); ?></div>
+            <?php if ($candidate->getWebSite()) : ?>
+                <a href="<?php echo $candidate->getWebSite(); ?>">
+                    <?php echo $candidate->getWebSite(); ?>
+                </a>
+            <?php else : ?>
+                <span><?php _e('none', 'ecjobhunting'); ?></span>
+            <?php endif; ?>
+        </li>
+    <?php endif;
+
+    if ($isOwner || !empty($candidate->getTwitter())) : ?>
+        <li>
+            <div class="profile-icon"><?php echo getTwitterIcon(); ?></div>
+            <?php if ($candidate->getTwitter()) : ?>
+                <a href="<?php echo $candidate->getTwitter(); ?>">
+                    <?php echo $candidate->getTwitter(); ?>
+                </a>
+            <?php else : ?>
+                <span><?php _e('none', 'ecjobhunting'); ?></span>
+            <?php endif; ?>
+        </li>
+    <?php endif;
+
+    if ($isOwner || !empty($candidate->getLinkedin())) : ?>
+        <li>
+            <div class="profile-icon"><?php echo getLinkedinIcon(); ?></div>
+            <?php if ($candidate->getLinkedin()) : ?>
+                <a href="<?php echo $candidate->getLinkedin(); ?>">
+                    <?php echo $candidate->getLinkedin(); ?>
+                </a>
+            <?php else : ?>
+                <span><?php _e('none', 'ecjobhunting'); ?></span>
+            <?php endif; ?>
+        </li>
+    <?php endif;
+
+    if ($isOwner || !empty($candidate->getFacebook())) : ?>
+        <li>
+            <div class="profile-icon"><?php echo getFacebookIcon(); ?></div>
+            <?php if ($candidate->getFacebook()) : ?>
+                <a href="<?php echo $candidate->getFacebook(); ?>">
+                    <?php echo $candidate->getFacebook(); ?>
+                </a>
+            <?php else : ?>
+                <span><?php _e('none', 'ecjobhunting'); ?></span>
+            <?php endif; ?>
+        </li>
+    <?php endif; ?>
 </ul>

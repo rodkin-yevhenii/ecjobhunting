@@ -2,6 +2,7 @@ import AjaxRequest from "./components/ajax/ajax-request";
 import ComponentEducation from "./components/cv/component-education";
 import ComponentAboutMe from "./components/cv/component-about-me";
 import ComponentContacts from "./components/cv/component-contacts";
+import ComponentWebsites from "./components/cv/component-websites";
 import $ from 'jquery'
 
 $(() => {
@@ -13,6 +14,7 @@ $(() => {
   new ComponentEducation(cvId, candidateId, siteSettings.nonce)
   new ComponentAboutMe(cvId, candidateId, siteSettings.nonce)
   new ComponentContacts(cvId, candidateId, siteSettings.nonce)
+  new ComponentWebsites(cvId, candidateId, siteSettings.nonce)
 })
 
 class CvController {
