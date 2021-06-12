@@ -75,8 +75,8 @@ class AjaxFormEducation extends AjaxRepeaterFormAbstract
             'description' => $_POST['description'] ?? '',
             'period' => [
                 'from' => $_POST['from'],
-                'to' => $_POST['isInProgress'] === 'true' ? '' : $_POST['to'],
-                'is_in_progress' => $_POST['isInProgress'] === 'true',
+                'to' => isset($_POST['isInProgress']) && $_POST['isInProgress']  === 'true' ? '' : $_POST['to'],
+                'is_in_progress' => isset($_POST['isInProgress']) && $_POST['isInProgress'] === 'true',
             ],
         ];
     }

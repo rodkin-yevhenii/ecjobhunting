@@ -11,9 +11,14 @@ if ('edit' === $action) {
     $heading = __('Edit Work Experience', 'ecjobhunting');
     $works = $candidate->getExperience();
     $work = $works[$workOrder];
+    $isInProgress =  $work['period']['is_in_progress'];
+    $to = !empty($work['period']['to'])
+        ? date('d.m.Y', strtotime($work['period']['to'])) : '';
 } else {
     $heading = __('Add Work Experience', 'ecjobhunting');
     $work = [];
+    $isInProgress = false;
+    $to = '';
 }
 ?>
 <form class="modal-content" id="work-experience">
@@ -34,7 +39,6 @@ if ('edit' === $action) {
                     id="from"
                     value="<?php echo !empty($work['period']['from'])
                         ? date('d.m.Y', strtotime($work['period']['from'])) : ''; ?>"
-                    required
                 />
             </div>
             <div class="col-12 col-sm-6">
@@ -45,12 +49,21 @@ if ('edit' === $action) {
                     class="field-text"
                     type="text"
                     id="to"
-                    value="<?php echo !empty($work['period']['to'])
-                        ? date('d.m.Y', strtotime($work['period']['to'])) : ''; ?>"
-                    required
+                    value="<?php echo $isInProgress ? 'Current' : $to; ?>"
+                    <?php echo $isInProgress ? 'disabled' : ''; ?>
                 />
             </div>
         </div>
+
+        <input
+            type="checkbox"
+            id="is_in_progress"
+            class="js-is-in-progress"
+            <?php echo $work['period']['is_in_progress'] ? 'checked' : ''; ?>
+        >
+        <label class="field-label" for="is_in_progress">
+            <?php _e('Currently in progress', 'ecjobhunting'); ?>
+        </label>
 
         <label class="field-label" for="position">
             <?php _e('Position', 'ecjobhunting'); ?>

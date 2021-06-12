@@ -87,7 +87,8 @@ class AjaxFormWorkExperience extends AjaxRepeaterFormAbstract
             'company_name' => $_POST['company'],
             'period' => [
                 'from' => $_POST['from'],
-                'to' => $_POST['to'],
+                'to' => isset($_POST['isInProgress']) && $_POST['isInProgress']  === 'true' ? '' : $_POST['to'],
+                'is_in_progress' => isset($_POST['isInProgress']) && $_POST['isInProgress'] === 'true',
             ],
             'description' => $_POST['description'],
         ];

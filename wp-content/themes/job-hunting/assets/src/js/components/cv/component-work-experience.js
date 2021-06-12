@@ -12,6 +12,14 @@ export default class ComponentWorkExperience extends ComponentRepeaterAbstract {
   constructor(cvId, candidateId, nonce) {
     super(cvId, candidateId, nonce, 'work-experience')
 
+    this.actions.push(
+      {
+        action: 'click',
+        elements: '.js-is-in-progress',
+        callback: this.updateToField.bind(this)
+      }
+    )
+
     this.registerActions()
   }
 
@@ -32,9 +40,25 @@ export default class ComponentWorkExperience extends ComponentRepeaterAbstract {
       company: $('#company').val(),
       from: $('#from').val(),
       to: $('#to').val(),
+      isInProgress: $('#is_in_progress').is(':checked'),
       description: $('#description').val(),
       rowNumber: $('#row_number').val(),
       doAction: $('#do_action').val()
+    }
+  }
+
+  updateToField(event) {
+    const isInProgress = $(event.currentTarget).is(':checked')
+    const $to = $('#to')
+
+    if (isInProgress) {
+      $to
+        .prop('disabled', true)
+        .val('Current')
+    } else {
+      $to
+        .prop('disabled', false)
+        .val('')
     }
   }
 }
