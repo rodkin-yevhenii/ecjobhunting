@@ -93,15 +93,20 @@ $isOwner = $currentUserId === $candidate->getUserId();
                         ['candidate' => $candidate, 'isOwner' => $isOwner]
                     ); ?>
                 </div>
-            <?php endif; ?>
-            <div class="profile-item">
-                <div class="profile-header">
-                    <h2 class="no-decor">References</h2>
+            <?php endif;
+
+            if (false) :
+                //TODO Discus and add with next release
+                ?>
+                <div class="profile-item" ?>
+                    <div class="profile-header">
+                        <h2 class="no-decor">References</h2>
+                    </div>
+                    <p>Hiring managers prefer candidates with references! Ask a former co-worker, manager, teacher or
+                        friend to write a reference for you.</p>
+                    <button class="btn btn-outline-secondary btn-full">Request References</button>
                 </div>
-                <p>Hiring managers prefer candidates with references! Ask a former co-worker, manager, teacher or
-                    friend to write a reference for you.</p>
-                <button class="btn btn-outline-secondary btn-full">Request References</button>
-            </div>
+            <?php endif; ?>
             <div class="profile-item">
                 <p><a href="#">Add Objective</a></p>
                 <p><a href="#">Add Achievements</a></p>
