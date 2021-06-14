@@ -113,6 +113,7 @@ gulp.task('libs', function (done) {
       'node_modules/scroll-lock/dist/scroll-lock.min.js',
       'node_modules/slick-carousel/slick/slick.min.js',
       'node_modules/imask/dist/imask.js',
+      'node_modules/bootstrap-autocomplete/dist/latest/bootstrap-autocomplete.min.js',
       'node_modules/nouislider/distribute/nouislider.min.js'
     ]
   }
