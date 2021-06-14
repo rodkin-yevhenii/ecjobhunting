@@ -65,15 +65,20 @@ $isOwner = $currentUserId === $candidate->getUserId();
                     ['candidate' => $candidate, 'isOwner' => $isOwner]
                 ); ?>
             </div>
-            <?php if ($isOwner || !empty($candidate->getSummary())) : ?>
-                <div id="executive-summary-holder" class="profile-item">
-                    <?php get_template_part(
+            <div
+                id="executive-summary-holder"
+                class="profile-item <?php echo empty($candidate->getSummary()) ? 'd-none' : ''; ?>"
+            >
+                <?php
+                if (!empty($candidate->getObjective())) :
+                    get_template_part(
                         'template-parts/candidate/dashboard/blocs/block',
                         'executive-summary',
                         ['candidate' => $candidate, 'isOwner' => $isOwner]
-                    ); ?>
-                </div>
-            <?php endif; ?>
+                    );
+                endif;
+                ?>
+            </div>
             <div
                 id="objective-holder"
                 class="profile-item <?php echo empty($candidate->getObjective()) ? 'd-none' : ''; ?>"
@@ -141,6 +146,16 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 </div>
             <?php endif; ?>
             <div class="profile-item">
+                <p id="add_executive-summary" class="<?php echo !empty($candidate->getSummary()) ? 'd-none' : ''; ?>">
+                    <a
+                        href="#"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#edit"
+                    >
+                        <?php _e('Add Executive Summary', 'ecjobhunting'); ?>
+                    </a>
+                </p>
                 <p id="add_objective" class="<?php echo !empty($candidate->getObjective()) ? 'd-none' : ''; ?>">
                     <a
                         href="#"

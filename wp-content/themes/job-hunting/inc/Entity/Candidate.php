@@ -300,7 +300,7 @@ class Candidate extends UserAbstract
     public function getSummary(): string
     {
         if (empty($this->summary)) {
-            $this->summary = get_the_content(null, null, $this->cvId);
+            $this->summary = $this->fields['executive_summary'] ?? '';
         }
         return $this->summary;
     }
