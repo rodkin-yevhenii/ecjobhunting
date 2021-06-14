@@ -1501,6 +1501,25 @@ class AcfFields
                             ],
                         ],
                     ],
+                    [
+                        'key' => 'field_objective',
+                        'label' => 'Objective',
+                        'name' => 'objective',
+                        'type' => 'textarea',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'default_value' => '',
+                        'placeholder' => 'Add Objective',
+                        'maxlength' => '',
+                        'rows' => '',
+                        'new_lines' => '',
+                    ],
                 ],
                 'location' => [
                     [

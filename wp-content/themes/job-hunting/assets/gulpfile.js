@@ -85,7 +85,7 @@ gulp.task('scripts', function (done) {
               loader: 'babel-loader',
               query: {
                 presets: ['@babel/preset-env'],
-                plugins: []
+                plugins: ["@babel/plugin-proposal-class-properties"]
               }
             }
           ]

@@ -73,9 +73,22 @@ $isOwner = $currentUserId === $candidate->getUserId();
                         ['candidate' => $candidate, 'isOwner' => $isOwner]
                     ); ?>
                 </div>
-            <?php endif;
-
-            if ($isOwner || !empty($candidate->getExperience())) : ?>
+            <?php endif; ?>
+            <div
+                id="objective-holder"
+                class="profile-item <?php echo empty($candidate->getObjective()) ? 'd-none' : ''; ?>"
+            >
+                <?php
+                if (!empty($candidate->getObjective())) :
+                    get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'objective',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    );
+                endif;
+                ?>
+            </div>
+            <?php if ($isOwner || !empty($candidate->getExperience())) : ?>
                 <div id="work-experience-holder" class="profile-item">
                     <?php get_template_part(
                         'template-parts/candidate/dashboard/blocs/block',
@@ -98,7 +111,7 @@ $isOwner = $currentUserId === $candidate->getUserId();
             if (false) :
                 //TODO Discus and add with next release
                 ?>
-                <div class="profile-item" ?>
+                <div class="profile-item">
                     <div class="profile-header">
                         <h2 class="no-decor">References</h2>
                     </div>
@@ -108,7 +121,16 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 </div>
             <?php endif; ?>
             <div class="profile-item">
-                <p><a href="#">Add Objective</a></p>
+                <p id="add_objective" class="<?php echo !empty($candidate->getObjective()) ? 'd-none' : ''; ?>">
+                    <a
+                        href="#"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#edit"
+                    >
+                        <?php _e('Add Objective', 'ecjobhunting'); ?>
+                    </a>
+                </p>
                 <p><a href="#">Add Achievements</a></p>
                 <p><a href="#">Add Certificates and Licenses</a></p>
                 <p><a href="#">Add Associations</a></p>

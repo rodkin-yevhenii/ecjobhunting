@@ -23,6 +23,7 @@ class Candidate extends UserAbstract
     private string $facebook;
     private array $experience;
     private array $education;
+    private string $objective;
     private string $summary;
     private string $salaryExpectation = '0';
 
@@ -256,6 +257,17 @@ class Candidate extends UserAbstract
             $this->education = !empty($this->fields['education']) ? $this->fields['education'] : [];
         }
         return $this->education;
+    }
+
+    /**
+     * @return string
+     */
+    public function getObjective(): string
+    {
+        if (empty($this->objective)) {
+            $this->objective = $this->fields['objective'] ?? '';
+        }
+        return $this->objective;
     }
 
     /**
