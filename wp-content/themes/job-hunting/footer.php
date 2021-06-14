@@ -107,10 +107,6 @@ $siteProfiles = get_field('site_social_profiles', 'option');
 </footer>
 </div>
 <?php wp_footer(); ?>
-<div class="modal fade" id="edit" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-    </div>
-</div>
 <div class="modal fade" id="notification-popup" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="alert alert-success alert-dismissible fade show" role="alert">

@@ -28,6 +28,7 @@ class Candidate extends UserAbstract
     private array $associations;
     private string $summary;
     private string $salaryExpectation = '0';
+    private array $skills;
 
     public function __construct($user)
     {
@@ -314,5 +315,23 @@ class Candidate extends UserAbstract
             $this->salaryExpectation = $this->fields['salary'] ?? '';
         }
         return $this->salaryExpectation;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSkills(): array
+    {
+        if (empty($this->skills)) {
+            $terms = wp_get_post_terms($this->cvId, 'skill', ['fields' => 'id=>name']);
+
+            if (is_wp_error($terms) || empty($terms)) {
+                return [];
+            }
+
+            $this->skills = $terms;
+        }
+
+        return $this->skills;
     }
 }
