@@ -88,7 +88,17 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 endif;
                 ?>
             </div>
-            <?php if ($isOwner || !empty($candidate->getExperience())) : ?>
+            <?php if ($isOwner || !empty($candidate->getAchievements())) : ?>
+                <div id="achievements-holder" class="profile-item">
+                    <?php get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'achievements',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    ); ?>
+                </div>
+            <?php endif;
+
+            if ($isOwner || !empty($candidate->getExperience())) : ?>
                 <div id="work-experience-holder" class="profile-item">
                     <?php get_template_part(
                         'template-parts/candidate/dashboard/blocs/block',
@@ -131,9 +141,27 @@ $isOwner = $currentUserId === $candidate->getUserId();
                         <?php _e('Add Objective', 'ecjobhunting'); ?>
                     </a>
                 </p>
-                <p><a href="#">Add Achievements</a></p>
+                <p id="add_achievements" class="<?php echo !empty($candidate->getAchievements()) ? 'd-none' : ''; ?>">
+                    <a
+                        href="#"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#edit"
+                    >
+                        <?php _e('Add Achievements', 'ecjobhunting'); ?>
+                    </a>
+                </p>
+                <p id="add_associations" class="<?php echo !empty($candidate->getAssociations()) ? 'd-none' : ''; ?>">
+                    <a
+                        href="#"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#edit"
+                    >
+                        <?php _e('Add Associations', 'ecjobhunting'); ?>
+                    </a>
+                </p>
                 <p><a href="#">Add Certificates and Licenses</a></p>
-                <p><a href="#">Add Associations</a></p>
                 <p><a href="#">Add Skills</a></p>
             </div>
             <div class="profile-item">

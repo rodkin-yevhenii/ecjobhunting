@@ -1,3 +1,4 @@
+import $ from 'jquery'
 import AjaxRequest from "./components/ajax/ajax-request"
 import ComponentAboutMe from "./components/cv/component-about-me"
 import ComponentContacts from "./components/cv/component-contacts"
@@ -6,7 +7,8 @@ import ComponentExecutiveSummary from "./components/cv/component-executive-summa
 import ComponentWorkExperience from "./components/cv/component-work-experience";
 import ComponentEducation from "./components/cv/component-education"
 import ComponentObjective from "./components/cv/component-objective";
-import $ from 'jquery'
+import ComponentAchievements from "./components/cv/component-achievements";
+import ComponentAssociations from "./components/cv/component-associations";
 
 $(() => {
   const { siteSettings } = window
@@ -21,6 +23,8 @@ $(() => {
   new ComponentWorkExperience(cvId, candidateId, siteSettings.nonce)
   new ComponentEducation(cvId, candidateId, siteSettings.nonce)
   new ComponentObjective(cvId, candidateId, siteSettings.nonce)
+  new ComponentAchievements(cvId, candidateId, siteSettings.nonce)
+  new ComponentAssociations(cvId, candidateId, siteSettings.nonce)
 })
 
 class CvController {

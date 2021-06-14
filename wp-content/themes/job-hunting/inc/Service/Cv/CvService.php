@@ -3,7 +3,9 @@
 namespace EcJobHunting\Service\Cv;
 
 use EcJobHunting\Service\Cv\Ajax\AjaxFormAboutMe;
+use EcJobHunting\Service\Cv\Ajax\AjaxFormAchievements;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormActivation;
+use EcJobHunting\Service\Cv\Ajax\AjaxFormAssociations;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormContacts;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormEducation;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormExecutiveSummary;
@@ -45,6 +47,8 @@ class CvService
         new AjaxFormWorkExperience();
         new AjaxFormEducation();
         new AjaxFormObjective();
+        new AjaxFormAchievements();
+        new AjaxFormAssociations();
     }
 
     /**
