@@ -1,5 +1,6 @@
 <?php
 
+use EcJobHunting\Service\Cv\CvService;
 use EcJobHunting\Service\User\UserService;
 
 $currentUserId = get_current_user_id();
@@ -120,13 +121,11 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 class="profile-item <?php echo !$isOwner && empty($candidate->getSkills()) ? 'd-none' : ''; ?>"
             >
                 <?php
-                if (!empty($candidate->getObjective())) :
-                    get_template_part(
-                        'template-parts/candidate/dashboard/blocs/block',
-                        'skills',
-                        ['candidate' => $candidate, 'isOwner' => $isOwner]
-                    );
-                endif;
+                get_template_part(
+                    'template-parts/candidate/dashboard/blocs/block',
+                    'skills',
+                    ['candidate' => $candidate, 'isOwner' => $isOwner]
+                );
                 ?>
             </div>
             <?php
@@ -216,7 +215,9 @@ $isOwner = $currentUserId === $candidate->getUserId();
         </div>
         <div class="col-12 order-1 col-md-5 float-md-left col-xl-3 order-xl-2">
             <div class="profile-progress">
-                <div class="profile-progressbar"><span style="width: 37%;"></span></div>
+                <div class="profile-progressbar">
+                    <span style="width: <?php echo CvService::calculateProgress(); ?>%;"></span>
+                </div>
                 <div class="profile-header">
                     <h2 class="no-decor">Your Profile is Incomplete</h2>
                 </div>
@@ -227,24 +228,26 @@ $isOwner = $currentUserId === $candidate->getUserId();
                         <span>Register with EcJobHunting</span>
                     </li>
                     <li>
-                        <div class="icon-check"></div>
-                        <span>Add Resume</span>
-                    </li>
-                    <li>
-                        <div class="icon-check"></div>
+                        <div class="icon-check <?php
+                        echo !empty($candidate->getPhoneNumber()) ? 'active' : ''; ?>"></div>
                         <span>Add Phone Number</span>
                     </li>
                     <li>
-                        <div class="icon-check"></div>
+                        <div class="icon-check <?php echo !empty($candidate->getSkills()) ? 'active' : ''; ?>"></div>
                         <span>Add Skills</span>
                     </li>
                     <li>
-                        <div class="icon-check"></div>
+                        <div class="icon-check <?php echo !empty($candidate->getHeadline()) ? 'active' : ''; ?>"></div>
                         <span>Add Headline</span>
                     </li>
                     <li>
+                        <div class="icon-check <?php
+                        echo !empty($candidate->getExperience()) ? 'active' : ''; ?>"></div>
+                        <span>Add Work Experience</span>
+                    </li>
+                    <li>
                         <div class="icon-check"></div>
-                        <span>Receive a Reference</span>
+                        <span>Add Resume</span>
                     </li>
                 </ul>
                 <a class="btn btn-primary btn-full mt-4" href="#">I got hired!</a>

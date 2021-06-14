@@ -13,6 +13,7 @@ use EcJobHunting\Service\Cv\Ajax\AjaxFormObjective;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormSkills;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWebsites;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWorkExperience;
+use EcJobHunting\Service\User\UserService;
 use Exception;
 
 /**
@@ -102,5 +103,30 @@ class CvService
         }
 
         update_field('photo', $imgId, "user_$userId");
+    }
+
+    public static function calculateProgress(): int
+    {
+        $part = 100 / 6;
+        $progress = $part;
+        $candidate = UserService::getUser(get_current_user_id());
+
+        if ($candidate->getPhoneNumber()) {
+            $progress += $part;
+        }
+
+        if ($candidate->getSkills()) {
+            $progress += $part;
+        }
+
+        if ($candidate->getHeadline()) {
+            $progress += $part;
+        }
+
+        if ($candidate->getExperience()) {
+            $progress += $part;
+        }
+
+        return ceil($progress);
     }
 }
