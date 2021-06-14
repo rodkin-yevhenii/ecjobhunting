@@ -24,6 +24,8 @@ class Candidate extends UserAbstract
     private array $experience;
     private array $education;
     private string $objective;
+    private array $achievements;
+    private array $associations;
     private string $summary;
     private string $salaryExpectation = '0';
 
@@ -268,6 +270,28 @@ class Candidate extends UserAbstract
             $this->objective = $this->fields['objective'] ?? '';
         }
         return $this->objective;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAchievements(): array
+    {
+        if (empty($this->achievements)) {
+            $this->achievements = !empty($this->fields['achievements']) ? $this->fields['achievements'] : [];
+        }
+        return $this->achievements;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAssociations(): array
+    {
+        if (empty($this->associations)) {
+            $this->associations = !empty($this->fields['associations']) ? $this->fields['associations'] : [];
+        }
+        return $this->associations;
     }
 
     /**
