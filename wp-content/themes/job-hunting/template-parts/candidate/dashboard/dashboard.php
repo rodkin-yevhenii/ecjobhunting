@@ -118,6 +118,16 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 </div>
             <?php endif;
 
+            if ($isOwner || !empty($candidate->getAssociations())) : ?>
+                <div id="associations-holder" class="profile-item">
+                    <?php get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'associations',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    ); ?>
+                </div>
+            <?php endif;
+
             if (false) :
                 //TODO Discus and add with next release
                 ?>
@@ -141,27 +151,14 @@ $isOwner = $currentUserId === $candidate->getUserId();
                         <?php _e('Add Objective', 'ecjobhunting'); ?>
                     </a>
                 </p>
-                <p id="add_achievements" class="<?php echo !empty($candidate->getAchievements()) ? 'd-none' : ''; ?>">
-                    <a
-                        href="#"
-                        type="button"
-                        data-toggle="modal"
-                        data-target="#edit"
-                    >
-                        <?php _e('Add Achievements', 'ecjobhunting'); ?>
-                    </a>
-                </p>
-                <p id="add_associations" class="<?php echo !empty($candidate->getAssociations()) ? 'd-none' : ''; ?>">
-                    <a
-                        href="#"
-                        type="button"
-                        data-toggle="modal"
-                        data-target="#edit"
-                    >
-                        <?php _e('Add Associations', 'ecjobhunting'); ?>
-                    </a>
-                </p>
-                <p><a href="#">Add Certificates and Licenses</a></p>
+                <?php
+                if (false) :
+                    //TODO Discus and add with next release
+                    ?>
+                    <p><a href="#">Add Certificates and Licenses</a></p>
+                    <?php
+                endif;
+                ?>
                 <p><a href="#">Add Skills</a></p>
             </div>
             <div class="profile-item">
