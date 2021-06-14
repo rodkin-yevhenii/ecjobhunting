@@ -1,5 +1,6 @@
 import $ from "jquery";
 import ComponentAbstract from "./component-abstract"
+import Autocomplete from "../autocomplate/autocomplete";
 
 export default class ComponentAboutMe extends ComponentAbstract {
   /**
@@ -22,6 +23,15 @@ export default class ComponentAboutMe extends ComponentAbstract {
         action: 'submit',
         elements: 'form#about-me',
         callback: this.submitForm.bind(this)
+      },
+      {
+        action: 'load-about-me-form',
+        elements: document,
+        callback: () => {
+          const $input = $('.js-auto-complete')
+
+          new Autocomplete($input, 'location')
+        }
       }
     )
 

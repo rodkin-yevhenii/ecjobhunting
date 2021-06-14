@@ -29,7 +29,13 @@ if (!$candidate) {
         <label class="field-label" for="location">
             <?php _e('Location', 'ecjobhunting'); ?>
         </label>
-        <input class="field-text" type="text" id="location" value="<?php echo $candidate->getLocation(); ?>">
+        <input
+            class="field-text js-auto-complete"
+            type="text"
+            id="location"
+            value="<?php echo $candidate->getLocation(); ?>"
+            autocomplete="off"
+        >
 
         <label class="field-label" for="zip">
             <?php _e('ZIP / Postal Code', 'ecjobhunting'); ?>
