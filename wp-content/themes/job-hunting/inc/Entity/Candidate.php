@@ -27,8 +27,12 @@ class Candidate extends UserAbstract
     private array $achievements;
     private array $associations;
     private string $summary;
-    private string $salaryExpectation = '0';
+    private int $salaryExpectation = 0;
+    private string $yearsOfExperience = '';
+    private string $highestDegreeEarned = '';
+    private string $veteranStatus = '';
     private array $skills;
+    private string $category = '';
 
     public function __construct($user)
     {
@@ -307,14 +311,50 @@ class Candidate extends UserAbstract
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getSalaryExpectation(): string
+    public function getSalaryExpectation(): int
     {
         if (empty($this->salaryExpectation)) {
-            $this->salaryExpectation = $this->fields['salary'] ?? '';
+            $this->salaryExpectation = (int)($this->fields['salary'] ?? 0);
         }
         return $this->salaryExpectation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getYearsOfExperience(): string
+    {
+        if (empty($this->yearsOfExperience)) {
+            $this->yearsOfExperience = $this->fields['years_of_experience'] ?? '';
+        }
+
+        return $this->yearsOfExperience;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHighestDegreeEarned(): string
+    {
+        if (empty($this->highestDegreeEarned)) {
+            $this->highestDegreeEarned = $this->fields['degree_earned'] ?? '';
+        }
+
+        return $this->highestDegreeEarned;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVeteranStatus(): string
+    {
+        if (empty($this->veteranStatus)) {
+            $this->veteranStatus = $this->fields['veteran_status'] ?? '';
+        }
+
+        return $this->veteranStatus;
     }
 
     /**
@@ -333,5 +373,23 @@ class Candidate extends UserAbstract
         }
 
         return $this->skills;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategory(): string
+    {
+        if (empty($this->category)) {
+            $terms = wp_get_post_terms($this->cvId, 'job-category', ['fields' => 'names']);
+
+            if (is_wp_error($terms) || empty($terms)) {
+                return '';
+            }
+
+            $this->category = $terms[0];
+        }
+
+        return $this->category;
     }
 }
