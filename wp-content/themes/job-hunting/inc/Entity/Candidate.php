@@ -33,6 +33,7 @@ class Candidate extends UserAbstract
     private string $veteranStatus = '';
     private array $skills;
     private string $category = '';
+    private string $resumeFile = '';
 
     public function __construct($user)
     {
@@ -391,5 +392,17 @@ class Candidate extends UserAbstract
         }
 
         return $this->category;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResumeFile(): string
+    {
+        if (empty($this->resumeFile)) {
+            $this->resumeFile = $this->fields['resume_file'] ?? '';
+        }
+
+        return $this->resumeFile;
     }
 }
