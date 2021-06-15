@@ -5,6 +5,8 @@ namespace EcJobHunting;
 use EcJobHunting\Admin\AdminInit;
 use EcJobHunting\Admin\Registry\UserRoles;
 use EcJobHunting\Front\FrontInit;
+use EcJobHunting\Service\Ajax\Ajax;
+use EcJobHunting\Service\Cv\CvService;
 use EcJobHunting\Service\Job\JobService;
 use EcJobHunting\Service\User\Login;
 use EcJobHunting\Service\User\Registration;
@@ -24,6 +26,7 @@ final class ThemeInit
         $this->afterThemeSetup();
         $this->registerUserRoles();
         $this->registerUserServices();
+        $this->registerAjaxCallbacks();
         add_action('rest_api_init', [$this, 'registerRestApiField']);
     }
 
@@ -48,6 +51,7 @@ final class ThemeInit
         add_action('init', new Login());
         add_action('init', new Registration());
         add_action('init', new RetrievePassword());
+        add_action('init', new CvService());
     }
 
     private function registerWidgets()
@@ -70,6 +74,11 @@ final class ThemeInit
     private function registerUserServices()
     {
         add_action('init', new UserService());
+    }
+
+    private function registerAjaxCallbacks(): void
+    {
+        new Ajax();
     }
 
     public function createBasicPages()

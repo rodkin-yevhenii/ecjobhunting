@@ -215,10 +215,14 @@
       margin: 0;
     }
 
-    .custom-handler {
+    .custom-handler, .profile-activation__spinner {
       position: absolute;
       right: 0;
       top: 30px;
+    }
+
+    .profile-activation__spinner {
+        right: 35px;
     }
 
     & + .profile-header {
@@ -263,7 +267,7 @@
       color: $color-grey;
     }
 
-    button.btn {
+    &__buttons {
       position: absolute;
       right: 0;
       top: 5px;
@@ -285,9 +289,13 @@
       margin: 25px 15px 30px;
       padding: 30px 45px;
 
-      .custom-handler {
+      .custom-handler, .profile-activation__spinner {
         top: 35px;
         right: 45px;
+      }
+
+      .profile-activation__spinner {
+        right: 85px;
       }
 
       h3 {

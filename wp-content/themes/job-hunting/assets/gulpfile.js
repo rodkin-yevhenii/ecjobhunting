@@ -13,7 +13,8 @@ const gulp = require('gulp'),
   sourcemaps = require('gulp-sourcemaps'),
   gulpif = require('gulp-if'),
   argv = require('yargs').argv,
-  cleanCSS = require('gulp-clean-css')
+  cleanCSS = require('gulp-clean-css'),
+  webpackStream = require('webpack-stream');
 
 gulp.task('markup', function () {
   return gulp.src('src/pug/pages/*.pug')
@@ -59,11 +60,41 @@ gulp.task('scripts', function (done) {
       'src/js/ajax.js',
       'src/js/api.js',
       'src/js/vacancies.js',
+      'src/js/cv.js',
     ]
   }
   Object.keys(scripts).forEach(name => {
     gulp.src(scripts[name])
-      .pipe(babel())
+      // .pipe(babel())
+      .pipe(webpackStream({
+        output: {
+          filename: '[name].js',
+        },
+        entry: {
+          general: './src/js/general.js',
+          ajax: './src/js/ajax.js',
+          api: './src/js/api.js',
+          vacancies: './src/js/vacancies.js',
+          cv: './src/js/cv.js',
+        },
+        module: {
+          rules: [
+            {
+              test: /\.(js)$/,
+              exclude: /(node_modules)/,
+              loader: 'babel-loader',
+              query: {
+                presets: ['@babel/preset-env'],
+                plugins: ["@babel/plugin-proposal-class-properties"]
+              }
+            }
+          ]
+        },
+        externals: {
+          jquery: 'jQuery'
+        },
+        mode: 'development'
+      }))
       .pipe(gulpif(argv.prod, uglify()))
       .pipe(gulp.dest(`public/js/${name}`))
       .pipe(gulpif(argv.dev, browsersync.reload({
@@ -81,6 +112,8 @@ gulp.task('libs', function (done) {
       'node_modules/bootstrap/dist/js/bootstrap.min.js',
       'node_modules/scroll-lock/dist/scroll-lock.min.js',
       'node_modules/slick-carousel/slick/slick.min.js',
+      'node_modules/imask/dist/imask.js',
+      'node_modules/bootstrap-autocomplete/dist/latest/bootstrap-autocomplete.min.js',
       'node_modules/nouislider/distribute/nouislider.min.js'
     ]
   }
