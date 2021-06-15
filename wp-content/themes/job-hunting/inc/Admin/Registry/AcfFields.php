@@ -986,7 +986,7 @@ class AcfFields
                             'class' => '',
                             'id' => '',
                         ),
-                        'return_format' => 'url',
+                        'return_format' => 'array',
                         'library' => 'all',
                         'min_size' => '',
                         'max_size' => '',

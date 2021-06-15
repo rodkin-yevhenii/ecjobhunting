@@ -11,6 +11,7 @@ use EcJobHunting\Service\Cv\Ajax\AjaxFormEducation;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormExecutiveSummary;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormMoreInformation;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormObjective;
+use EcJobHunting\Service\Cv\Ajax\AjaxFormResume;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormSkills;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWebsites;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWorkExperience;
@@ -54,6 +55,7 @@ class CvService
         new AjaxFormAssociations();
         new AjaxFormSkills();
         new AjaxFormMoreInformation();
+        new AjaxFormResume();
     }
 
     /**
@@ -126,6 +128,10 @@ class CvService
         }
 
         if ($candidate->getExperience()) {
+            $progress += $part;
+        }
+
+        if (!empty($candidate->getResumeFile())) {
             $progress += $part;
         }
 

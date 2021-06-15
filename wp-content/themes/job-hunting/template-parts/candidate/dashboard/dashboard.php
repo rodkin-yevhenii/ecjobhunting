@@ -107,6 +107,17 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 </div>
                 <?php
             endif;
+
+            if ($isOwner || !empty($candidate->getResumeFile())) : ?>
+                <div id="resume-holder" class="profile-item">
+                    <?php get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'resume',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    ); ?>
+                </div>
+                <?php
+            endif;
             ?>
             <div
                 id="skills-holder"
@@ -237,7 +248,8 @@ $isOwner = $currentUserId === $candidate->getUserId();
                         <span>Add Work Experience</span>
                     </li>
                     <li>
-                        <div class="icon-check"></div>
+                        <div class="icon-check <?php
+                        echo !empty($candidate->getResumeFile()) ? 'active' : ''; ?>"></div>
                         <span>Add Resume</span>
                     </li>
                 </ul>
