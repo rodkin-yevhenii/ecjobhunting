@@ -63,7 +63,7 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 class="profile-item <?php echo empty($candidate->getSummary()) ? 'd-none' : ''; ?>"
             >
                 <?php
-                if (!empty($candidate->getObjective())) :
+                if (!empty($candidate->getSummary())) :
                     get_template_part(
                         'template-parts/candidate/dashboard/blocs/block',
                         'executive-summary',
@@ -196,13 +196,12 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 <?php
             endif;
             ?>
-            <div class="profile-item">
-                <h2 class="no-decor">More Information</h2>
-                <p><a href="#">Add Desired Salary</a></p>
-                <p><a href="#">Add Years of Experience</a></p>
-                <p><a href="#">Add Highest Degree Earned</a></p>
-                <p><a href="#">Add Industry</a></p>
-                <p><a href="#">Add Veteran Status</a></p>
+            <div id="more-information-holder" class="profile-item" >
+                <?php get_template_part(
+                    'template-parts/candidate/dashboard/blocs/block',
+                    'more-information',
+                    ['candidate' => $candidate, 'isOwner' => $isOwner]
+                ); ?>
             </div>
         </div>
         <div class="col-12 order-1 col-md-5 float-md-left col-xl-3 order-xl-2">
