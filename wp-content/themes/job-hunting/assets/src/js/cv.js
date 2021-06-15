@@ -10,6 +10,7 @@ import ComponentObjective from "./components/cv/component-objective";
 import ComponentAchievements from "./components/cv/component-achievements";
 import ComponentAssociations from "./components/cv/component-associations";
 import ComponentSkills from "./components/cv/component-skills";
+import ComponentProfileActivation from "./components/cv/component-profile-activation";
 
 $(() => {
   const { siteSettings } = window
@@ -27,6 +28,7 @@ $(() => {
   new ComponentAchievements(cvId, candidateId, siteSettings.nonce)
   new ComponentAssociations(cvId, candidateId, siteSettings.nonce)
   new ComponentSkills(cvId, candidateId, siteSettings.nonce)
+  new ComponentProfileActivation(cvId, candidateId, siteSettings.nonce)
 })
 
 class CvController {

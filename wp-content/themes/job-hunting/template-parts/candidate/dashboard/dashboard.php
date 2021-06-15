@@ -49,23 +49,15 @@ $isOwner = $currentUserId === $candidate->getUserId();
             </div>
         </div>
         <div class="col-12 order-2 col-md-7 float-md-right col-xl-6 order-xl-1 mb-5">
-            <?php
-            if ($error) :
-                $classes = 'alert-danger';
-            else :
-                $classes = 'd-none';
-            endif;
-            ?>
-            <div id="profile-notification" class="text-center p-2 mt-4 <?php echo $classes; ?>">
-                <?php echo $error; ?>
-            </div>
-            <div class="profile-activation">
-                <?php get_template_part(
-                    'template-parts/candidate/dashboard/blocs/block',
-                    'activation',
-                    ['candidate' => $candidate, 'isOwner' => $isOwner]
-                ); ?>
-            </div>
+            <?php if ($isOwner) : ?>
+                <div class="profile-activation">
+                    <?php get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'activation',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    ); ?>
+                </div>
+            <?php endif; ?>
             <div
                 id="executive-summary-holder"
                 class="profile-item <?php echo empty($candidate->getSummary()) ? 'd-none' : ''; ?>"
