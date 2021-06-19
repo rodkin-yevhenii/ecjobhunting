@@ -34,6 +34,8 @@ class Candidate extends UserAbstract
     private array $skills;
     private string $category = '';
     private array $resumeFile;
+    private array $references;
+    private array $certificates;
 
     public function __construct($user)
     {
@@ -400,9 +402,33 @@ class Candidate extends UserAbstract
     public function getResumeFile(): array
     {
         if (empty($this->resumeFile)) {
-            $this->resumeFile = $this->fields['resume_file'] ?? [];
+            $this->resumeFile = empty($this->fields['resume_file']) ? [] : $this->fields['resume_file'];
         }
 
         return $this->resumeFile;
+    }
+
+    /**
+     * @return array
+     */
+    public function getReferences(): array
+    {
+        if (empty($this->references)) {
+            $this->references = empty($this->fields['references']) ? [] : $this->fields['references'];
+        }
+
+        return $this->references;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCertificates(): array
+    {
+        if (empty($this->certificates)) {
+            $this->certificates = empty($this->fields['certificates']) ? [] : $this->fields['certificates'];
+        }
+
+        return $this->certificates;
     }
 }

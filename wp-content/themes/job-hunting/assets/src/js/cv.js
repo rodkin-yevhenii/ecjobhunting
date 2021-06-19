@@ -13,6 +13,8 @@ import ComponentSkills from "./components/cv/component-skills";
 import ComponentProfileActivation from "./components/cv/component-profile-activation";
 import ComponentMoreInformation from "./components/cv/component-more-information";
 import ComponentResume from "./components/cv/component-resume";
+import ComponentReferences from "./components/cv/component-references";
+import ComponentCertificates from "./components/cv/component-certificates";
 
 $(() => {
   const { siteSettings } = window
@@ -33,6 +35,8 @@ $(() => {
   new ComponentProfileActivation(cvId, candidateId, siteSettings.nonce)
   new ComponentMoreInformation(cvId, candidateId, siteSettings.nonce)
   new ComponentResume(cvId, candidateId, siteSettings.nonce)
+  new ComponentReferences(cvId, candidateId, siteSettings.nonce)
+  new ComponentCertificates(cvId, candidateId, siteSettings.nonce)
 })
 
 class CvController {

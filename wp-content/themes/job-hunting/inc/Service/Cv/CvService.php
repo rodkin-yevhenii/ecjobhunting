@@ -6,11 +6,13 @@ use EcJobHunting\Service\Cv\Ajax\AjaxFormAboutMe;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormAchievements;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormActivation;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormAssociations;
+use EcJobHunting\Service\Cv\Ajax\AjaxFormCertificates;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormContacts;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormEducation;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormExecutiveSummary;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormMoreInformation;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormObjective;
+use EcJobHunting\Service\Cv\Ajax\AjaxFormReferences;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormResume;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormSkills;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWebsites;
@@ -56,6 +58,8 @@ class CvService
         new AjaxFormSkills();
         new AjaxFormMoreInformation();
         new AjaxFormResume();
+        new AjaxFormReferences();
+        new AjaxFormCertificates();
     }
 
     /**

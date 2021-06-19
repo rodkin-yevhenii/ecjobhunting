@@ -279,6 +279,26 @@
 
   }
 
+  &-documents-upload {
+    input[type=file] {
+      display: none;
+    }
+
+    label {
+      color:#71af06;;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    labe {
+      color:#71af06;;
+      cursor: pointer;
+    }
+  }
+
   @include more-768 {
 
     &-item {

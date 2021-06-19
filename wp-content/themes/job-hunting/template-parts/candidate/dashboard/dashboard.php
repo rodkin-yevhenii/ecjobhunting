@@ -118,6 +118,17 @@ $isOwner = $currentUserId === $candidate->getUserId();
                 </div>
                 <?php
             endif;
+
+            if ($isOwner || !empty($candidate->getReferences())) : ?>
+                <div id="references-holder" class="profile-item">
+                    <?php get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'references',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    ); ?>
+                </div>
+                <?php
+            endif;
             ?>
             <div
                 id="skills-holder"
@@ -141,6 +152,17 @@ $isOwner = $currentUserId === $candidate->getUserId();
                     ); ?>
                 </div>
             <?php endif;
+
+            if ($isOwner || !empty($candidate->getCertificates())) : ?>
+                <div id="certificates-holder" class="profile-item">
+                    <?php get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'certificates',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    ); ?>
+                </div>
+                <?php
+            endif;
 
             if ($isOwner || !empty($candidate->getAssociations())) : ?>
                 <div id="associations-holder" class="profile-item">

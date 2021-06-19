@@ -470,6 +470,27 @@ input[type="radio"] {
     text-decoration: none;
   }
 
+  &.btn-delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $color-white;
+    background-color: #b3b3b3;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+
+    &:hover,
+    &:focus {
+      background-color: #e60909;
+      transition: all .5s ease-out;
+    }
+
+    &--circle {
+      border-radius: 50%;
+    }
+  }
+
   &.btn-outline-primary {
     color: $color-primary;
     border-color: $color-primary;
