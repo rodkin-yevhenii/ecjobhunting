@@ -2,7 +2,7 @@ import $ from 'jquery'
 
 export default class Alert {
   constructor(id) {
-    this.alert = $(id)
+    this.alert = id
     this.allowedTypes = [
       'alert-primary',
       'alert-secondary',
@@ -12,16 +12,12 @@ export default class Alert {
       'alert-info'
     ]
 
-    if (!this.alert.length) {
-      return null
-    }
-
     this.registerActions()
   }
 
   registerActions() {
-    this.alert.on('click', '.close', function () {
-        this.alert.hide()
+    $(this.alert).on('click', '.close', function () {
+        $(this.alert).hide()
       }.bind(this)
     )
   }
@@ -60,10 +56,12 @@ export default class Alert {
    * @param type      Alert type: primary, secondary, success, danger, warning, info.
    */
   customAlert(message, type) {
+    const alert = $(this.alert)
+    console.log(this.alert)
     this.restore()
-    this.alert.find('.content').text(message)
+    alert.find('.content').text(message)
     this.setAlertType(type)
-    this.alert.show()
+    alert.show()
   }
 
   /**
@@ -73,13 +71,13 @@ export default class Alert {
    */
   setAlertType(type) {
     if (!this.allowedTypes.includes(type)) {
-      this.alert.addClass('alert-secondary')
+      $(this.alert).addClass('alert-secondary')
     }
 
-    this.alert.addClass('alert-' + type)
+    $(this.alert).addClass('alert-' + type)
   }
 
   restore () {
-    this.allowedTypes.forEach(item => this.alert.removeClass(item))
+    this.allowedTypes.forEach(item => $(this.alert).removeClass(item))
   }
 }
