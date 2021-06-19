@@ -15,7 +15,14 @@ export default class ComponentProfileActivation {
     this.candidateId = candidateId
     this.nonce = nonce
 
-    $('#profile-activation-switcher').on('click', this.profileActivationToggle.bind(this))
+    const $switcher = $('#profile-activation-switcher')
+
+    $switcher.on('click', this.profileActivationToggle.bind(this))
+    $(document).on('profile_drafted', () => {
+      $switcher.removeClass('active')
+      $('.profile-activation__text').text('Private: Your profile is not publicly accessible. However, it is viewable as' +
+        'a part of your applications.')
+    })
   }
 
   profileActivationToggle () {
@@ -52,8 +59,10 @@ export default class ComponentProfileActivation {
 
           if (response.data.status === 'publish') {
             $switcher.addClass('active')
+            $(document).trigger('profile_published')
           } else {
             $switcher.removeClass('active');
+            $(document).trigger('profile_drafted')
           }
         }
       )

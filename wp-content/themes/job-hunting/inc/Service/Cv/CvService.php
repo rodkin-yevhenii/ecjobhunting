@@ -17,6 +17,7 @@ use EcJobHunting\Service\Cv\Ajax\AjaxFormResume;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormSkills;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWebsites;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormWorkExperience;
+use EcJobHunting\Service\Cv\Ajax\AjaxGotHired;
 use EcJobHunting\Service\User\UserService;
 use Exception;
 
@@ -60,6 +61,7 @@ class CvService
         new AjaxFormResume();
         new AjaxFormReferences();
         new AjaxFormCertificates();
+        new AjaxGotHired();
     }
 
     /**

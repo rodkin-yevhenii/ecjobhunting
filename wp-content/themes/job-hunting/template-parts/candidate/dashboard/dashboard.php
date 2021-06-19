@@ -275,7 +275,14 @@ $isOwner = $currentUserId === $candidate->getUserId();
                         <span>Add Resume</span>
                     </li>
                 </ul>
-                <a class="btn btn-primary btn-full mt-4" href="#">I got hired!</a>
+                <a
+                    id="got_hired_btn"
+                    class="btn btn-primary btn-full mt-4 <?php echo $candidate->isPublished() ? : 'd-none'; ?>"
+                    href="#"
+                    disabled="true"
+                >
+                    I got hired!
+                </a>
             </div>
         </div>
     </div>

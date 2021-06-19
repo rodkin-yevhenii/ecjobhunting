@@ -15,6 +15,7 @@ import ComponentMoreInformation from "./components/cv/component-more-information
 import ComponentResume from "./components/cv/component-resume";
 import ComponentReferences from "./components/cv/component-references";
 import ComponentCertificates from "./components/cv/component-certificates";
+import ComponentGotHired from "./components/cv/component-got-hired";
 
 $(() => {
   const { siteSettings } = window
@@ -37,6 +38,7 @@ $(() => {
   new ComponentResume(cvId, candidateId, siteSettings.nonce)
   new ComponentReferences(cvId, candidateId, siteSettings.nonce)
   new ComponentCertificates(cvId, candidateId, siteSettings.nonce)
+  new ComponentGotHired(cvId, siteSettings.nonce)
 })
 
 class CvController {
