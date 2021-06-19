@@ -16,7 +16,7 @@ if (!$candidate) {
         ['heading' => __('Objective', 'ecjobhunting')]
     ); ?>
     <div class="modal-body">
-        <textarea id="objective-text" class="field-textarea"><?php echo $candidate->getObjective(); ?></textarea>
+        <textarea id="text" class="field-textarea"><?php echo $candidate->getObjective(); ?></textarea>
     </div>
     <?php get_template_part('template-parts/candidate/dashboard/modal-forms/form-footer'); ?>
 </form>

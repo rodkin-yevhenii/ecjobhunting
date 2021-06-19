@@ -1,14 +1,8 @@
+import ComponentAbstract from "./component-abstract";
 import $ from "jquery";
-import ComponentHiddenAbstract from "./component-hidden-abstract";
-import Alert from "../alert";
 
-export default class ComponentObjective extends ComponentHiddenAbstract {
-  formId = 'objective'
-  addLinkId = 'add_objective'
-  addLinkHolderId = 'add_objective'
-  editLink = '.js-edit-objective'
-  removeLink = '.js-remove-objective'
-  holderId = `${this.formId}-holder`
+export default class ComponentObjective extends ComponentAbstract {
+  id = 'objective'
 
   /**
    * ComponentEducation constructor.
@@ -20,8 +14,19 @@ export default class ComponentObjective extends ComponentHiddenAbstract {
   constructor(cvId, candidateId, nonce ) {
     super(cvId, candidateId, nonce)
 
-    this.initActions()
-    this.initAjaxAction()
+    this.init()
     this.registerActions()
+  }
+
+  /**
+   * Get prepared data object for save form ajax request.
+   *
+   * @returns {{}}    Data object for save form ajax request
+   */
+  getSaveFormAjaxData () {
+    const data = super.getSaveFormAjaxData()
+    data.content = $('#text').val()
+
+    return data
   }
 }

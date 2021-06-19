@@ -3,6 +3,8 @@ import ComponentAbstract from "./component-abstract"
 import Autocomplete from "../autocomplate/autocomplete";
 
 export default class ComponentAboutMe extends ComponentAbstract {
+  id = 'about-me'
+
   /**
    * ComponentEducation constructor.
    *
@@ -13,19 +15,10 @@ export default class ComponentAboutMe extends ComponentAbstract {
   constructor(cvId, candidateId, nonce) {
     super(cvId, candidateId, nonce)
 
+    this.init()
     this.actions.push(
       {
-        action: 'click',
-        elements: '.js-edit-about-me',
-        callback: this.showForm.bind(this)
-      },
-      {
-        action: 'submit',
-        elements: 'form#about-me',
-        callback: this.submitForm.bind(this)
-      },
-      {
-        action: 'load-about-me-form',
+        action: `load-${this.id}-form`,
         elements: document,
         callback: () => {
           const $input = $('.js-auto-complete')
@@ -35,21 +28,7 @@ export default class ComponentAboutMe extends ComponentAbstract {
       }
     )
 
-    super.registerActions()
-  }
-
-  /**
-   * Get prepared data object for show form ajax request.
-   *
-   * @param $btn    Edit button (jQuery object).
-   * @returns {{}}  Data object for show form ajax request.
-   */
-  getShowFormAjaxData($btn) {
-    return {
-      nonce: this.nonce,
-      action: 'load_about_me_form',
-      formId: 'about-me'
-    }
+    this.registerActions()
   }
 
   /**
@@ -58,17 +37,14 @@ export default class ComponentAboutMe extends ComponentAbstract {
    * @returns {{}}    Data object for save form ajax request
    */
   getSaveFormAjaxData () {
-    return {
-      action: 'save_about_me_form',
-      nonce: this.nonce,
-      cvId: this.cvId,
-      user: this.candidateId,
-      holderId: 'about-me-holder',
-      fullName: $('#name').val(),
-      headline: $('#headline').val(),
-      location: $('#location').val(),
-      zip: $('#zip').val(),
-      isReadyToRelocate: $('#is-ready-to-relocate').is(':checked'),
-    }
+    const data = super.getSaveFormAjaxData()
+
+    data.fullName = $('#name').val()
+    data.headline = $('#headline').val()
+    data.location = $('#location').val()
+    data.zip = $('#zip').val()
+    data.isReadyToRelocate = $('#is-ready-to-relocate').val()
+
+    return data
   }
 }

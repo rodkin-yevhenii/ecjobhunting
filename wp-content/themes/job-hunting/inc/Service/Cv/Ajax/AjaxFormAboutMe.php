@@ -17,11 +17,11 @@ class AjaxFormAboutMe extends AjaxFormAbstract
      */
     protected function registerHooks(): void
     {
-        add_action('wp_ajax_save_about_me_form', [$this, 'saveCallback']);
-        add_action('wp_ajax_nopriv_save_about_me_form', [$this, 'getCallback']);
+        add_action('wp_ajax_save_about-me_form', [$this, 'saveCallback']);
+        add_action('wp_ajax_nopriv_save_about-me_form', [$this, 'getCallback']);
 
-        add_action('wp_ajax_load_about_me_form', [$this, 'getCallback']);
-        add_action('wp_ajax_nopriv_load_about_me_form', [$this, 'getCallback']);
+        add_action('wp_ajax_load_about-me_form', [$this, 'getCallback']);
+        add_action('wp_ajax_nopriv_load_about-me_form', [$this, 'getCallback']);
     }
 
     /**

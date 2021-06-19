@@ -1,9 +1,10 @@
 import $ from "jquery";
 import ComponentAbstract from "./component-abstract"
 import AjaxRequest from "../ajax/ajax-request";
-import NotificationPopup from "../notification-popup";
 
 export default class ComponentContacts extends ComponentAbstract {
+  id = 'contacts'
+
   /**
    * ComponentEducation constructor.
    *
@@ -14,17 +15,8 @@ export default class ComponentContacts extends ComponentAbstract {
   constructor(cvId, candidateId, nonce) {
     super(cvId, candidateId, nonce)
 
+    this.init()
     this.actions.push(
-      {
-        action: 'click',
-        elements: '.js-edit-contacts',
-        callback: this.showForm.bind(this)
-      },
-      {
-        action: 'submit',
-        elements: 'form#contacts',
-        callback: this.submitForm.bind(this)
-      },
       {
         action: 'click',
         elements: '.js-resend-email-confirmation',
@@ -32,21 +24,7 @@ export default class ComponentContacts extends ComponentAbstract {
       }
     )
 
-    super.registerActions()
-  }
-
-  /**
-   * Get prepared data object for show form ajax request.
-   *
-   * @param $btn    Edit button (jQuery object).
-   * @returns {{}}  Data object for show form ajax request.
-   */
-  getShowFormAjaxData($btn) {
-    return {
-      nonce: this.nonce,
-      action: 'load_contacts_form',
-      formId: 'contacts'
-    }
+    this.registerActions()
   }
 
   /**
@@ -55,35 +33,34 @@ export default class ComponentContacts extends ComponentAbstract {
    * @returns {{}}    Data object for save form ajax request
    */
   getSaveFormAjaxData () {
-    return {
-      action: 'save_contacts_form',
-      nonce: this.nonce,
-      cvId: this.cvId,
-      user: this.candidateId,
-      holderId: 'contacts-holder',
-      phone: $('#phone').val(),
-      new_email: $('#public_email').val(),
-    }
+    const data = super.getSaveFormAjaxData()
+
+    data.phone = $('#phone').val()
+    data.new_email = $('#public_email').val()
+
+    return data
   }
 
+  /**
+   * Send email with confirmation link
+   */
   sendEmailConfirmation () {
     const data = {
       action: 'send_email_confirmation',
       nonce: this.nonce
     }
     const ajax = new AjaxRequest(data)
-    const notification = new NotificationPopup()
 
     ajax
       .send()
       .done(response => {
         if (200 !== parseInt(response.status)) {
-          notification.error(response.message)
+          this.notification.error(response.message)
 
           return
         }
 
-        notification.success(response.message)
+        this.notification.success(response.message)
         $('.js-verification-text')
           .remove()
 
@@ -91,7 +68,7 @@ export default class ComponentContacts extends ComponentAbstract {
           .remove()
       })
       .fail(error => {
-        notification.error(error.statusText)
+        this.notification.error(error.statusText)
       })
   }
 

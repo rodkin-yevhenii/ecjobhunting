@@ -1,12 +1,8 @@
-import ComponentHiddenAbstract from "./component-hidden-abstract";
+import ComponentAbstract from "./component-abstract";
+import $ from "jquery";
 
-export default class ComponentExecutiveSummary extends ComponentHiddenAbstract {
-  formId = 'executive-summary'
-  addLinkId = 'add_executive-summary'
-  addLinkHolderId = 'add_executive-summary'
-  editLink = '.js-edit-executive-summary'
-  removeLink = '.js-remove-executive-summary'
-  holderId = `${this.formId}-holder`
+export default class ComponentExecutiveSummary extends ComponentAbstract {
+  id = 'executive-summary'
 
   /**
    * ComponentEducation constructor.
@@ -18,8 +14,19 @@ export default class ComponentExecutiveSummary extends ComponentHiddenAbstract {
   constructor(cvId, candidateId, nonce ) {
     super(cvId, candidateId, nonce)
 
-    this.initActions()
-    this.initAjaxAction()
+    this.init()
     this.registerActions()
+  }
+
+  /**
+   * Get prepared data object for save form ajax request.
+   *
+   * @returns {{}}    Data object for save form ajax request
+   */
+  getSaveFormAjaxData () {
+    const data = super.getSaveFormAjaxData()
+    data.content = $('#text').val()
+
+    return data
   }
 }

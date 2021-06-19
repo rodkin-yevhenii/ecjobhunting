@@ -14,8 +14,22 @@ if (!$candidate) {
 ?>
 <div class="profile-header">
     <h2 class="no-decor"><?php _e('Objective', 'ecjobhunting'); ?></h2>
-    <p><?php echo nl2br($candidate->getObjective()); ?></p>
-    <?php if ($isOwner) : ?>
+    <?php if (! empty($candidate->getObjective())) : ?>
+        <p><?php echo nl2br($candidate->getObjective()); ?></p>
+    <?php else : ?>
+        <p>
+            <a
+                href="#"
+                class="js-edit-objective"
+                data-toggle="modal"
+                data-target="#edit"
+            >
+                <?php _e('Add Objective', 'ecjobhunting'); ?>
+            </a>
+        </p>
+    <?php endif;
+
+    if ($isOwner && ! empty($candidate->getObjective())) : ?>
         <button
             class="btn btn-outline-secondary js-edit-objective"
             type="button"
@@ -23,12 +37,6 @@ if (!$candidate) {
             data-target="#edit"
         >
             <?php _e('Edit', 'ecjobhunting'); ?>
-        </button>
-        <button
-            class="btn btn-outline-secondary js-remove-objective"
-            type="button"
-        >
-            <?php _e('Delete', 'ecjobhunting'); ?>
         </button>
     <?php endif; ?>
 </div>

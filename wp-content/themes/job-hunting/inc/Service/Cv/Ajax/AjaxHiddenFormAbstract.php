@@ -49,13 +49,6 @@ class AjaxHiddenFormAbstract extends AjaxFormAbstract
                 ->send();
         }
 
-        if (empty($_POST['content'])) {
-            $this->response
-                ->setStatus(204)
-                ->setMessage(__('The field is required', 'ecjobhunting'))
-                ->send();
-        }
-
         $cvId = (int)$_POST['cvId'];
         update_field($this->fieldName, $_POST['content'] ?? '', $cvId);
         $candidate = UserService::getUser(get_current_user_id());

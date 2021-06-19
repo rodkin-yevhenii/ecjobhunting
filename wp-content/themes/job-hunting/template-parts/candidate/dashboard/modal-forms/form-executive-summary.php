@@ -16,7 +16,7 @@ if (!$candidate) {
         ['heading' => __('Executive Summary', 'ecjobhunting')]
     ); ?>
     <div class="modal-body">
-        <textarea id="objective-text" class="field-textarea"><?php echo $candidate->getSummary(); ?></textarea>
+        <textarea id="text" class="field-textarea"><?php echo $candidate->getSummary(); ?></textarea>
     </div>
     <?php get_template_part('template-parts/candidate/dashboard/modal-forms/form-footer'); ?>
 </form>

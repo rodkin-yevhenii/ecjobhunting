@@ -4,6 +4,8 @@ import Alert from "../alert";
 import NotificationPopup from "../notification-popup";
 
 export default class ComponentAbstract {
+  id = ''
+  actions = []
 
   /**
    * ComponentSimpleAbstract constructor
@@ -16,8 +18,26 @@ export default class ComponentAbstract {
     this.cvId = cvId
     this.candidateId = candidateId
     this.nonce = nonce
-    this.actions = []
+  }
+
+  /**
+   * Initialize notification elements
+   */
+  init () {
     this.notification = new NotificationPopup()
+    this.alert = new Alert('#form-error')
+    this.actions = [
+      {
+        action: 'click',
+        elements: `.js-edit-${this.id}`,
+        callback: this.showForm.bind(this)
+      },
+      {
+        action: 'submit',
+        elements: `form#${this.id}`,
+        callback: this.submitForm.bind(this)
+      }
+    ]
   }
 
   /**
@@ -83,24 +103,25 @@ export default class ComponentAbstract {
 
     const data = this.getSaveFormAjaxData()
     const ajax = new AjaxRequest(data)
-    const alert = new Alert('#form-error')
 
     ajax.send()
       .done(
         response => {
           if (response.status !== 200) {
-            alert.error(response.message)
+            this.alert.error(response.message)
             return
           }
 
           $(`#${data.holderId}`).html(response.html)
           $('#edit').modal('hide')
           this.notification.success(response.message)
+          $(document).trigger(`updated-${this.id}-block`)
+          console.log(`Run "updated-${this.id}-block" action`)
         }
       )
       .fail(
         () => {
-          alert.error('Updating failed')
+          this.alert.error('Updating failed')
         }
       )
   }
@@ -112,7 +133,11 @@ export default class ComponentAbstract {
    * @returns {{}}  Data object for show form ajax request.
    */
   getShowFormAjaxData ($btn) {
-    return {}
+    return {
+      nonce: this.nonce,
+      action: `load_${this.id}_form`,
+      formId: this.id
+    }
   }
 
   /**
@@ -121,6 +146,13 @@ export default class ComponentAbstract {
    * @returns {{}}    Data object for save form ajax request
    */
   getSaveFormAjaxData () {
-    return {}
+    return {
+      nonce: this.nonce,
+      action: `save_${this.id}_form`,
+      cvId: this.cvId,
+      user: this.candidateId,
+      holderId: `${this.id}-holder`,
+      formId: this.id,
+    }
   }
 }

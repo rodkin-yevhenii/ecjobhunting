@@ -49,7 +49,8 @@ $isOwner = $currentUserId === $candidate->getUserId();
             </div>
         </div>
         <div class="col-12 order-2 col-md-7 float-md-right col-xl-6 order-xl-1 mb-5">
-            <?php if ($isOwner) : ?>
+            <?php if ($isOwner) :
+                ?>
                 <div class="profile-activation">
                     <?php get_template_part(
                         'template-parts/candidate/dashboard/blocs/block',
@@ -57,36 +58,37 @@ $isOwner = $currentUserId === $candidate->getUserId();
                         ['candidate' => $candidate, 'isOwner' => $isOwner]
                     ); ?>
                 </div>
-            <?php endif; ?>
-            <div
-                id="executive-summary-holder"
-                class="profile-item <?php echo empty($candidate->getSummary()) ? 'd-none' : ''; ?>"
-            >
                 <?php
-                if (!empty($candidate->getSummary())) :
+            endif;
+
+            if ($isOwner || ! empty($candidate->getSummary())) :
+                ?>
+                <div id="executive-summary-holder" class="profile-item">
+                    <?php
                     get_template_part(
                         'template-parts/candidate/dashboard/blocs/block',
                         'executive-summary',
                         ['candidate' => $candidate, 'isOwner' => $isOwner]
                     );
-                endif;
-                ?>
-            </div>
-            <div
-                id="objective-holder"
-                class="profile-item <?php echo empty($candidate->getObjective()) ? 'd-none' : ''; ?>"
-            >
+                    ?>
+                </div>
                 <?php
-                if (!empty($candidate->getObjective())) :
+            endif;
+
+            if ($isOwner || ! empty($candidate->getObjective())) :
+                ?>
+                <div id="objective-holder" class="profile-item">
+                    <?php
                     get_template_part(
                         'template-parts/candidate/dashboard/blocs/block',
                         'objective',
                         ['candidate' => $candidate, 'isOwner' => $isOwner]
                     );
-                endif;
-                ?>
-            </div>
-            <?php
+                    ?>
+                </div>
+                <?php
+            endif;
+
             if ($isOwner || !empty($candidate->getExperience())) : ?>
                 <div id="work-experience-holder" class="profile-item">
                     <?php get_template_part(
@@ -171,60 +173,6 @@ $isOwner = $currentUserId === $candidate->getUserId();
                         'associations',
                         ['candidate' => $candidate, 'isOwner' => $isOwner]
                     ); ?>
-                </div>
-            <?php endif;
-
-            if (false) :
-                //TODO Discus and add with next release
-                ?>
-                <div class="profile-item">
-                    <div class="profile-header">
-                        <h2 class="no-decor">References</h2>
-                    </div>
-                    <p>Hiring managers prefer candidates with references! Ask a former co-worker, manager, teacher or
-                        friend to write a reference for you.</p>
-                    <button class="btn btn-outline-secondary btn-full">Request References</button>
-                </div>
-            <?php endif;
-
-            if (
-                empty($candidate->getSummary()) ||
-                empty($candidate->getObjective()) ||
-                empty($candidate->getSkills())
-            ) :
-                ?>
-                <div class="profile-item">
-                    <p
-                        id="add_executive-summary"
-                        class="<?php echo !empty($candidate->getSummary()) ? 'd-none' : ''; ?>"
-                    >
-                        <a
-                            href="#"
-                            type="button"
-                            data-toggle="modal"
-                            data-target="#edit"
-                        >
-                            <?php _e('Add Executive Summary', 'ecjobhunting'); ?>
-                        </a>
-                    </p>
-                    <p id="add_objective" class="<?php echo !empty($candidate->getObjective()) ? 'd-none' : ''; ?>">
-                        <a
-                            href="#"
-                            type="button"
-                            data-toggle="modal"
-                            data-target="#edit"
-                        >
-                            <?php _e('Add Objective', 'ecjobhunting'); ?>
-                        </a>
-                    </p>
-                    <?php
-                    if (false) :
-                        //TODO Discus and add with next release
-                        ?>
-                        <p><a href="#">Add Certificates and Licenses</a></p>
-                        <?php
-                    endif;
-                    ?>
                 </div>
                 <?php
             endif;
