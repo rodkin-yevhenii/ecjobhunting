@@ -1,6 +1,7 @@
 import $ from "jquery";
 import AjaxRequest from "../ajax/ajax-request";
 import Alert from "../alert";
+import NotificationPopup from "../notification-popup";
 
 export default class ComponentAbstract {
 
@@ -16,6 +17,7 @@ export default class ComponentAbstract {
     this.candidateId = candidateId
     this.nonce = nonce
     this.actions = []
+    this.notification = new NotificationPopup()
   }
 
   /**
@@ -91,8 +93,9 @@ export default class ComponentAbstract {
             return
           }
 
-          alert.success(response.message)
           $(`#${data.holderId}`).html(response.html)
+          $('#edit').modal('hide')
+          this.notification.success(response.message)
         }
       )
       .fail(

@@ -22,6 +22,7 @@ export default class ComponentResume extends ComponentHiddenAbstract {
   constructor(cvId, candidateId, nonce ) {
     super(cvId, candidateId, nonce)
 
+    this.notification = new NotificationPopup()
     this.initActions()
 
     this.actions.push(
@@ -59,8 +60,9 @@ export default class ComponentResume extends ComponentHiddenAbstract {
           return
         }
 
-        alert.success(response.message)
         $(`#${this.holderId}`).html(response.html)
+        $('#edit').modal('hide')
+        this.notification.success(response.message)
       })
       .fail(() => {
         console.error('Resume loading failed')
@@ -76,7 +78,6 @@ export default class ComponentResume extends ComponentHiddenAbstract {
       cvId: this.cvId
     }
     const ajax = new AjaxRequest(data)
-    const notification = new NotificationPopup()
 
     ajax.send()
       .done(
@@ -86,13 +87,13 @@ export default class ComponentResume extends ComponentHiddenAbstract {
             return
           }
 
-          notification.success(response.message)
+          this.notification.success(response.message)
           $(`#${this.holderId}`).html(response.html)
         }
       )
       .fail(
         () => {
-          notification.error('Updating failed')
+          this.notification.error('Updating failed')
         }
       )
   }

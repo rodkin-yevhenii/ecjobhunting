@@ -77,7 +77,7 @@ export default class ComponentDocumentsAbstract {
           return
         }
 
-        // this.notification.success(response.message)
+        this.notification.success(response.message)
         this.holder.innerHTML = response.html
         isDoingAjax = false
       })
@@ -115,6 +115,7 @@ export default class ComponentDocumentsAbstract {
           return
         }
 
+        this.notification.success(response.message)
         this.holder.innerHTML = response.html
         isDoingAjax = false
       })

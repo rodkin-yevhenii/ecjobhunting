@@ -18,6 +18,7 @@ export default class ComponentRepeaterAbstract {
     this.candidateId = candidateId
     this.nonce = nonce
     this.formId = formId
+    this.notification = new NotificationPopup()
     this.actions = [
       {
         action: 'click',
@@ -165,7 +166,6 @@ export default class ComponentRepeaterAbstract {
       blockId: this.formId,
       rowNumber: $edit.attr('data-row-number')
     }
-    const notificationPopup = new NotificationPopup()
     const ajax = new AjaxRequest(data)
 
     ajax.beforeSend = () => {
@@ -182,11 +182,11 @@ export default class ComponentRepeaterAbstract {
       .done(
         response => {
           if (response.status !== 200) {
-            notificationPopup.error(response.message)
+            this.notification.error(response.message)
             return
           }
 
-          notificationPopup.success(response.message)
+          this.notification.success(response.message)
           $(`#${this.formId}-holder`).html(response.html)
         }
       )
@@ -217,8 +217,9 @@ export default class ComponentRepeaterAbstract {
             return
           }
 
-          alert.success(response.message)
           $(`#${data.holderId}`).html(response.html)
+          $('#edit').modal('hide')
+          this.notification.success(response.message)
         }
       )
       .fail(
