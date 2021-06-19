@@ -723,6 +723,10 @@ form {
     border-radius: $br;
     font-size: 16px;
     line-height: 50px;
+
+    &::placeholder {
+      color: $color-grey-dark;
+    }
   }
 
   &-textarea {

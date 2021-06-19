@@ -37,6 +37,7 @@ if ('edit' === $action) {
                     class="field-text"
                     type="text"
                     id="from"
+                    placeholder="01.01.2021"
                     value="<?php echo !empty($education['period']['from'])
                         ? date('d.m.Y', strtotime($education['period']['from'])) : ''; ?>"
                 />
@@ -49,6 +50,7 @@ if ('edit' === $action) {
                     class="field-text"
                     type="text"
                     id="to"
+                    placeholder="01.01.2021"
                     value="<?php echo $isInProgress ? 'Current' : $to; ?>"
                     <?php echo $isInProgress ? 'disabled' : ''; ?>
                 />
