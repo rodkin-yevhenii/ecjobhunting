@@ -5,7 +5,7 @@
  */
 $candidate = $args['candidate'] ?? null;
 $action = $args['action'] ?? 'add';
-$rowNumber = $args['row-number'] ?? 0;
+$rowNumber = $args['row'] ?? 0;
 
 if ('edit' === $action) {
     $heading = __('Edit education', 'ecjobhunting');
