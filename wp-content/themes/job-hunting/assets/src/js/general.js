@@ -1,5 +1,8 @@
+import Autocomplete from "./components/autocomplate/autocomplete";
+
 $(() => {
   const wrapper = $('.wrapper'),
+    autocomplete = $('.js-auto-complete'),
     body = $('body'),
     headerButtonWrapper = $('.header-button-wrapper'),
     headerAccountWrapper = headerButtonWrapper.length ?
@@ -11,6 +14,13 @@ $(() => {
   setTimeout(function () {
     wrapper.animate({ opacity: 1 }, 500)
   }, 500)
+
+  // Init autocomplete
+  if (autocomplete.length) {
+    for (const item of autocomplete) {
+      new Autocomplete($(item), item.name)
+    }
+  }
 
   pageRepaint()
   $('.candidate-list').slick({
