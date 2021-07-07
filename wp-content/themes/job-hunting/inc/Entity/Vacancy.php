@@ -262,10 +262,9 @@ class Vacancy
      */
     public function getCompensationTo()
     {
-        return VacancyService::getCurrencySymbol($this->currency) . (
-            is_numeric($this->compensationTo)
-                ? number_format($this->compensationTo, 0, '.', ',') : 0.00
-            );
+        return is_numeric($this->compensationTo)
+            ? number_format($this->compensationTo, 0, '.', ',')
+            : 0.00;
     }
 
     /**
@@ -273,10 +272,9 @@ class Vacancy
      */
     public function getCompensationFrom()
     {
-        return VacancyService::getCurrencySymbol($this->currency) . (
-            is_numeric($this->compensationFrom)
-                ? number_format($this->compensationFrom, 0, '.', ',' ) : 0.00
-            );
+        return is_numeric($this->compensationFrom)
+                ? number_format($this->compensationFrom, 0, '.', ',')
+                : 0.00;
     }
 
     /**

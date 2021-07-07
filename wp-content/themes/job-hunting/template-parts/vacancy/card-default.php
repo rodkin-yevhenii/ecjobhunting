@@ -2,10 +2,12 @@
 
 use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Entity\Vacancy;
+use EcJobHunting\Service\Vacancy\VacancyService;
 
 $vacancy = new Vacancy(get_the_ID());
 $user = new Candidate(wp_get_current_user());
 $bookmarks = $user->getJobsBookmarks();
+$currencySymbol = VacancyService::getCurrencySymbol($vacancy->getCurrency());
 
 if(!$vacancy){
     return;
@@ -31,10 +33,10 @@ if (in_array($vacancy->getId(), $bookmarks)) {
     <ul>
         <li class="color-secondary">
             <?php echo sprintf(
-                    __('Pay %1$s to %2$s %3$s', 'ecjobhunting'),
-                    $vacancy->getCompensationFrom(),
-                    $vacancy->getCompensationTo(),
-                    $vacancy->getCompensationPeriodName()
+                __('Pay %1$s to %2$s %3$s', 'ecjobhunting'),
+                $currencySymbol . $vacancy->getCompensationFrom(),
+                $currencySymbol . $vacancy->getCompensationTo(),
+                $vacancy->getCompensationPeriodName()
             ); ?>
         </li>
     </ul>

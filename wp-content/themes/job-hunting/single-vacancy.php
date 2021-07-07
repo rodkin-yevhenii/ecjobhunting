@@ -5,12 +5,14 @@
  */
 
 use EcJobHunting\Entity\Vacancy;
+use EcJobHunting\Service\Vacancy\VacancyService;
 
 $vacancy = new Vacancy(get_the_ID());
 $user = wp_get_current_user();
 $appliedUsersList = $vacancy->getCandidates();
 $isApplied = in_array($user->ID, $appliedUsersList);
 $visitorsList = !empty($vacancy->getVisitors()) && is_array($vacancy->getVisitors()) ? $vacancy->getVisitors() : [];
+$currencySymbol = VacancyService::getCurrencySymbol($vacancy->getCurrency());
 
 if (!in_array($user->ID, $visitorsList)) {
     $visitorsList[] = $user->ID;
@@ -33,11 +35,13 @@ get_header(); ?>
                                     if ($vacancy->getCompensationFrom() && $vacancy->getCompensationTo()):
                                         echo sprintf(
                                             __('%s to %s', 'ecjobhunting'),
-                                            $vacancy->getCompensationFrom(),
-                                            $vacancy->getCompensationTo()
+                                            $currencySymbol . $vacancy->getCompensationFrom(),
+                                            $currencySymbol . $vacancy->getCompensationTo()
                                         );
                                     else:
-                                        echo $vacancy->getCompensationFrom() ? : $vacancy->getCompensationTo();
+                                        echo $vacancy->getCompensationFrom()
+                                            ? $currencySymbol . $vacancy->getCompensationFrom()
+                                            : $currencySymbol . $vacancy->getCompensationTo();
                                     endif;
 
                                     echo ' ' . $vacancy->getCompensationPeriodName();
