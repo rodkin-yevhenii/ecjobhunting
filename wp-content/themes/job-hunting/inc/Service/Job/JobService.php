@@ -8,6 +8,7 @@ use EcJobHunting\Entity\Vacancy;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Interfaces\AjaxResponse;
 use EcJobHunting\Service\Job\Response\JobsResponse;
+use EcJobHunting\Service\User\UserService;
 use PHPMailer\PHPMailer\Exception;
 use WP_Query;
 use WP_REST_Posts_Controller;
@@ -284,21 +285,22 @@ class JobService
 
             $id = (int) $_POST['id'];
             $userId = get_current_user_id();
-            $jobBookmarks = get_user_meta($userId, 'jobs_bookmarks', true);
+            $candidate = UserService::getUser();
+            $savedJobs = $candidate->getSavedJobs();
 
-            if (!is_array($jobBookmarks)) {
-                $jobBookmarks = [];
+            if (!is_array($savedJobs)) {
+                $savedJobs = [];
             }
 
-            if (array_key_exists($id, $jobBookmarks)) {
-                unset($jobBookmarks[$id]);
+            if (array_key_exists($id, $savedJobs)) {
+                unset($savedJobs[$id]);
                 $isAdd = false;
             } else {
-                $jobBookmarks[$id] = $id;
+                $savedJobs[$id] = $id;
                 $isAdd = true;
             }
 
-            update_user_meta($userId, 'jobs_bookmarks', $jobBookmarks);
+            update_user_meta($userId, 'jobs_bookmarks', $savedJobs);
 
             $this->response
                 ->setMessage( $isAdd ? 'Added to bookmarks' : 'Removed from bookmarks')
@@ -342,7 +344,6 @@ class JobService
                 ->send();
         }
 
-        $action = $_POST['action'] ?? '';
         $vacancy = new Vacancy((int) $_POST['vacancyId']);
         $userId = get_current_user_id();
 
@@ -358,13 +359,9 @@ class JobService
         if (!in_array($userId, $candidates)) {
             $candidates[] = $userId;
             $this->response->setMessage('applied');
-        } else {
-            $key = array_search($userId, $candidates);
-            unset($candidates[$key]);
-            $this->response->setMessage('revoked');
+            update_field('applied', $candidates, $vacancy->getId());
         }
 
-        update_field('applied', $candidates, $vacancy->getId());
 
         $this->response
             ->setStatus(200)

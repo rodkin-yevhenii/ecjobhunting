@@ -36,6 +36,7 @@ class Candidate extends UserAbstract
     private array $resumeFile;
     private array $references;
     private array $certificates;
+    private array $savedJobs;
 
     public function __construct($user)
     {
@@ -430,5 +431,18 @@ class Candidate extends UserAbstract
         }
 
         return $this->certificates;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSavedJobs(): array
+    {
+        if (empty($this->savedJobs)) {
+            $savedJobs = get_user_meta($this->getUserId(), 'jobs_bookmarks', true);
+            $this->savedJobs = empty($savedJobs) ? [] : $savedJobs;
+        }
+
+        return $this->savedJobs;
     }
 }

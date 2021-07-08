@@ -1,10 +1,67 @@
 <?php
 
+use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Service\User\UserService;
 
-$candidate = UserService::getUser(get_current_user_id());
+/**
+ * @var $candidate Candidate
+ */
+$candidate = UserService::getUser();
+$savedJobs = $candidate->getSavedJobs();
 $searchString = $_REQUEST['search_string'] ?? '';
 $location = $_REQUEST['location'] ?? $candidate->getLocation();
+
+$args = [
+    'posts_per_page' => -1,
+    'post_type' => 'vacancy',
+    'post_status' => 'publish',
+    's' => $searchString,
+    'fields' => 'ids'
+];
+
+if (!empty($location)) {
+    $args['tax_query'] = [
+        [
+            'taxonomy' => 'location',
+            'field' => 'name',
+            'terms' => $location
+        ]
+    ];
+}
+
+$appliedJobsArgs = array_merge(
+    $args,
+    [
+        'meta_query' => [
+            [
+                'key' => 'applied',
+                'value' => '"' . $candidate->getUserId() . '"',
+                'compare' => 'LIKE'
+            ]
+        ]
+    ]
+);
+
+$appliedJobsQuery = new WP_Query($appliedJobsArgs);
+
+$savedJobsArgs = array_merge(
+    $args,
+    [
+        'post__in' => $candidate->getSavedJobs(),
+    ]
+);
+
+$savedJobsQuery = new WP_Query($savedJobsArgs);
+
+$suggestedJobsArgs = array_merge(
+    $args,
+    [
+        'posts_per_page' => 9,
+        'post__not_in' => array_merge($savedJobsQuery->posts, $appliedJobsQuery->posts),
+    ]
+);
+
+$suggestedJobsQuery = new WP_Query($suggestedJobsArgs);
 ?>
 <form class="hero-form">
     <div class="container">
@@ -62,198 +119,33 @@ $location = $_REQUEST['location'] ?? $candidate->getLocation();
                     <li class="active" data-tab-content="suggested">
                         <div class="container-fluid p-0">
                             <div class="row">
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-7.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Front-End Developer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen, GC Holders or Authorized to Work in the US Overview: We are seeking a senior</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-8.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Sr. .NET Developer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-9.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Senior Ruby Developer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen, GC Holders or Authorized to Work in the US Overview: We are seeking a senior</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-10.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Senior Ruby Developer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen, GC Holders or Authorized to Work in the US Overview: We are seeking a senior</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-1.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Full Stack Software Engineer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-2.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Full Stack Software Engineer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen, GC Holders or Authorized to Work in the US Overview: We are seeking a senior</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
+                                <?php if ($suggestedJobsQuery->have_posts()) :
+                                    foreach ($suggestedJobsQuery->posts as $jobId) :
+                                        get_template_part('template-parts/vacancy/card', 'vacancy', ['id' => $jobId]);
+                                    endforeach;
+                                endif; ?>
                             </div>
                         </div>
                     </li>
                     <li data-tab-content="applied">
                         <div class="container-fluid p-0">
                             <div class="row">
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-9.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Senior Ruby Developer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen, GC Holders or Authorized to Work in the US Overview: We are seeking a senior</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-10.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Senior Ruby Developer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen, GC Holders or Authorized to Work in the US Overview: We are seeking a senior</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-1.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Full Stack Software Engineer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-2.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Full Stack Software Engineer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen, GC Holders or Authorized to Work in the US Overview: We are seeking a senior</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
+                                <?php if ($appliedJobsQuery->have_posts()) :
+                                    foreach ($appliedJobsQuery->posts as $jobId) :
+                                        get_template_part('template-parts/vacancy/card', 'vacancy', ['id' => $jobId]);
+                                    endforeach;
+                                endif; ?>
                             </div>
                         </div>
                     </li>
                     <li data-tab-content="saved">
                         <div class="container-fluid p-0">
                             <div class="row">
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-1.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Full Stack Software Engineer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                                    <div class="card-vacancy">
-                                        <div class="card-vacancy-logo"><img src="images/companies-image-2.png" alt="logo"></div>
-                                        <div class="card-vacancy-content">
-                                            <h3>Full Stack Software Engineer</h3><span>TekPartners, A P2P Company</span><span>Boynton Beach, FL</span>
-                                            <ul>
-                                                <li><span>Pay</span><span>xxx</span></li>
-                                                <li><span>Benefits</span><span>xxx</span></li>
-                                                <li><span>Type</span><span>xxx</span></li>
-                                            </ul>
-                                            <p>(ReactJS) Location : Bethesda, Maryland Duration : 10 Months Work Requirements : US Citizen, GC Holders or Authorized to Work in the US Overview: We are seeking a senior</p>
-                                        </div>
-                                        <div class="card-vacancy-footer"><a class="btn btn-primary" href="#">View Details</a><a class="btn btn-outline-primary" href="#">Dismiss</a></div>
-                                    </div>
-                                </div>
+                                <?php if ($savedJobsQuery->have_posts()) :
+                                    foreach ($savedJobsQuery->posts as $jobId) :
+                                        get_template_part('template-parts/vacancy/card', 'vacancy', ['id' => $jobId]);
+                                    endforeach;
+                                endif; ?>
                             </div>
                         </div>
                     </li>
