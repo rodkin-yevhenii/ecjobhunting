@@ -30,6 +30,25 @@ class AcfFields
                 'title' => 'Vacancy Details',
                 'fields' => [
                     [
+                        'key' => 'field_company_logo',
+                        'label' => 'Company Logo',
+                        'name' => 'company_logo',
+                        'type' => 'image',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => array(
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ),
+                        'return_format' => 'id',
+                        'library' => 'all',
+                        'min_size' => '',
+                        'max_size' => '',
+                        'mime_types' => '',
+                    ],
+                    [
                         'key' => 'field_5fecd57ec26b9',
                         'label' => 'Benefits',
                         'name' => 'benefits',

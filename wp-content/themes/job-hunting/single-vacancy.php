@@ -91,7 +91,14 @@ get_header(); ?>
 <!--TODO Clarify with client what should do button "Am I Qualified?"-->
                         </div>
                         <div class="col-12 col-xl-3 my-5 d-md-flex d-xl-block">
-                            <div class="vacancy-image"><img src="<?php echo $employer->getPhoto(); ?>" alt="<?php echo $employer->getName(); ?>"></div>
+                            <?php if (!empty($vacancy->getLogoId())) : ?>
+                                <div class="vacancy-image">
+                                    <img
+                                        src="<?php echo wp_get_attachment_image_url($vacancy->getLogoId(), 'single-vacancy-logo'); ?>"
+                                        alt="<?php echo $vacancy->getCompanyName(); ?>"
+                                    />
+                                </div>
+                            <?php endif; ?>
                             <div class="vacancy-info">
                                 <h2 class="vacancy-company no-decor"><?php echo $vacancy->getCompanyName(); ?></h2>
                                 <span class="color-secondary"><?php echo nicetime($vacancy->getDatePosted()); ?></span>

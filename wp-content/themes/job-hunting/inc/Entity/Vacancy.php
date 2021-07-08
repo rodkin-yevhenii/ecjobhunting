@@ -21,6 +21,7 @@ class Vacancy
     private string $compensationPeriod = 'annualy';
     private bool $isCommissionIncluded = false;
     private string $status = 'draft';
+    private int $logoId = 0;
 
     //Taxonomies
     private array $location = []; // taxonomy Location
@@ -69,9 +70,11 @@ class Vacancy
                 $this->compensationTo = floatval(
                     !empty($fields['compensation_range']['to']) ? $fields['compensation_range']['to'] : 0
                 );
-                $this->compensationRange = !empty($fields['compensation_range']) ? $fields['compensation_range'] : $this->compensationRange;
+                $this->compensationRange = !empty($fields['compensation_range'])
+                    ? $fields['compensation_range']
+                    : $this->compensationRange;
                 $this->streetAddress = !empty($fields['street_address']) ? $fields['street_address'] : '';
-
+                $this->logoId = $fields['company_logo'] ?? 0;
                 $this->companyName = $fields['hiring_company'] ?? '';
                 $this->reasonsToWork = $fields['why_work_at_this_company'] ?? '';
                 $this->companyDescription = $fields['hiring_company_description'] ?? '';
@@ -348,5 +351,13 @@ class Vacancy
     public function getPermalink()
     {
         return $this->permalink;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLogoId(): int
+    {
+        return $this->logoId;
     }
 }

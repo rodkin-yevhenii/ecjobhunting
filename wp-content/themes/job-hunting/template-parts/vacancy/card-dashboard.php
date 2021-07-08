@@ -11,9 +11,13 @@ if (!$vacancy) {
         <div class="container-fluid">
             <div class="row">
                 <div class="d-none d-md-block col-md-2 col-xl-1">
-                    <div class="results-image"><img src="<?php
-                        echo $vacancy->getEmployer()->getPhoto(); ?>"
-                                                    alt="photo"></div>
+                    <?php if (!empty($vacancy->getLogoId())) : ?>
+                        <div class="results-image">
+                            <img src="<?php echo wp_get_attachment_image_url($vacancy->getLogoId(), 'results-image'); ?>"
+                                 alt="<?php echo $vacancy->getCompanyName(); ?>"
+                            />
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="col-12 col-md-10 col-xl-11">
                     <div class="container-fluid">
