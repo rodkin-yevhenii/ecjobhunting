@@ -11,8 +11,8 @@ $vacancyId = $args['id'];
 $vacancy = new Vacancy($vacancyId);
 $currencySymbol = VacancyService::getCurrencySymbol($vacancy->getCurrency())
 ?>
-<div class="col-12 col-sm-6 col-lg-4 d-flex">
-    <div class="card-vacancy vacancy-id-<?php echo $vacancyId; ?>">
+<div class="col-12 col-sm-6 col-lg-4 d-flex card-vacancy-wrapper">
+    <div id="<?php echo $vacancyId; ?>" class="card-vacancy">
         <?php if (!empty($vacancy->getLogoId())) : ?>
             <div class="card-vacancy-logo">
                 <img src="<?php echo wp_get_attachment_image_url($vacancy->getLogoId(), 'card-vacancy-logo'); ?>"
@@ -62,7 +62,7 @@ $currencySymbol = VacancyService::getCurrencySymbol($vacancy->getCurrency())
         </div>
         <div class="card-vacancy-footer">
             <a class="btn btn-primary" href="<?php echo $vacancy->getPermalink(); ?>">View Details</a>
-            <a class="btn btn-outline-primary" href="#">Dismiss</a>
+            <a class="btn btn-outline-primary js-dismiss-job" href="#">Dismiss</a>
         </div>
     </div>
 </div>

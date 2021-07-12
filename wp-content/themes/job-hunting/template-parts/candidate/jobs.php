@@ -8,26 +8,12 @@ use EcJobHunting\Service\User\UserService;
  */
 $candidate = UserService::getUser();
 $savedJobs = $candidate->getSavedJobs();
-$searchString = $_REQUEST['search_string'] ?? '';
-$location = $_REQUEST['location'] ?? $candidate->getLocation();
-
 $args = [
     'posts_per_page' => -1,
     'post_type' => 'vacancy',
     'post_status' => 'publish',
-    's' => $searchString,
     'fields' => 'ids'
 ];
-
-if (!empty($location)) {
-    $args['tax_query'] = [
-        [
-            'taxonomy' => 'location',
-            'field' => 'name',
-            'terms' => $location
-        ]
-    ];
-}
 
 $appliedJobsArgs = array_merge(
     $args,
@@ -57,13 +43,25 @@ $suggestedJobsArgs = array_merge(
     $args,
     [
         'posts_per_page' => 9,
-        'post__not_in' => array_merge($savedJobsQuery->posts, $appliedJobsQuery->posts),
+        'post__not_in' => array_merge($savedJobsQuery->posts, $appliedJobsQuery->posts, $candidate->getDismissedJobs()),
+        'tax_query' => [
+            [
+                'taxonomy' => 'location',
+                'field' => 'name',
+                'terms' => $candidate->getLocation()
+            ],
+            [
+                'taxonomy' => 'job-category',
+                'field' => 'name',
+                'terms' => $candidate->getCategory()
+            ],
+        ],
     ]
 );
 
 $suggestedJobsQuery = new WP_Query($suggestedJobsArgs);
 ?>
-<form class="hero-form">
+<form class="hero-form" method="get" action="/jobs">
     <div class="container">
         <div class="row d-flex justify-content-xl-center">
             <div class="col-12 col-md-5 col-xl-4">
@@ -71,9 +69,9 @@ $suggestedJobsQuery = new WP_Query($suggestedJobsArgs);
                     <input
                         class="field-text"
                         type="text"
-                        name="search_string"
+                        name="s"
                         placeholder="Job Title"
-                        value="<?php echo $searchString; ?>"
+                        value=""
                     >
                 </label>
             </div>
@@ -84,7 +82,7 @@ $suggestedJobsQuery = new WP_Query($suggestedJobsArgs);
                         type="text"
                         name="location"
                         placeholder="Location"
-                        value="<?php echo $location; ?>"
+                        value="<?php echo $candidate->getLocation(); ?>"
                         autocomplete="off"
                     >
                 </label>
@@ -109,22 +107,29 @@ $suggestedJobsQuery = new WP_Query($suggestedJobsArgs);
                     <div class="container-fluid p-0">
                         <div class="row">
                             <div class="col-12 col-md-8">
-                                <p>Below are other jobs you might like, based on your resume, prior job applications and search history.</p>
+                                <p>
+                                    Below are other jobs you might like, based on your resume.
+                                </p>
                             </div>
-                            <div class="col-12 col-md-4 d-md-flex justify-content-md-end"><a class="color-primary" href="#">View Dismissed Jobs <i class="fa fa-angle-right"></i></a></div>
+                            <div class="col-12 col-md-4 d-md-flex justify-content-md-end">
+                                <a class="color-primary js-show-dismissed-jobs" href="#" style="display: none">
+                                    View Dismissed Jobs <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <ul class="results-content">
                     <li class="active" data-tab-content="suggested">
                         <div class="container-fluid p-0">
-                            <div class="row">
+                            <div class="row js-suggested-jobs">
                                 <?php if ($suggestedJobsQuery->have_posts()) :
                                     foreach ($suggestedJobsQuery->posts as $jobId) :
                                         get_template_part('template-parts/vacancy/card', 'vacancy', ['id' => $jobId]);
                                     endforeach;
                                 endif; ?>
                             </div>
+                            <div class="row js-dismissed-jobs" style="display: none"></div>
                         </div>
                     </li>
                     <li data-tab-content="applied">

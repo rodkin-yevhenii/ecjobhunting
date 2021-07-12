@@ -37,6 +37,7 @@ class Candidate extends UserAbstract
     private array $references;
     private array $certificates;
     private array $savedJobs;
+    private array $dismissedJobs;
 
     public function __construct($user)
     {
@@ -444,5 +445,18 @@ class Candidate extends UserAbstract
         }
 
         return $this->savedJobs;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDismissedJobs(): array
+    {
+        if (empty($this->dismissedJobs)) {
+            $dismissedJobs = get_user_meta($this->getUserId(), 'dismissed_jobs', true);
+            $this->dismissedJobs = empty($dismissedJobs) ? [] : $dismissedJobs;
+        }
+
+        return $this->dismissedJobs;
     }
 }

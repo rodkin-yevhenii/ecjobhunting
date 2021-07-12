@@ -47,8 +47,17 @@ class JobService
             add_action('wp_ajax_edit_job', [$this, 'editJobAjax']);
             add_action('wp_ajax_nopriv_edit_job', [$this, 'editJobAjax']);
 
+            // Save Job
             add_action('wp_ajax_update_bookmark', [$this, 'updateBookmark']);
             add_action('wp_ajax_nopriv_update_bookmark', [$this, 'updateBookmark']);
+
+            // Dismiss job
+            add_action('wp_ajax_dismiss_job', [$this, 'dismissJob']);
+            add_action('wp_ajax_nopriv_dismiss_job', [$this, 'dismissJob']);
+
+            // Dismiss job
+            add_action('wp_ajax_un_dismiss_job', [$this, 'unDismissJob']);
+            add_action('wp_ajax_nopriv_un_dismiss_job', [$this, 'unDismissJob']);
 
             // Apply job
             add_action('wp_ajax_apply_job', [$this, 'applyJobAjaxCallback']);
@@ -314,6 +323,72 @@ class JobService
                 ->setStatus(501)
                 ->send();
         }
+    }
+
+    /**
+     * Add job to users dismissed jobs.
+     */
+    public function dismissJob(): void
+    {
+        if (empty($_POST['id'])) {
+            $this->response
+                ->setMessage('ID data is required')
+                ->setStatus(204)
+                ->send();
+        }
+
+        $id = (int) $_POST['id'];
+        $userId = get_current_user_id();
+        $candidate = UserService::getUser();
+        $dismissedJobs = $candidate->getDismissedJobs();
+
+        if (!is_array($dismissedJobs)) {
+            $dismissedJobs = [];
+        }
+
+        if (!array_key_exists($id, $dismissedJobs)) {
+            $dismissedJobs[$id] = $id;
+            update_user_meta($userId, 'dismissed_jobs', $dismissedJobs);
+        }
+
+        $this->response
+            ->setMessage('Added to dismissed jobs')
+            ->setStatus(200)
+            ->setId($id)
+            ->send();
+    }
+
+    /**
+     * Remove job from users dismissed jobs.
+     */
+    public function unDismissJob(): void
+    {
+        if (empty($_POST['id'])) {
+            $this->response
+                ->setMessage('ID data is required')
+                ->setStatus(204)
+                ->send();
+        }
+
+        $id = (int) $_POST['id'];
+        $userId = get_current_user_id();
+        $candidate = UserService::getUser();
+        $dismissedJobs = $candidate->getDismissedJobs();
+
+        if (!is_array($dismissedJobs)) {
+            $dismissedJobs = [];
+        }
+
+        if (array_key_exists($id, $dismissedJobs)) {
+            unset($dismissedJobs[$id]);
+            update_user_meta($userId, 'dismissed_jobs', $dismissedJobs);
+        }
+
+        $this->response
+            ->setMessage('Removed from dismissed jobs')
+            ->setStatus(200)
+            ->setId($id)
+            ->send();
     }
 
     /**

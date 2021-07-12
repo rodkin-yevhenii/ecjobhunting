@@ -8,7 +8,11 @@ $(() => {
   const $addBookmarkBtn = $('.add-bookmark')
   const $applyBtn = $('.js-apply')
   const $revokeBtn = $('.js-revoke')
-  const $dismissBtn = $('.js-dismiss')
+  const $dismissBtn = $('.js-dismiss-job')
+  const $showDismissedJobsBtn = $('.js-show-dismissed-jobs')
+  const $showSuggestedJobsBtn = $('.js-show-dismissed-jobs')
+  const $suggestedJobsContainer = $('.js-suggested-jobs')
+  const $dismissedJobsContainer = $('.js-dismissed-jobs')
 
   function postJobAjax (data, $messageContainer) {
     $.ajax({
@@ -225,6 +229,92 @@ $(() => {
     }
 
     ajaxRequest(data, () => {}, success, error)
+  })
+
+  $(document).on('click', '.js-dismiss-job', event => {
+    event.preventDefault()
+
+    const $btn = $(event.currentTarget)
+    const $card = $btn.parents('.card-vacancy')
+    const id = $card.attr('id')
+    const data = {
+      action: 'dismiss_job',
+      id
+    }
+
+    const success = (response) => {
+      if (response.status !== 200) {
+        console.log(response.message)
+
+        return
+      }
+
+      $('.js-show-dismissed-jobs').show()
+      const $cardClone = $card.parent().clone()
+      $card.parent().remove()
+      $cardClone.appendTo($dismissedJobsContainer)
+      $cardClone.find('.js-dismiss-job').replaceWith('<a class="btn btn-outline-primary js-un-dismiss-job" href="#">Un-Dismiss</a>')
+    }
+
+    const error = (error) => {
+      console.log(error)
+    }
+
+    ajaxRequest(data, () => {}, success, error)
+  })
+
+  $(document).on('click', '.js-un-dismiss-job', event => {
+    event.preventDefault()
+
+    const $btn = $(event.currentTarget)
+    const $card = $btn.parents('.card-vacancy')
+    const id = $card.attr('id')
+    const data = {
+      action: 'un_dismiss_job',
+      id
+    }
+
+    const success = (response) => {
+      if (response.status !== 200) {
+        console.log(response.message)
+
+        return
+      }
+
+      const $cardClone = $card.parent().clone()
+      $card.parent().remove()
+      $cardClone.appendTo($suggestedJobsContainer)
+      $cardClone.find('.js-un-dismiss-job').replaceWith('<a class="btn btn-outline-primary js-dismiss-job" href="#">Dismiss</a>')
+    }
+
+    const error = (error) => {
+      console.log(error)
+    }
+
+    ajaxRequest(data, () => {}, success, error)
+  })
+
+  $(document).on('click', '.js-show-dismissed-jobs', event => {
+    event.preventDefault()
+
+    $suggestedJobsContainer.toggle()
+    $dismissedJobsContainer.toggle()
+    $(event.currentTarget).replaceWith('<a class="color-primary js-show-suggested-jobs" href="#"><i class="fa fa-angle-left ml-0 mr-2"></i> View Suggested Jobs</a>')
+  })
+
+  $(document).on('click', '.js-show-suggested-jobs', event => {
+    event.preventDefault()
+
+    $suggestedJobsContainer.toggle()
+    $dismissedJobsContainer.toggle()
+    const $dismissButton = $('<a>View Dismissed Jobs <i class="fa fa-angle-right"></i></a>')
+    $dismissButton.addClass('color-primary js-show-dismissed-jobs')
+
+    if (!$dismissedJobsContainer.children('div').length) {
+      $dismissButton.css('display', 'none')
+    }
+
+    $(event.currentTarget).replaceWith($dismissButton)
   })
 
   $publishJobFrom.on('click', '[data-select-item]', function () {
