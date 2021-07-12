@@ -81,8 +81,6 @@ class JobService
                 'post_author' => (int)$_POST['author'] ?? get_current_user_id(),
                 'post_type' => 'vacancy',
                 'meta_input' => [
-                    'compensation_range_from' => filter_var($_POST['compensationFrom'], FILTER_SANITIZE_NUMBER_FLOAT) ?? 0,
-                    'compensation_range_to' => filter_var($_POST['compensationTo'], FILTER_SANITIZE_NUMBER_FLOAT) ?? 0,
                     'street_address' => $_POST['street'] ?? '',
                     'hiring_company' => $_POST['company'],
                     'why_work_at_this_company' => $_POST['reasonsToWork'],
@@ -106,6 +104,18 @@ class JobService
                     'Job wansn\'t created, please try again later or send email to support team'
                 )->setStatus(501)->send();
             }
+
+            update_field(
+                'compensation_range',
+                [
+                    'from' => filter_var($_POST['compensationFrom'], FILTER_SANITIZE_NUMBER_FLOAT) ?? 0,
+                    'to' => filter_var($_POST['compensationTo'], FILTER_SANITIZE_NUMBER_FLOAT) ?? 0
+                ],
+                $postId
+            );
+            update_field('compensation_currency', $_POST['currency'], $postId);
+            update_field('compensation_period', $_POST['period'], $postId);
+
             $this->response
                 ->setId($postId)
                 ->setPermalink(get_the_permalink($postId))

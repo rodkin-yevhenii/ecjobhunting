@@ -39,7 +39,14 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                         class="color-primary">*</span></label>
         </div>
         <div class="col-12 col-md-7">
-            <input class="field-text" type="text" id="post-job-location" required>
+            <input
+                class="field-text js-auto-complete"
+                type="text"
+                id="post-job-location"
+                name="location"
+                autocomplete="off"
+                required
+            >
         </div>
     </div>
     <div class="row mt-3 mt-md-4">
@@ -115,18 +122,18 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                     <div class="ys-select ys-select-bordered mt-3 mt-md-0 mr-md-4" data-select><span
                                 data-select-value>USD</span>
                         <ul>
-                            <?php foreach ($currencies as $item): ?>
+                            <?php foreach ($currencies as $item) : ?>
                                 <li data-select-item data-key="<?php echo $item; ?>"><?php echo $item; ?></li>
                             <?php endforeach; ?>
                         </ul>
                         <input class="d-none" type="text" id="currency">
                     </div>
                 <?php endif; ?>
-                <?php if (!empty($period)): ?>
+                <?php if (!empty($period)) : ?>
                     <div class="ys-select ys-select-bordered mt-3 mt-md-0 flex-md-grow-1 mr-lg-4" data-select><span
                                 data-select-value>Annualy</span>
                         <ul>
-                            <?php foreach ($period as $key => $item): ?>
+                            <?php foreach ($period as $key => $item) : ?>
                                 <li data-select-item data-key="<?php echo $key; ?>"><?php echo $item; ?></li>
                             <?php endforeach; ?>
                         </ul>
