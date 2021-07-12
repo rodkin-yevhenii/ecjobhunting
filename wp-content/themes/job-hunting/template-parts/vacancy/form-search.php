@@ -1,6 +1,6 @@
 <?php
 $searchPageUrl = get_field('search_page_url', 'option');
-$s = $_GET['s'] ?? '';
+$s = $_GET['search'] ?? '';
 $location = $_GET['location'] ?? '';
 ?>
 <form class="hero" method="get" action="<?php echo $searchPageUrl; ?>">
@@ -11,7 +11,7 @@ $location = $_GET['location'] ?? '';
                     <input
                         class="field-text"
                         type="text"
-                        name="s"
+                        name="search"
                         placeholder="<?php _e('Job Title', 'ecjobhunting'); ?>"
                         value="<?php echo $s; ?>"
                     />

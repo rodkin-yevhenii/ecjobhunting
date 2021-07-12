@@ -11,7 +11,7 @@ $filtersValues['compensation'] = (int) ($_GET['compensation'] ?? 0);
 $filtersValues['employment-type'] = (int) ($_GET['employment-type'] ?? 0);
 $filtersValues['category'] = (int) ($_GET['category'] ?? 0);
 $filtersValues['company'] = $_GET['company'] ?? '';
-$filtersValues['s'] = $_GET['s'] ?? '';
+$filtersValues['s'] = $_GET['search'] ?? '';
 $filtersValues['location'] = $_GET['location'] ?? '';
 
 $jobsFilter = new JobFilter($filtersValues);

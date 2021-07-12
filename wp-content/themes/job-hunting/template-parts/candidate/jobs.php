@@ -69,7 +69,7 @@ $suggestedJobsQuery = new WP_Query($suggestedJobsArgs);
                     <input
                         class="field-text"
                         type="text"
-                        name="s"
+                        name="search"
                         placeholder="Job Title"
                         value=""
                     >
