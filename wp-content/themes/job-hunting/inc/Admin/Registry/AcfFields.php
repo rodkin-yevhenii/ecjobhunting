@@ -770,8 +770,8 @@ class AcfFields
                             ],
                             [
                                 'key' => 'field_5ff88e21ace4a',
-                                'label' => 'Compensation Period',
-                                'name' => 'compensation_period',
+                                'label' => 'Compensation Period 1',
+                                'name' => 'compensation_period_values',
                                 'type' => 'repeater',
                                 'instructions' => '',
                                 'required' => 0,
@@ -2013,7 +2013,7 @@ class AcfFields
     public function compensationPeriodChoices($field)
     {
         $settings = SiteSettings::getJobSettings();
-        $jobService = $settings['compensation_period'] ?? [];
+        $jobService = $settings['compensation_period_values'] ?? [];
         return $this->prepareFieldChoices($jobService, $field);
     }
 
