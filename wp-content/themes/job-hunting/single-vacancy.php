@@ -5,6 +5,7 @@
  */
 
 use EcJobHunting\Entity\Vacancy;
+use EcJobHunting\Service\User\UserService;
 use EcJobHunting\Service\Vacancy\VacancyService;
 
 $vacancy = new Vacancy(get_the_ID());
@@ -14,7 +15,7 @@ $isApplied = in_array($user->ID, $appliedUsersList);
 $visitorsList = !empty($vacancy->getVisitors()) && is_array($vacancy->getVisitors()) ? $vacancy->getVisitors() : [];
 $currencySymbol = VacancyService::getCurrencySymbol($vacancy->getCurrency());
 
-if (!in_array($user->ID, $visitorsList)) {
+if (!in_array($user->ID, $visitorsList) && UserService::isCandidate()) {
     $visitorsList[] = $user->ID;
     update_field('visitors', ++$visitorsList, $vacancy->getId());
 }
