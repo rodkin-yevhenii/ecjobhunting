@@ -66,7 +66,7 @@ if (!$vacancy) {
                                                     </li>
                                                     <li>
                                                         <strong class="color-dark text-large text-regular"><?php
-                                                            echo $vacancy->getVisitors(); ?></strong><span
+                                                            echo count($vacancy->getVisitors()); ?></strong><span
                                                                 class="color-secondary text-usual">Visitors</span></li>
                                                     <li><strong class="color-primary text-large text-regular"><?php
                                                             echo $vacancy->getCandidatesNumber(); ?></strong><span
