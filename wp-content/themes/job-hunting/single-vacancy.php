@@ -79,11 +79,11 @@ get_header(); ?>
                                         class="btn btn-primary btn-lg js-apply"
                                         data-vacancy-id="<?php echo $vacancy->getId(); ?>"
                                         data-apply-text="<?php _e('Apply Now', 'ecjobhunting'); ?>"
-                                        data-revoke-text="<?php _e('Revoke confirmation', 'ecjobhunting'); ?>"
+                                        <?php echo $isApplied ? 'disabled' : ''; ?>
                                     >
                                         <?php echo !$isApplied
                                             ? __('Apply Now', 'ecjobhunting')
-                                            : __('Revoke confirmation', 'ecjobhunting');
+                                            : __('Already Applied', 'ecjobhunting');
                                         ?>
                                     </button>
                                 <?php endif; ?>
