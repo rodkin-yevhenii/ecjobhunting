@@ -26,6 +26,15 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
 <form class="container-fluid p-0 publish-job-form" data-author="<?php echo get_current_user_id();?>">
     <div class="row mt-md-4">
         <div class="col-12 col-md-5 col-xl-3">
+            <label class="field-label mb-2 mb-md-0 mt-md-3" for="post-company-logo">Company logo
+                <span class="color-primary">*</span></label>
+        </div>
+        <div class="col-12 col-md-7">
+            <input class="file" type="file" id="post-company-logo" required>
+        </div>
+    </div>
+    <div class="row mt-md-4">
+        <div class="col-12 col-md-5 col-xl-3">
             <label class="field-label mb-2 mb-md-0 mt-md-3" for="post-job-title"><?php echo $vacancy->getTitle(); ?>
                 <span class="color-primary">*</span></label>
         </div>
@@ -51,14 +60,30 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
     </div>
     <div class="row mt-3 mt-md-4">
         <div class="col-12 col-md-5 col-xl-3">
+            <label class="field-label mb-2 mb-md-0 mt-md-3" for="post-job-category">Job Category<span
+                    class="color-primary">*</span></label>
+        </div>
+        <div class="col-12 col-md-7">
+            <input
+                class="field-text js-auto-complete"
+                type="text"
+                id="post-job-category"
+                name="job-category"
+                autocomplete="off"
+                required
+            >
+        </div>
+    </div>
+    <div class="row mt-3 mt-md-4">
+        <div class="col-12 col-md-5 col-xl-3">
             <div class="field-label mb-2 mb-md-0 mt-md-3">Employment Type <span class="color-primary">*</span></div>
         </div>
-        <?php if (!empty($employmentTypes)): ?>
+        <?php if (!empty($employmentTypes)) : ?>
             <div class="col-12 col-md-7">
                 <div class="ys-select ys-select-bordered" data-select><span
                             data-select-value>Select employment type</span>
                     <ul>
-                        <?php foreach ($employmentTypes as $type): ?>
+                        <?php foreach ($employmentTypes as $type) : ?>
                             <li data-select-item data-key="<?php echo $type->name; ?>"><?php echo $type->name; ?></li>
                         <?php endforeach; ?>
                     </ul>
@@ -83,7 +108,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
         </div>
         <?php if (!empty($benefits_1)) : ?>
             <div class="col-12 col-md-4">
-                <?php foreach ($benefits_1 as $id => $item): ?>
+                <?php foreach ($benefits_1 as $id => $item) : ?>
                     <fieldset>
                         <input type="checkbox" name="post-job-benefits[]" id="<?php echo $id; ?>">
                         <label for="<?php echo $id; ?>"><?php echo $item; ?></label>
@@ -93,7 +118,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
         <?php endif; ?>
         <?php if (!empty($benefits_2)) : ?>
             <div class="col-12 col-md-3">
-                <?php foreach ($benefits_2 as $id => $item): ?>
+                <?php foreach ($benefits_2 as $id => $item) : ?>
                     <fieldset>
                         <input type="checkbox" name="post-job-benefits[]" id="<?php echo $id; ?>">
                         <label for="<?php echo $id; ?>"><?php echo $item; ?></label>
@@ -118,7 +143,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                 </label>
             </div>
             <div class="d-md-flex justify-content-md-between mt-3 mt-md-4 align-items-start flex-wrap">
-                <?php if (!empty($currencies)): ?>
+                <?php if (!empty($currencies)) : ?>
                     <div class="ys-select ys-select-bordered mt-3 mt-md-0 mr-md-4" data-select><span
                                 data-select-value>USD</span>
                         <ul>
@@ -170,7 +195,13 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
             </ul>
             <div class="field-skills-panel d-flex flex-column flex-md-row">
                 <label class="d-block mb-0 mt-3 mt-md-0 flex-md-grow-1 mr-md-4">
-                    <input class="field-text" type="text">
+                    <input
+                        class="field-text js-auto-complete"
+                        type="text"
+                        id="post-job-category"
+                        name="skill"
+                        autocomplete="off"
+                    />
                 </label>
                 <button class="btn btn-primary mt-3 m-md-0 px-md-4" type="button">Add</button>
             </div>
@@ -220,11 +251,11 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                 </label>
                 <button class="btn btn-primary mt-3 m-md-0" type="button">Add Email</button>
             </div>
-            <?php if (!empty($agreements)):
+            <?php if (!empty($agreements)) :
                 $firstKey = array_key_first($agreements);
                 foreach ($agreements as $id => $item) :
                     $classNames = '';
-                    if ($id === $firstKey):
+                    if ($id === $firstKey) :
                         $classNames = " mt-3 mt-md-5";
                     endif; ?>
                     <div class="d-flex<?php echo $classNames; ?>">
