@@ -356,6 +356,8 @@ $(() => {
     let benefits = []
     let agreements = []
     let skills = []
+    let emails = []
+
     $('input[name="post-job-benefits[]"]:checked').each((index, item) => {
       benefits.push($(item).attr('id'))
     })
@@ -364,16 +366,28 @@ $(() => {
       agreements.push($(item).attr('id'))
     })
 
+    const fileInput = $('#post-company-logo')
+    let file = null
+
+    if (fileInput.length &&  fileInput[0].files !== undefined && fileInput[0].files.length) {
+      file = fileInput[0].files[0]
+    }
+
     const $compensationRange = $('.field-prices input')
-    $('.field-skills-list li').each((index, item) => {
+    $('.js-skills-list li').each((index, item) => {
       skills.push($(item).attr('data-key'))
+    })
+    $('.js-emails-list li').each((index, item) => {
+      emails.push($(item).attr('data-key'))
     })
     let formData = new FormData()
     formData.append('action', 'create_job')
     formData.append('id', $(this).attr('id'))
     formData.append('status', $(submitBtn).attr('data-status')) || 'draft'
+    formData.append('logo', file)
     formData.append('title', $('#post-job-title').val())
     formData.append('location', $('#post-job-location').val())
+    formData.append('category', $('#post-job-category').val())
     formData.append('typeId', $('#employment-type').attr('data-value'))
     formData.append('description', $('#post-job-description').val())
     formData.append('benefits', benefits)
@@ -387,9 +401,10 @@ $(() => {
     formData.append('company', $('#post-job-company').val())
     formData.append('reasonsToWork', $('#post-job-why').val())
     formData.append('companyDesc', $('#post-job-company-description').val())
-    formData.append('notifyMe', $('#post-job-send').val())
+    formData.append('notifyMe', $('#post-job-send').is(':checked'))
     formData.append('notifyEmail', $('#post-job-send-email').val())
     formData.append('agreements', agreements)
+    formData.append('emails', emails)
     formData.append('author', $publishJobFrom.attr('data-author'))
 
     postJobAjax(formData, submitBtn)

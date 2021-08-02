@@ -1,6 +1,9 @@
 import Autocomplete from "./components/autocomplate/autocomplete";
+import CustomList from "./components/custom-list";
 
 $(() => {
+  new CustomList()
+
   const wrapper = $('.wrapper'),
     autocomplete = $('.js-auto-complete'),
     body = $('body'),
@@ -216,30 +219,30 @@ $(() => {
     parent.find(`[data-tab-content]`).removeClass('active')
   })
 
-  $(document).on('click', '.field-skills-close', function () {
-    $(this).parents('li').detach()
-  })
-
-  $(document).on('click', '.field-skills-panel button', function () {
-    addSkill($(this).parents('.field-skills'))
-  })
-
-  $(document).on('keydown', '.field-skills-panel input', function (event) {
-    if (event.keyCode === 13) {
-      event.preventDefault()
-      addSkill($(this).parents('.field-skills'))
-    }
-  })
-
-  function addSkill (skills) {
-    const input = $(skills).find('input:not([type="hidden"])'),
-      value = input.val(),
-      list = $(skills).find('ul')
-    if (value && value.length) {
-      $(`<li data-key="${value}"><span>${value}</span><span class="field-skills-close"></span></li>`).appendTo(list)
-      input.val('')
-    }
-  }
+  // $(document).on('click', '.js-custom-list-item-close', function () {
+  //   $(this).parents('li').detach()
+  // })
+  //
+  // $(document).on('click', '.js-custom-list-add-button', function () {
+  //   addCustomListItem($(this).parents('.js-custom-list-component'))
+  // })
+  //
+  // $(document).on('keydown', '.js-custom-list-input', function (event) {
+  //   if (event.keyCode === 13) {
+  //     event.preventDefault()
+  //     addCustomListItem($(this).parents('.js-custom-list-component'))
+  //   }
+  // })
+  //
+  // function addCustomListItem (component) {
+  //   const input = $(component).find('input:not([type="hidden"])'),
+  //     value = input.val(),
+  //     list = $(component).find('ul')
+  //   if (value && value.length) {
+  //     $(`<li data-key="${value}"><span>${value}</span><span class="field-skills-close"></span></li>`).appendTo(list)
+  //     input.val('')
+  //   }
+  // }
 
   function repaintTablet () {
     headerAccount.appendTo(headerAccountWrapper)

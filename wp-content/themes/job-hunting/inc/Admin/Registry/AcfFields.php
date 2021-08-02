@@ -281,6 +281,43 @@ class AcfFields
                         'return_format' => 'value',
                         'save_custom' => 0,
                     ],
+                    [
+                        'key' => 'field_additional_emails_for_notification',
+                        'label' => 'Additional emails',
+                        'name' => 'additional_employer_emails',
+                        'type' => 'repeater',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'collapsed' => '',
+                        'min' => 0,
+                        'max' => 0,
+                        'layout' => 'table',
+                        'button_label' => '',
+                        'sub_fields' => [
+                            [
+                                'key' => 'field_additional_employer_email',
+                                'label' => 'Email',
+                                'name' => 'email',
+                                'type' => 'email',
+                                'instructions' => '',
+                                'required' => 0,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'default_value' => '',
+                                'placeholder' => '',
+                            ],
+                        ]
+                    ],
                 ],
                 'location' => [
                     [
@@ -672,7 +709,7 @@ class AcfFields
                             [
                                 'key' => 'field_5ff88cc8c50ca',
                                 'label' => 'Benefits',
-                                'name' => 'benefits',
+                                'name' => 'benefits_options',
                                 'type' => 'repeater',
                                 'instructions' => '',
                                 'required' => 0,
@@ -1267,7 +1304,8 @@ class AcfFields
                         'label' => 'Let Employers Find You',
                         'name' => 'visibility',
                         'type' => 'true_false',
-                        'instructions' => 'Private: Your profile is not publicly accessible. However, it is viewable as a part of your applications.',
+                        'instructions' => 'Private: Your profile is not publicly accessible. However, it is viewable as
+                        a part of your applications.',
                         'required' => 0,
                         'conditional_logic' => 0,
                         'wrapper' => [
@@ -1421,7 +1459,10 @@ class AcfFields
                                     'class' => '',
                                     'id' => '',
                                 ],
-                                'default_value' => 'Enthusiastic and self-motivated web designer with 3+ years of experience. Eager to join WebHouse to bring top-class frontend development, UX, and visual design skills. In previous roles redesigned a SaaS website that reduced CAC by 50%, and implemented an SEO-optimized design that boosted traffic by 300%.',
+                                'default_value' => 'Enthusiastic and self-motivated web designer with 3+ years of
+                                experience. Eager to join WebHouse to bring top-class frontend development, UX, and
+                                visual design skills. In previous roles redesigned a SaaS website that reduced CAC by
+                                50%, and implemented an SEO-optimized design that boosted traffic by 300%.',
                                 'placeholder' => 'Description',
                                 'maxlength' => '',
                                 'rows' => '',
@@ -1992,7 +2033,7 @@ class AcfFields
     public function benefitsChoices($field)
     {
         $settings = SiteSettings::getJobSettings();
-        $jobService = $settings['benefits'] ?? [];
+        $jobService = $settings['benefits_options'] ?? [];
         return $this->prepareFieldChoices($jobService, $field);
     }
 

@@ -30,7 +30,13 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                 <span class="color-primary">*</span></label>
         </div>
         <div class="col-12 col-md-7">
-            <input class="file" type="file" id="post-company-logo" required>
+            <input
+                class="file"
+                type="file"
+                id="post-company-logo"
+                accept=".jpg,.png"
+                required
+            />
         </div>
     </div>
     <div class="row mt-md-4">
@@ -188,22 +194,20 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
             <div class="field-label mb-2 mb-md-0 mt-md-2">Skills <span class="color-primary">*</span></div>
             <p>Target the exact job seekers you need by adding skill keywords below.</p>
         </div>
-        <div class="col-12 col-md-7 field-skills">
-            <ul class="field-skills-list mb-md-4">
-                <li data-key="Adobe Photoshop"><span>Adobe Photoshop</span><span class="field-skills-close"></span></li>
-                <li data-key="Figma"><span>Figma</span><span class="field-skills-close"></span></li>
+        <div class="col-12 col-md-7 js-custom-list-component">
+            <ul class="custom-list__items js-custom-list-items js-skills-list mb-md-4">
             </ul>
             <div class="field-skills-panel d-flex flex-column flex-md-row">
                 <label class="d-block mb-0 mt-3 mt-md-0 flex-md-grow-1 mr-md-4">
                     <input
-                        class="field-text js-auto-complete"
+                        class="field-text js-auto-complete js-custom-list-input"
                         type="text"
                         id="post-job-category"
                         name="skill"
                         autocomplete="off"
                     />
                 </label>
-                <button class="btn btn-primary mt-3 m-md-0 px-md-4" type="button">Add</button>
+                <button class="btn btn-primary mt-3 m-md-0 px-md-4 js-custom-list-add-button" type="button">Add</button>
             </div>
         </div>
     </div>
@@ -240,16 +244,19 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                         class="color-primary">*</span></label>
             <p>Alert emails with new candidates will be sent to</p>
         </div>
-        <div class="col-12 col-md-7">
+        <div class="col-12 col-md-7 custom-list js-custom-list-component">
             <fieldset>
                 <input type="checkbox" name="post-job-send" id="post-job-send" checked>
                 <label for="post-job-send">EmployerName (You!)</label>
             </fieldset>
+            <ul
+                class="mb-md-4 custom-list__items custom-list__items--vertical js-custom-list-items js-emails-list"
+            ></ul>
             <div class="mt-md-2 d-flex flex-column flex-md-row">
                 <label class="d-block m-0 mr-md-4 flex-grow-1">
-                    <input class="field-text" type="text" id="post-job-send-email">
+                    <input class="field-text js-custom-list-input" type="email" id="post-job-send-email">
                 </label>
-                <button class="btn btn-primary mt-3 m-md-0" type="button">Add Email</button>
+                <button class="btn btn-primary mt-3 m-md-0 js-custom-list-add-button" type="button">Add Email</button>
             </div>
             <?php if (!empty($agreements)) :
                 $firstKey = array_key_first($agreements);

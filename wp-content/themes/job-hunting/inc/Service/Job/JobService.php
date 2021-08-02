@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EcJobHunting\Service\Job;
-
 
 use EcJobHunting\Entity\Vacancy;
 use EcJobHunting\Front\SiteSettings;
@@ -80,21 +78,11 @@ class JobService
                 'post_status' => $_POST['status'] ?? 'draft',
                 'post_author' => (int)$_POST['author'] ?? get_current_user_id(),
                 'post_type' => 'vacancy',
-                'meta_input' => [
-                    'street_address' => $_POST['street'] ?? '',
-                    'hiring_company' => $_POST['company'],
-                    'why_work_at_this_company' => $_POST['reasonsToWork'],
-                    'hiring_company_description' => $_POST['companyDesc'],
-                    'send_new_candidates_to' => $_POST['notifyMe'] === 'on' ? 1 : 0,
-                    'emails_to_inform' => $_POST['notifyEmail'] === 'on' ? 1 : 0,
-                    'is_commission_included' => $_POST['isCommissionIncluded'] === 'on' ? 1 : 0,
-                    'additional_options' => explode(',', $_POST['agreements']),
-                    'benefits' => explode(',', $_POST['benefits']),
-                ],
                 'tax_input' => [
                     'type' => explode(',', $_POST['typeId']) ?? [],
                     'skill' => explode(',', $_POST['skills']) ?? [],
                     'location' => explode(',', $_POST['location']) ?? [],
+                    'job-category' => explode(',', $_POST['category']) ?? [],
                 ],
             ];
 
@@ -102,6 +90,29 @@ class JobService
             if (!$postId) {
                 $this->response->setMessage(
                     'Job wansn\'t created, please try again later or send email to support team'
+                )->setStatus(501)->send();
+            }
+
+            // Load company logo
+            if (!empty($_FILES['logo']) && in_array($_FILES['logo']['type'], ['image/jpeg', 'image/png'])) {
+                require_once(ABSPATH . 'wp-admin/includes/image.php');
+                require_once(ABSPATH . 'wp-admin/includes/file.php');
+                require_once(ABSPATH . 'wp-admin/includes/media.php');
+
+                $attachmentId = media_handle_upload('logo', $postId);
+
+                if (!is_wp_error($attachmentId)) {
+                    update_field('company_logo', $attachmentId, $postId);
+                } else {
+                    $this->response->setMessage(
+                        'Error of file uploading. Job wansn\'t created, please try again later or send email to
+                        support team'
+                    )->setStatus(501)->send();
+                }
+            } else {
+                $this->response->setMessage(
+                    'Error of file uploading. Job wansn\'t created, please try again later or send email to
+                    support team'
                 )->setStatus(501)->send();
             }
 
@@ -113,8 +124,29 @@ class JobService
                 ],
                 $postId
             );
-            update_field('compensation_currency', $_POST['currency'], $postId);
-            update_field('compensation_period', $_POST['period'], $postId);
+            update_field('compensation_currency', $_POST['currency'] ?? 'USD', $postId);
+            update_field('compensation_period', $_POST['period'] ?? 'annually', $postId);
+            update_field('is_commission_included', ($_POST['isCommissionIncluded'] ?? '') === 'on', $postId);
+            update_field('street_address', $_POST['street'] ?? '', $postId);
+            update_field('hiring_company', $_POST['company'] ?? '', $postId);
+            update_field('why_work_at_this_company', $_POST['reasonsToWork'] ?? '', $postId);
+            update_field('hiring_company_description', $_POST['companyDesc'] ?? '', $postId);
+            update_field('emails_to_inform', $_POST['notifyMe'] ?? true, $postId);
+            update_field('hiring_company_description', $_POST['companyDesc'] ?? '', $postId);
+
+            if (!empty($_POST['benefits'])) {
+                update_field('benefits', explode(',', $_POST['benefits']), $postId);
+            }
+
+            if (!empty($_POST['agreements'])) {
+                update_field('additional_options', explode(',', $_POST['agreements']), $postId);
+            }
+
+            if (!empty($_POST['emails'])) {
+                foreach (explode(',', $_POST['emails']) as $email) {
+                    add_row('additional_employer_emails', ['email' => $email], $postId);
+                }
+            }
 
             $this->response
                 ->setId($postId)
@@ -209,10 +241,10 @@ class JobService
                 ]
             );
 
-            if($query->have_posts()) {
+            if ($query->have_posts()) {
                 global $post;
                 ob_start();
-                foreach ($query->posts as $post){
+                foreach ($query->posts as $post) {
                     setup_postdata($post);
                     get_template_part('template-parts/vacancy/card', 'default');
                 }
@@ -252,7 +284,7 @@ class JobService
                     ->send();
             }
 
-            $perPage = (int) get_option( 'posts_per_page' );
+            $perPage = (int) get_option('posts_per_page');
             $paged = (int) $_POST['paged'];
             $filtersValues['s'] = $_POST['s'] ?? '';
             $filtersValues['location'] = $_POST['location'] ?? '';
@@ -279,7 +311,6 @@ class JobService
                 ->setTotal($filter->getFoundJobs())
                 ->setIsEnd($filter->getFoundJobs() <= $perPage * $paged)
                 ->send();
-
         } catch (Exception $ex) {
             $this->response
                 ->setMessage($ex->getMessage())
@@ -322,7 +353,7 @@ class JobService
             update_user_meta($userId, 'jobs_bookmarks', $savedJobs);
 
             $this->response
-                ->setMessage( $isAdd ? 'Added to bookmarks' : 'Removed from bookmarks')
+                ->setMessage($isAdd ? 'Added to bookmarks' : 'Removed from bookmarks')
                 ->setStatus(200)
                 ->setId($id)
                 ->setIsAdded($isAdd)

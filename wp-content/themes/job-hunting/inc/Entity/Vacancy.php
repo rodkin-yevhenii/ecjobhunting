@@ -188,15 +188,15 @@ class Vacancy
     public function getBenefits()
     {
         if (
-            !empty($this->fieldsObject['value']['benefits'])
-            && is_array($this->fieldsObject['value']['benefits'])
+            !empty($this->fieldsObject['value']['benefits_options'])
+            && is_array($this->fieldsObject['value']['benefits_options'])
         ) {
-            $columns = array_column($this->fieldsObject['value']['benefits'], 'key');
+            $columns = array_column($this->fieldsObject['value']['benefits_options'], 'key');
             $values = [];
             foreach ($this->benefits as $benefit) {
                 $key = array_search($benefit, $columns);
                 if ($key !== false) {
-                    array_push($values, $this->fieldsObject['value']['benefits'][$key]['name']);
+                    array_push($values, $this->fieldsObject['value']['benefits_options'][$key]['name']);
                 }
             }
             return $values;
@@ -285,9 +285,10 @@ class Vacancy
      */
     public function getCompensationPeriodName(): string
     {
-        if (!empty($this->fieldsObject['value']['compensation_period']) && is_array(
-                $this->fieldsObject['value']['compensation_period']
-            )) {
+        if (
+            !empty($this->fieldsObject['value']['compensation_period'])
+            && is_array($this->fieldsObject['value']['compensation_period'])
+        ) {
             $key = array_search(
                 $this->compensationPeriod,
                 array_column($this->fieldsObject['value']['compensation_period'], 'key')
