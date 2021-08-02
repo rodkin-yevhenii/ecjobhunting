@@ -3,6 +3,7 @@
 namespace EcJobHunting;
 
 use EcJobHunting\Admin\AdminInit;
+use EcJobHunting\Admin\Registry\ThemeSettings;
 use EcJobHunting\Admin\Registry\UserRoles;
 use EcJobHunting\Front\FrontInit;
 use EcJobHunting\Service\Ajax\Ajax;
@@ -40,8 +41,10 @@ final class ThemeInit
 
     private function registerAdminHooks()
     {
-        add_action('init', new AdminInit());
-        add_action('acf/init', ['EcJobHunting\Admin\Registry\ThemeSettings', 'init']);
+        ThemeSettings::init();
+        AdminInit::init();
+//        add_action('init', [AdminInit::class, 'init']);
+//        add_action('acf/init', ['EcJobHunting\Admin\Registry\ThemeSettings', 'init']);
     }
 
     private function registerFrontHooks()
@@ -112,7 +115,8 @@ final class ThemeInit
                     add_action(
                         'admin_notices',
                         function () {
-                            $message = "Can't create basic page. Please set page templates for pages: 'signup', 'candidate', 'employer'";
+                            $message = "Can't create basic page. Please set page templates for pages: 'signup',
+                            'candidate', 'employer'";
                             echo '<div class="notice notice-error is-dismissible"> <p>' . $message . '</p></div>';
                         }
                     );
@@ -211,16 +215,16 @@ final class ThemeInit
 
     public function retrieveJobLocation($object)
     {
-        return wp_get_post_terms($object['id'], 'location', ['fields'=> 'names']);
+        return wp_get_post_terms($object['id'], 'location', ['fields' => 'names']);
     }
 
     public function retrieveJobSkills($object)
     {
-        return wp_get_post_terms($object['id'], 'skill', ['fields'=> 'names']);
+        return wp_get_post_terms($object['id'], 'skill', ['fields' => 'names']);
     }
 
     public function retrieveJobEmploymentType($object)
     {
-        return wp_get_post_terms($object['id'], 'type', ['fields'=> 'names']);
+        return wp_get_post_terms($object['id'], 'type', ['fields' => 'names']);
     }
 }

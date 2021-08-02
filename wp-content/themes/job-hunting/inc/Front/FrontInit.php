@@ -10,7 +10,6 @@ class FrontInit
     {
         add_theme_support('title-tag');
         add_action('wp_enqueue_scripts', new Assets());
-        add_action('acf/init', [$this, 'init']);
         add_filter('walker_nav_menu_start_el', [$this, 'addClassName'], 10, 4);
         add_filter('nav_menu_css_class', [$this, 'setActiveStateForItem'], 10, 4);
         add_filter('body_class', [$this, 'resetDefaultClasses'], 10, 2);
@@ -53,7 +52,7 @@ class FrontInit
             unset($classes[$key]);
         }
         if (is_front_page()) {
-           return ['frontpage'];
+            return ['frontpage'];
         }
         return $classes;
     }

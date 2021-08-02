@@ -12,7 +12,13 @@ class SiteSettings
     {
         $logo = get_field('logo', 'option');
         $this->logoUrl = empty($logo) ? IMG_URI . 'logo-2X.jpg' : wp_get_attachment_image_url($logo);
-        $this->contactUsUrl = get_field('contact_us_url', 'option');
+        $contactUsArr = get_field('contact_us_url', 'option');
+
+        if (is_array($contactUsArr)) {
+            $this->contactUsUrl = $contactUsArr['url'] ?? '';
+        } else {
+            $this->contactUsUrl = $contactUsArr;
+        }
     }
 
     /**
@@ -32,7 +38,8 @@ class SiteSettings
         return self::$jobSettings;
     }
 
-    public function getContactUsUrl(){
-       return $this->contactUsUrl;
+    public function getContactUsUrl()
+    {
+        return $this->contactUsUrl;
     }
 }

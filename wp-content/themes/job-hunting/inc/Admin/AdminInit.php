@@ -9,7 +9,7 @@ use EcJobHunting\Admin\Registry\ThemeSettings;
 
 class AdminInit
 {
-    public function __invoke()
+    public static function init()
     {
         $acf = new AcfFields();
         $cpt = new CustomPostTypes();
