@@ -167,6 +167,8 @@ class JobService
         try {
             $postId = (int)$_POST['postId'] ?? false;
             $postAuthor = (int)$_POST['author'] ?? false;
+            $benefits = get_field('benefits', $postId);
+            $additionalOptions = get_field('additional_options', $postId);
             $post = get_post($postId);
             if (!$post) {
                 $this->response
@@ -199,15 +201,20 @@ class JobService
                     'type' => wp_get_post_terms($post->ID, 'type', ['fields' => 'ids']),
                     'skill' => wp_get_post_terms($post->ID, 'skill', ['fields' => 'ids']),
                     'location' => wp_get_post_terms($post->ID, 'location', ['fields' => 'ids']),
+                    'job-category' => wp_get_post_terms($post->ID, 'job-category', ['fields' => 'ids']),
                 ],
                 'meta_input' => $meta,
             ];
             $postId = wp_insert_post(wp_slash($postData));
+
             if (!$postId) {
                 $this->response->setMessage(
                     'Job wansn\'t created, please try again later or send email to support team'
                 )->setStatus(501)->send();
             }
+
+            update_field('benefits', $benefits, $postId);
+            update_field('additional_options', $additionalOptions, $postId);
 
             $this->response
                 ->setId($postId)
