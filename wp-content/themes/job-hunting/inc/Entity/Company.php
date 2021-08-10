@@ -45,26 +45,33 @@ class Company extends UserAbstract
     }
 
     /**
+     * @param string $search
      * @return array
      */
-    public function getVacancies(): array
+    public function getVacancies(string $search = ''): array
     {
         if (!$this->vacancies) {
-            $this->vacancies = $this->getVacanciesList();
+            $this->vacancies = $this->getVacanciesList(
+                [
+                    's' => $search
+                ]
+            );
         }
         return $this->vacancies;
     }
 
     /**
+     * @param string $search
      * @return array
      */
-    public function getNewVacancies(): array
+    public function getNewVacancies(string $search = ''): array
     {
         if (!$this->newVacancies) {
             add_filter('posts_where', [$this, 'getVacanciesForMonth']);
             $this->newVacancies = $this->getVacanciesList(
                 [
-                    'suppress_filters' => false
+                    'suppress_filters' => false,
+                    's' => $search
                 ]
             );
             remove_filter('posts_where', [$this, 'getVacanciesForMonth']);
@@ -74,14 +81,16 @@ class Company extends UserAbstract
     }
 
     /**
+     * @param string $search
      * @return array
      */
-    public function getActiveVacancies(): array
+    public function getActiveVacancies(string $search = ''): array
     {
         if (!$this->activeVacancies) {
             $this->activeVacancies = $this->getVacanciesList(
                 [
-                    'post_status' => 'publish'
+                    'post_status' => 'publish',
+                    's' => $search
                 ]
             );
         }
@@ -90,14 +99,16 @@ class Company extends UserAbstract
     }
 
     /**
+     * @param string $search
      * @return array
      */
-    public function getDraftVacancies(): array
+    public function getDraftVacancies(string $search = ''): array
     {
         if (!$this->draftVacancies) {
             $this->draftVacancies = $this->getVacanciesList(
                 [
-                    'post_status' => 'draft'
+                    'post_status' => 'draft',
+                    's' => $search
                 ]
             );
         }
@@ -106,14 +117,16 @@ class Company extends UserAbstract
     }
 
     /**
+     * @param string $search
      * @return array
      */
-    public function getClosedVacancies(): array
+    public function getClosedVacancies(string $search = ''): array
     {
         if (!$this->closedVacancies) {
             $this->closedVacancies = $this->getVacanciesList(
                 [
-                    'post_status' => 'private'
+                    'post_status' => 'private',
+                    's' => $search
                 ]
             );
         }

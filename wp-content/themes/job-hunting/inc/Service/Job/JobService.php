@@ -243,23 +243,25 @@ class JobService
                 ->send();
         }
 
+        $searchQuery = $_POST['search'] ?? '';
+
         $employer = new Company(wp_get_current_user());
 
         switch ($_POST['type']) {
             case 'new':
-                $vacancies = $employer->getNewVacancies();
+                $vacancies = $employer->getNewVacancies($searchQuery);
                 break;
             case 'active':
-                $vacancies = $employer->getActiveVacancies();
+                $vacancies = $employer->getActiveVacancies($searchQuery);
                 break;
             case 'draft':
-                $vacancies = $employer->getDraftVacancies();
+                $vacancies = $employer->getDraftVacancies($searchQuery);
                 break;
             case 'closed':
-                $vacancies = $employer->getClosedVacancies();
+                $vacancies = $employer->getClosedVacancies($searchQuery);
                 break;
             default:
-                $vacancies = $employer->getVacancies();
+                $vacancies = $employer->getVacancies($searchQuery);
                 break;
         }
 

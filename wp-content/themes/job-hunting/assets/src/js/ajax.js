@@ -7,8 +7,6 @@ $(() => {
   const $filterLoadMoreBtn = $('.js-filter-load-more')
   const $addBookmarkBtn = $('.add-bookmark')
   const $applyBtn = $('.js-apply')
-  const $revokeBtn = $('.js-revoke')
-  const $dismissBtn = $('.js-dismiss-job')
   const $suggestedJobsContainer = $('.js-suggested-jobs')
   const $dismissedJobsContainer = $('.js-dismissed-jobs')
 
@@ -38,6 +36,45 @@ $(() => {
         url: ajaxUrl,
         nonce: $('.js-employer-my-jobs-types').data('nonce'),
         type
+      },
+      dataType: 'json',
+      beforeSend: function () {
+        isAjax = true;
+      },
+      success: function (response) {
+        if (response && response.status === 200) {
+          $('.js-employer-my-jobs-container').html(response.html)
+        } else if (response.status === 404) {
+          $('.js-employer-my-jobs-container').html(`<p>${response.message}</p>`)
+        } else {
+          console.log(response.message)
+        }
+      }
+    })
+  })
+
+  $(document).on('submit', '.js-employer-my-job-search', function (event) {
+    event.preventDefault()
+
+    if (isAjax !== undefined && isAjax) {
+      return
+    }
+
+    let isAjax = false;
+
+    const activeFilter = $('.js-employer-my-jobs-types li a.active')
+    const type = activeFilter.parent().data('type')
+    const search = $(event.currentTarget).find('input').val()
+
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data: {
+        action: 'load_employer_vacancies',
+        url: ajaxUrl,
+        nonce: $('.js-employer-my-jobs-types').data('nonce'),
+        type,
+        search
       },
       dataType: 'json',
       beforeSend: function () {
@@ -114,7 +151,7 @@ $(() => {
 
   function filterLoadMore($holder, $btn) {
     const paged = $holder.attr('data-paged')
-    const per_page = $holder.attr('data-perpage')
+    // const per_page = $holder.attr('data-perpage')
     const s = $('#s').val()
     const location = $('#location').val()
     const publish_date = $('#publish-date').val()
@@ -215,33 +252,6 @@ $(() => {
       }
     )
   })
-
-  // $revokeBtn.on('click', (event) => {
-  //   const $btnRevoke = $(event.currentTarget);
-  //   const $holder = $btnRevoke.parent()
-  //   const $btnApply = $holder.find('.js-apply')
-  //   const data = {
-  //     action: 'revoke_job',
-  //     vacancyId: $btnRevoke.attr('data-vacancy-id')
-  //   }
-  //
-  //   ajaxRequest(
-  //     data,
-  //     () => {},
-  //     (response) => {
-  //       if (response.status === 200) {
-  //         $btnRevoke.fadeOut(0)
-  //         $btnApply.fadeIn(500)
-  //
-  //         return
-  //       }
-  //       console.error(response.status, response.message)
-  //     },
-  //     (error) => {
-  //       console.error(error)
-  //     }
-  //   )
-  // })
 
   $addBookmarkBtn.on('click', (event) => {
     event.preventDefault()
@@ -451,7 +461,7 @@ $(() => {
     postJobAjax(formData, submitBtn)
   })
 
-  $loadMoreBtn.on('click', (e) => {
+  $loadMoreBtn.on('click', () => {
     const total = $vacancyHolder.attr('data-total')
     const itemsShown = $vacancyHolder.attr('data-shown')
     if (total <= itemsShown) {
@@ -460,7 +470,7 @@ $(() => {
     loadMoreAjax($vacancyHolder, $loadMoreBtn)
   })
 
-  $filterLoadMoreBtn.on('click', (e) => {
+  $filterLoadMoreBtn.on('click', () => {
     filterLoadMore($vacancyHolder, $filterLoadMoreBtn)
   })
 
