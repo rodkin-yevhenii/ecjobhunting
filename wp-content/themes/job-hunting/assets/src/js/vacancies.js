@@ -9,23 +9,20 @@ async function getVacancy (id) {
 }
 
 async function updateVacancy (id, dataset) {
-  const response = await fetch(`/wp-json/wp/v2/vacancies/${id}`, {
+  return await fetch(`/wp-json/wp/v2/vacancies/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
-      'Authorization': 'Basic ' + window._basic
+      'X-WP-Nonce': REST_API_data.nonce
     },
     body: JSON.stringify(dataset)
   })
-  return response
 }
 
 $(() => {
   const $edit = $('.js-edit-job')
-  const $duplicate = $('.js-duplicate-job')
-  const $delete = $('.js-delete-job')
-  const $publish = $('.js-publish-job')
-  const $archive = $('.js-archive-job')
+  // const $duplicate = $('.js-duplicate-job')
+  // const $delete = $('.js-delete-job')
   const $modal = $('.ec-job-modal')
 
   $edit.on('click', (e) => {
@@ -86,16 +83,47 @@ $(() => {
     $modal.addClass('is-hidden')
   })
 
-  $publish.on('click', (e) => {
+  // Publish vacancy
+  $(document).on('click', '.js-publish-job', () => {
     const dataset = {
       status: 'publish'
     }
-    const id = $(e.currentTarget).closest('ul').attr('data-job-id')
+    // const id = $(e.currentTarget).attr('data-job-id')
+    const id = undefined
 
     let promise = updateVacancy(id, dataset)
     promise.then((response) => response.json())
-      .then((data) => { console.log(data) })
+      .then(
+        data => {
+          if (data.code !== undefined) {
+            console.error(data)
+          } else {
+            document.location.reload()
+          }
+        }
+      )
       .catch((err) => { console.log(err) })
   })
 
+  // CLose/Archive vacancy
+  $(document).on('click', '.js-archive-job', e => {
+    const dataset = {
+      status: 'private'
+    }
+    const id = $(e.currentTarget).attr('data-job-id')
+    console.log(id)
+
+    let promise = updateVacancy(id, dataset)
+    promise.then((response) => response.json())
+      .then(
+        data => {
+          if (data.code !== undefined) {
+            console.error(data)
+          } else {
+            document.location.reload()
+          }
+        }
+      )
+      .catch((err) => { console.log(err) })
+  })
 })

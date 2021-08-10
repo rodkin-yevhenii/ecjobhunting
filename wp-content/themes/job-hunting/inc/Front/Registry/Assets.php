@@ -62,5 +62,11 @@ class Assets
                 'nonce' => wp_create_nonce('ecjob_nonce')
             ]
         );
+
+        wp_localize_script(
+            'vacancies',
+            'REST_API_data',
+            ['nonce' => wp_create_nonce('wp_rest')]
+        );
     }
 }
