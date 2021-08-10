@@ -2,6 +2,7 @@
 
 namespace EcJobHunting\Service\Job;
 
+use EcJobHunting\Entity\Company;
 use EcJobHunting\Entity\Vacancy;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Interfaces\AjaxResponse;
@@ -60,6 +61,9 @@ class JobService
             // Apply job
             add_action('wp_ajax_apply_job', [$this, 'applyJobAjaxCallback']);
             add_action('wp_ajax_nopriv_apply_job', [$this, 'applyJobAjaxCallback']);
+
+            add_action('wp_ajax_load_employer_vacancies', [$this, 'loadEmployerVacancies']);
+            add_action('wp_ajax_nopriv_load_employer_vacancies', [$this, 'loadEmployerVacancies']);
         }
     }
 
@@ -228,6 +232,57 @@ class JobService
                 ->setStatus(501)
                 ->send();
         }
+    }
+
+    public function loadEmployerVacancies(): void
+    {
+        if (!wp_verify_nonce($_POST['nonce'], 'employer_my_vacancies')) {
+            $this->response
+                ->setMessage('Access forbidden')
+                ->setStatus(403)
+                ->send();
+        }
+
+        $employer = new Company(wp_get_current_user());
+
+        switch ($_POST['type']) {
+            case 'new':
+                $vacancies = $employer->getNewVacancies();
+                break;
+            case 'active':
+                $vacancies = $employer->getActiveVacancies();
+                break;
+            case 'draft':
+                $vacancies = $employer->getDraftVacancies();
+                break;
+            case 'closed':
+                $vacancies = $employer->getClosedVacancies();
+                break;
+            default:
+                $vacancies = $employer->getVacancies();
+                break;
+        }
+
+        if (empty($vacancies)) {
+            $this->response
+                ->setMessage('Jobs not found')
+                ->setStatus(404)
+                ->send();
+        }
+
+        ob_start();
+        global $post;
+        foreach ($vacancies as $post) :
+            setup_postdata($post);
+            get_template_part('template-parts/vacancy/card', 'dashboard');
+        endforeach;
+        wp_reset_postdata();
+        $html = ob_get_clean();
+
+        $this->response
+            ->setStatus(200)
+            ->setResponseBody($html)
+            ->send();
     }
 
     public function loadMoreItems()

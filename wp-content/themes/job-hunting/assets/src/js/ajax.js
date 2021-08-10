@@ -9,10 +9,51 @@ $(() => {
   const $applyBtn = $('.js-apply')
   const $revokeBtn = $('.js-revoke')
   const $dismissBtn = $('.js-dismiss-job')
-  const $showDismissedJobsBtn = $('.js-show-dismissed-jobs')
-  const $showSuggestedJobsBtn = $('.js-show-dismissed-jobs')
   const $suggestedJobsContainer = $('.js-suggested-jobs')
   const $dismissedJobsContainer = $('.js-dismissed-jobs')
+
+  $(document).on('click', '.js-employer-my-jobs-types a', event => {
+    event.preventDefault();
+
+    if (isAjax !== undefined && isAjax) {
+      return
+    }
+
+    let isAjax = false;
+    const currentLink = $(event.currentTarget);
+
+    if (currentLink.hasClass('active')) {
+      return
+    }
+
+    $('.js-employer-my-jobs-types a').removeClass('active')
+    currentLink.addClass('active');
+    const type = currentLink.parent().data('type')
+
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data: {
+        action: 'load_employer_vacancies',
+        url: ajaxUrl,
+        nonce: $('.js-employer-my-jobs-types').data('nonce'),
+        type
+      },
+      dataType: 'json',
+      beforeSend: function () {
+        isAjax = true;
+      },
+      success: function (response) {
+        if (response && response.status === 200) {
+          $('.js-employer-my-jobs-container').html(response.html)
+        } else if (response.status === 404) {
+          $('.js-employer-my-jobs-container').html(`<p>${response.message}</p>`)
+        } else {
+          console.log(response.message)
+        }
+      }
+    })
+  })
 
   function postJobAjax (data, $messageContainer) {
     $.ajax({

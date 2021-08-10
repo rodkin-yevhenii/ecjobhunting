@@ -10,6 +10,10 @@ class Company extends UserAbstract
     private bool $isActivated = false;
     private float $credits = 0;
     private array $vacancies = [];
+    private array $newVacancies = [];
+    private array $activeVacancies = [];
+    private array $draftVacancies = [];
+    private array $closedVacancies = [];
     private array $candidates = [];
     private int $jobPosted = 0;
     private int $jobVisitors = 0;
@@ -46,16 +50,105 @@ class Company extends UserAbstract
     public function getVacancies(): array
     {
         if (!$this->vacancies) {
-            $this->vacancies = get_posts(
+            $this->vacancies = $this->getVacanciesList();
+        }
+        return $this->vacancies;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNewVacancies(): array
+    {
+        if (!$this->newVacancies) {
+            add_filter('posts_where', [$this, 'getVacanciesForMonth']);
+            $this->newVacancies = $this->getVacanciesList(
                 [
-                    'numberposts' => -1,
-                    'fields' => 'ids',
-                    'post_type' => 'vacancy',
-                    'post_status' => 'any',
+                    'suppress_filters' => false
+                ]
+            );
+            remove_filter('posts_where', [$this, 'getVacanciesForMonth']);
+        }
+
+        return $this->newVacancies;
+    }
+
+    /**
+     * @return array
+     */
+    public function getActiveVacancies(): array
+    {
+        if (!$this->activeVacancies) {
+            $this->activeVacancies = $this->getVacanciesList(
+                [
+                    'post_status' => 'publish'
                 ]
             );
         }
-        return $this->vacancies;
+
+        return $this->activeVacancies;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDraftVacancies(): array
+    {
+        if (!$this->draftVacancies) {
+            $this->draftVacancies = $this->getVacanciesList(
+                [
+                    'post_status' => 'draft'
+                ]
+            );
+        }
+
+        return $this->draftVacancies;
+    }
+
+    /**
+     * @return array
+     */
+    public function getClosedVacancies(): array
+    {
+        if (!$this->closedVacancies) {
+            $this->closedVacancies = $this->getVacanciesList(
+                [
+                    'post_status' => 'private'
+                ]
+            );
+        }
+
+        return $this->closedVacancies;
+    }
+
+    /**
+     * @param string $where SQL request
+     *
+     * @return string
+     */
+    public function getVacanciesForMonth(string $where = ''): string
+    {
+        $where .= " AND post_date > '" . date('Y-m-d', strtotime('-30 days')) . "'";
+
+        return $where;
+    }
+
+    /**
+     * @param $args array   Query args
+     *
+     * @return array
+     */
+    private function getVacanciesList(array $args = []): array
+    {
+        $defaultArgs = [
+            'numberposts' => -1,
+            'fields' => 'ids',
+            'post_type' => 'vacancy',
+            'post_status' => 'any',
+        ];
+        $args = array_merge($defaultArgs, $args);
+
+        return get_posts($args);
     }
 
     /**
