@@ -189,13 +189,24 @@ class Company extends UserAbstract
      */
     public function getJobVisitors(): int
     {
+        if (!$this->jobVisitors) {
+            $vacancies = $this->getActiveVacancies();
+            $counter = 0;
+
+            foreach ($vacancies as $id) {
+                $vacancy = new Vacancy($id);
+                $counter += $vacancy->getVisitorsNumber();
+            }
+
+            $this->jobVisitors = $counter;
+        }
         return $this->jobVisitors;
     }
 
     public function getCandidates(): array
     {
         if (!$this->candidates) {
-            $vacancies = $this->getVacancies();
+            $vacancies = $this->getActiveVacancies();
             foreach ($vacancies as $vacancy) {
                 $applied = get_field('applied', $vacancy);
                 if ($applied) {

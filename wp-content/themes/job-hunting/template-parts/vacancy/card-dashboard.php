@@ -107,7 +107,7 @@ if (!$vacancy) {
                                                     </li>
                                                     <li>
                                                         <strong class="color-dark text-large text-regular"><?php
-                                                            echo count($vacancy->getVisitors()); ?></strong><span
+                                                            echo $vacancy->getVisitorsNumber(); ?></strong><span
                                                                 class="color-secondary text-usual">Visitors</span></li>
                                                     <li><strong class="color-primary text-large text-regular"><?php
                                                             echo $vacancy->getCandidatesNumber(); ?></strong><span

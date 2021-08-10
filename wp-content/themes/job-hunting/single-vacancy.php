@@ -17,12 +17,14 @@ $currencySymbol = VacancyService::getCurrencySymbol($vacancy->getCurrency());
 
 if (!in_array($user->ID, $visitorsList) && UserService::isCandidate()) {
     $visitorsList[] = $user->ID;
-    update_field('visitors', ++$visitorsList, $vacancy->getId());
+    update_field('visitors', $visitorsList, $vacancy->getId());
 }
 
 get_header(); ?>
     <main>
-        <?php if (have_posts() && $vacancy): the_post();
+        <?php
+        if (have_posts() && $vacancy) :
+            the_post();
             $benefits = $vacancy->getBenefits();
             $employer = $vacancy->getEmployer();
             ?>
@@ -33,13 +35,13 @@ get_header(); ?>
                             <h1 class="mb-md-3 mb-xl-5"><?php echo $vacancy->getTitle(); ?></h1>
                             <div class="vacancy-header"><strong class="my-3">
                                     <?php
-                                    if ($vacancy->getCompensationFrom() && $vacancy->getCompensationTo()):
+                                    if ($vacancy->getCompensationFrom() && $vacancy->getCompensationTo()) :
                                         echo sprintf(
                                             __('%s to %s', 'ecjobhunting'),
                                             $currencySymbol . $vacancy->getCompensationFrom(),
                                             $currencySymbol . $vacancy->getCompensationTo()
                                         );
-                                    else:
+                                    else :
                                         echo $vacancy->getCompensationFrom()
                                             ? $currencySymbol . $vacancy->getCompensationFrom()
                                             : $currencySymbol . $vacancy->getCompensationTo();
@@ -52,24 +54,39 @@ get_header(); ?>
                                 <?php if ($benefits) : ?>
                                     <strong class="mt-4 mb-2">Benefits Offered</strong>
                                     <ul>
-                                        <?php foreach ($benefits as $benefit): ?>
+                                        <?php
+                                        foreach ($benefits as $benefit) :
+                                            ?>
                                             <li><?php echo $benefit; ?></li>
-                                        <?php endforeach; ?>
+                                            <?php
+                                        endforeach;
+                                        ?>
                                     </ul>
                                 <?php endif; ?>
                             </div>
                             <article class="mt-5">
-                                <?php if ($vacancy->getDescription()): ?>
-                                    <h2><?php _e('Job description', 'ecjobhunting')?></h2>
-                                    <p class="mb-4"><?php echo $vacancy->getDescription(); ?></p>
-                                <?php endif; ?>
+                                <?php
+                                if ($vacancy->getDescription()) :
+                                    ?>
+                                    <h2><?php
+                                        _e('Job description', 'ecjobhunting') ?></h2>
+                                    <p class="mb-4"><?php
+                                        echo $vacancy->getDescription(); ?></p>
+                                    <?php
+                                endif;
+                                ?>
 
-                                <?php if ($vacancy->getReasonsToWork()): ?>
-                                    <h4><?php _e('Why Work at This Company?', 'ecjobhunting')?></h4>
-                                    <p class="mb-4"><?php echo $vacancy->getReasonsToWork(); ?></p>
-                                <?php endif; ?>
+                                <?php
+                                if ($vacancy->getReasonsToWork()) :
+                                    ?>
+                                    <h4><?php
+                                        _e('Why Work at This Company?', 'ecjobhunting') ?></h4>
+                                    <p class="mb-4"><?php
+                                        echo $vacancy->getReasonsToWork(); ?></p>
+                                    <?php
+                                endif; ?>
 
-                                <?php if ($vacancy->getReasonsToWork()): ?>
+                                <?php if ($vacancy->getReasonsToWork()) : ?>
                                     <h4><?php _e('About The Penso Agency:', 'ecjobhunting')?></h4>
                                     <p class="mb-4"><?php echo $vacancy->getCompanyDescription(); ?></p>
                                 <?php endif; ?>
@@ -95,7 +112,13 @@ get_header(); ?>
                             <?php if (!empty($vacancy->getLogoId())) : ?>
                                 <div class="vacancy-image">
                                     <img
-                                        src="<?php echo wp_get_attachment_image_url($vacancy->getLogoId(), 'single-vacancy-logo'); ?>"
+                                        src="
+                                        <?php
+                                        echo wp_get_attachment_image_url(
+                                            $vacancy->getLogoId(),
+                                            'single-vacancy-logo'
+                                        );
+                                        ?>"
                                         alt="<?php echo $vacancy->getCompanyName(); ?>"
                                     />
                                 </div>
@@ -117,7 +140,8 @@ get_header(); ?>
                     </div>
                 </div>
             </section>
-        <?php else: ?>
-            <?php get_template_part('content-none'); endif; ?>
+        <?php else : ?>
+            <?php get_template_part('content-none');
+        endif; ?>
     </main>
 <?php get_footer();
