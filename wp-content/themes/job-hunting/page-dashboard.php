@@ -2,7 +2,7 @@
 
 use EcJobHunting\Service\User\UserService;
 
-if (!is_user_logged_in() || !UserService::isCandidate() && UserService::isEmployer()) {
+if (!is_user_logged_in() || !UserService::isCandidate() && !UserService::isEmployer()) {
     wp_redirect('/', 301);
     wp_die();
 }
