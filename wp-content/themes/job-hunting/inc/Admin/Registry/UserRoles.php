@@ -49,10 +49,11 @@ class UserRoles
             return;
         }
 
-        $this->updateRole('candidate');
+        $this->updateRole('employer');
     }
 
-    public function updateRole(string $role): void {
+    public function updateRole(string $role): void
+    {
         $role = get_role($role);
 
         if (!$role->has_cap('read')) {
