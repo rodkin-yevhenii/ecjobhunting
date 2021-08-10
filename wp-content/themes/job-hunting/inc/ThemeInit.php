@@ -189,6 +189,42 @@ final class ThemeInit
 
         register_rest_field(
             'vacancy',
+            'jobCategory',
+            [
+                'get_callback' => [$this, 'retrieveJobCategory'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
+            'isCommissionIncluded',
+            [
+                'get_callback' => [$this, 'retrieveCommissionStatus'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
+            'isInformEmployer',
+            [
+                'get_callback' => [$this, 'retrieveInformEmployerStatus'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
+            'additionalEmailsToInform',
+            [
+                'get_callback' => [$this, 'retrieveAdditionalEmailsList'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
             'employmentType',
             [
                 'get_callback' => [$this, 'retrieveJobEmploymentType'],
@@ -223,8 +259,28 @@ final class ThemeInit
         return wp_get_post_terms($object['id'], 'skill', ['fields' => 'names']);
     }
 
+    public function retrieveJobCategory($object)
+    {
+        return wp_get_post_terms($object['id'], 'job-category', ['fields' => 'names']);
+    }
+
     public function retrieveJobEmploymentType($object)
     {
         return wp_get_post_terms($object['id'], 'type', ['fields' => 'names']);
+    }
+
+    public function retrieveCommissionStatus($object)
+    {
+        return get_field('is_commission_included', $object['id']);
+    }
+
+    public function retrieveInformEmployerStatus($object)
+    {
+        return get_field('emails_to_inform', $object['id']);
+    }
+
+    public function retrieveAdditionalEmailsList($object)
+    {
+        return get_field('additional_employer_emails', $object['id']);
     }
 }

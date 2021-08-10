@@ -23,16 +23,21 @@ $currencies = get_field_object('field_compensation_currency')['choices']; // fie
 $period = get_field_object('field_compensation_period')['choices']; // field_compensation_period option
 $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements option
 ?>
-<form class="container-fluid p-0 publish-job-form" data-author="<?php echo get_current_user_id();?>">
+<form
+    id="publish-job-form"
+    class="container-fluid p-0 publish-job-form"
+    data-author="<?php echo get_current_user_id();?>"
+>
     <div class="row mt-md-4">
         <div class="col-12 col-md-5 col-xl-3">
             <label class="field-label mb-2 mb-md-0 mt-md-3" for="post-company-logo">Company logo
                 <span class="color-primary">*</span></label>
         </div>
-        <div class="col-12 col-md-7">
+        <div class="col-12 col-md-7 js-file-input-container">
             <input
                 class="file"
                 type="file"
+                name="logo"
                 id="post-company-logo"
                 accept=".jpg,.png"
                 required
@@ -86,7 +91,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
         </div>
         <?php if (!empty($employmentTypes)) : ?>
             <div class="col-12 col-md-7">
-                <div class="ys-select ys-select-bordered" data-select><span
+                <div class="ys-select ys-select-bordered js-employment-type" data-select><span
                             data-select-value>Select employment type</span>
                     <ul>
                         <?php foreach ($employmentTypes as $type) : ?>
@@ -150,19 +155,19 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
             </div>
             <div class="d-md-flex justify-content-md-between mt-3 mt-md-4 align-items-start flex-wrap">
                 <?php if (!empty($currencies)) : ?>
-                    <div class="ys-select ys-select-bordered mt-3 mt-md-0 mr-md-4" data-select><span
-                                data-select-value>USD</span>
+                    <div class="ys-select ys-select-bordered mt-3 mt-md-0 mr-md-4 js-currency" data-select>
+                        <span data-select-value>USD</span>
                         <ul>
-                            <?php foreach ($currencies as $item) : ?>
-                                <li data-select-item data-key="<?php echo $item; ?>"><?php echo $item; ?></li>
+                            <?php foreach ($currencies as $key => $item) : ?>
+                                <li data-select-item data-key="<?php echo $key; ?>"><?php echo $item; ?></li>
                             <?php endforeach; ?>
                         </ul>
                         <input class="d-none" type="text" id="currency">
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($period)) : ?>
-                    <div class="ys-select ys-select-bordered mt-3 mt-md-0 flex-md-grow-1 mr-lg-4" data-select><span
-                                data-select-value>Annualy</span>
+                    <div class="ys-select ys-select-bordered mt-3 mt-md-0 flex-md-grow-1 mr-lg-4 js-period" data-select>
+                        <span data-select-value>Annualy</span>
                         <ul>
                             <?php foreach ($period as $key => $item) : ?>
                                 <li data-select-item data-key="<?php echo $key; ?>"><?php echo $item; ?></li>
@@ -202,7 +207,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                     <input
                         class="field-text js-auto-complete js-custom-list-input"
                         type="text"
-                        id="post-job-category"
+                        id="post-skill"
                         name="skill"
                         autocomplete="off"
                     />
@@ -246,7 +251,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
         </div>
         <div class="col-12 col-md-7 custom-list js-custom-list-component">
             <fieldset>
-                <input type="checkbox" name="post-job-send" id="post-job-send" checked>
+                <input type="checkbox" name="post-job-send" id="post-job-send">
                 <label for="post-job-send">EmployerName (You!)</label>
             </fieldset>
             <ul

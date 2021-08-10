@@ -2217,7 +2217,16 @@ class AcfFields
     public function currencyChoices($field)
     {
         $settings = SiteSettings::getJobSettings();
-        $jobService = $settings['currency'] ?? [];
+        $currencies = $settings['currency'] ?? [];
+        $jobService = [];
+
+        foreach ($currencies as $currency) {
+            $jobService[] = [
+                'key' => strtolower($currency['name']),
+                'name' => $currency['name'],
+            ];
+        }
+
         return $this->prepareFieldChoices($jobService, $field);
     }
 

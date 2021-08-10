@@ -76,7 +76,9 @@ class JobService
     public function createNewJobAjax()
     {
         try {
+            $vacancyId = $_POST['id'] ?? '';
             $postData = [
+                'ID' => $vacancyId,
                 'post_title' => wp_strip_all_tags($_POST['title'] ?? 'Vacancy'),
                 'post_content' => $_POST['description'] ?? '',
                 'post_status' => $_POST['status'] ?? 'draft',
@@ -89,6 +91,11 @@ class JobService
                     'job-category' => explode(',', $_POST['category']) ?? [],
                 ],
             ];
+
+            if (!empty($vacancyId)) {
+                $vacancy = new Vacancy($vacancyId);
+                $postData['post_date'] = $vacancy->getDatePosted();
+            }
 
             $postId = wp_insert_post(wp_slash($postData));
             if (!$postId) {
@@ -113,7 +120,7 @@ class JobService
                         support team'
                     )->setStatus(501)->send();
                 }
-            } else {
+            } elseif (empty($vacancyId)) {
                 $this->response->setMessage(
                     'Error of file uploading. Job wansn\'t created, please try again later or send email to
                     support team'
@@ -130,12 +137,20 @@ class JobService
             );
             update_field('compensation_currency', $_POST['currency'] ?? 'USD', $postId);
             update_field('compensation_period', $_POST['period'] ?? 'annually', $postId);
-            update_field('is_commission_included', ($_POST['isCommissionIncluded'] ?? '') === 'on', $postId);
+            update_field(
+                'is_commission_included',
+                ($_POST['isCommissionIncluded'] ?? 'false') !== 'false',
+                $postId
+            );
             update_field('street_address', $_POST['street'] ?? '', $postId);
             update_field('hiring_company', $_POST['company'] ?? '', $postId);
             update_field('why_work_at_this_company', $_POST['reasonsToWork'] ?? '', $postId);
             update_field('hiring_company_description', $_POST['companyDesc'] ?? '', $postId);
-            update_field('emails_to_inform', $_POST['notifyMe'] ?? true, $postId);
+            update_field(
+                'emails_to_inform',
+                ($_POST['notifyMe'] ?? 'false') !== 'false',
+                $postId
+            );
             update_field('hiring_company_description', $_POST['companyDesc'] ?? '', $postId);
 
             if (!empty($_POST['benefits'])) {
@@ -147,6 +162,15 @@ class JobService
             }
 
             if (!empty($_POST['emails'])) {
+                if (!empty($vacancyId)) {
+                    $oldMails = get_field('additional_employer_emails', $vacancyId);
+                    $count = count($oldMails);
+
+                    for ($index = count($oldMails); $index > 0; $index--) {
+                        delete_row('additional_employer_emails', $index, $postId);
+                    }
+                }
+
                 foreach (explode(',', $_POST['emails']) as $email) {
                     add_row('additional_employer_emails', ['email' => $email], $postId);
                 }
