@@ -111,7 +111,6 @@ $(() => {
       status: 'private'
     }
     const id = $(e.currentTarget).attr('data-job-id')
-    console.log(id)
 
     let promise = updateVacancy(id, dataset)
     promise.then((response) => response.json())

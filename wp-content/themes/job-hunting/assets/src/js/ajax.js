@@ -53,6 +53,30 @@ $(() => {
     })
   })
 
+  // Duplicate vacancy
+  $(document).on('click', '.js-duplicate-job', e => {
+    const id = $(e.currentTarget).closest('ul').attr('data-job-id')
+    const author = $(e.currentTarget).closest('ul').attr('data-author')
+
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data: {
+        action: 'duplicate_job',
+        postId: id || 0,
+        author: author || ''
+      },
+      dataType: 'json',
+      success: function (response) {
+        if (response && response.status === 201) {
+          window.location.replace(response.permalink)
+        } else {
+          console.error(response)
+        }
+      }
+    })
+  })
+
   $(document).on('submit', '.js-employer-my-job-search', function (event) {
     event.preventDefault()
 

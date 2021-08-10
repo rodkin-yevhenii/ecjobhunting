@@ -52,7 +52,10 @@ if (!$vacancy) {
                                 <div class="d-flex align-items-start mt-3">
                                     <div class="ys-select ys-select-links mr-3" data-select>
                                         <span data-select-value>Manage</span>
-                                        <ul data-job-id="<?php the_ID();?>">
+                                        <ul
+                                            data-job-id="<?php the_ID();?>"
+                                            data-author="<?php echo $vacancy->getAuthor(); ?>"
+                                        >
                                             <li>
                                                 <a
                                                     class="js-edit-job"
