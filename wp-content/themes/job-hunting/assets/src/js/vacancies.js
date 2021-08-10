@@ -2,7 +2,8 @@ async function getVacancy (id) {
   const response = await fetch(`/wp-json/wp/v2/vacancies/${id}`, {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json;charset=utf-8'
+      'Content-Type': 'application/json;charset=utf-8',
+      'X-WP-Nonce': REST_API_data.nonce
     }
   })
   return await response.json()
@@ -19,18 +20,29 @@ async function updateVacancy (id, dataset) {
   })
 }
 
+async function deleteVacancy (id) {
+  return await fetch(`/wp-json/wp/v2/vacancies/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'X-WP-Nonce': REST_API_data.nonce
+    },
+    body: JSON.stringify({})
+  })
+}
+
 $(() => {
-  const $edit = $('.js-edit-job')
-  // const $duplicate = $('.js-duplicate-job')
-  // const $delete = $('.js-delete-job')
   const $modal = $('.ec-job-modal')
 
-  $edit.on('click', (e) => {
+  $(document).on('click', '.js-edit-job', (e) => {
+    e.preventDefault()
+
     $modal.removeClass('is-hidden')
     const id = $(e.currentTarget).closest('ul').attr('data-job-id')
     let response = getVacancy(id)
 
     response.then((r) => {
+      console.log(r)
       const job = {
         title: r.title,
         jobLocation: r.location,
@@ -84,12 +96,11 @@ $(() => {
   })
 
   // Publish vacancy
-  $(document).on('click', '.js-publish-job', () => {
+  $(document).on('click', '.js-publish-job', e => {
     const dataset = {
       status: 'publish'
     }
-    // const id = $(e.currentTarget).attr('data-job-id')
-    const id = undefined
+    const id = $(e.currentTarget).attr('data-job-id')
 
     let promise = updateVacancy(id, dataset)
     promise.then((response) => response.json())
@@ -113,6 +124,24 @@ $(() => {
     const id = $(e.currentTarget).attr('data-job-id')
 
     let promise = updateVacancy(id, dataset)
+    promise.then((response) => response.json())
+      .then(
+        data => {
+          if (data.code !== undefined) {
+            console.error(data)
+          } else {
+            document.location.reload()
+          }
+        }
+      )
+      .catch((err) => { console.log(err) })
+  })
+
+  // Delete vacancy
+  $(document).on('click', '.js-delete-job', e => {
+    const id = $(e.currentTarget).closest('ul').attr('data-job-id')
+
+    let promise = deleteVacancy(id)
     promise.then((response) => response.json())
       .then(
         data => {

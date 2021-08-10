@@ -21,6 +21,9 @@ class UserRoles
                 'edit_published_posts' => true,
                 'upload_files' => true,
                 'publish_posts' => true,
+                'delete_posts' => true,
+                'delete_published_posts' => true,
+
             ]
         );
 
@@ -42,6 +45,8 @@ class UserRoles
                 'edit_published_posts' => true,
                 'upload_files' => true,
                 'publish_posts' => true,
+                'delete_posts' => true,
+                'delete_published_posts' => true,
             ]
         );
 
@@ -74,6 +79,14 @@ class UserRoles
 
         if (!$role->has_cap('publish_posts')) {
             $role->add_cap('publish_posts', true);
+        }
+
+        if (!$role->has_cap('delete_posts')) {
+            $role->add_cap('delete_posts', true);
+        }
+
+        if (!$role->has_cap('delete_published_posts')) {
+            $role->add_cap('delete_published_posts', true);
         }
     }
 }
