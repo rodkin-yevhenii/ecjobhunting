@@ -14,6 +14,8 @@ class Company extends UserAbstract
     private array $activeVacancies = [];
     private array $draftVacancies = [];
     private array $closedVacancies = [];
+    private array $appliedVacancies = [];
+    private array $candidatesData = [];
     private array $candidates = [];
     private int $jobPosted = 0;
     private int $jobVisitors = 0;
@@ -135,6 +137,31 @@ class Company extends UserAbstract
     }
 
     /**
+     * @param string $search
+     * @return array
+     */
+    public function getAppliedVacancies(string $search = ''): array
+    {
+        if (!$this->appliedVacancies) {
+            $this->appliedVacancies = $this->getVacanciesList(
+                [
+                    'post_status' => 'publish',
+                    's' => $search,
+                    'meta_query' => [
+                        [
+                            'key' => 'applied',
+                            'value' => 0,
+                            'compare' => '>'
+                        ]
+                    ]
+                ]
+            );
+        }
+
+         return $this->appliedVacancies;
+    }
+
+    /**
      * @param string $where SQL request
      *
      * @return string
@@ -203,24 +230,48 @@ class Company extends UserAbstract
         return $this->jobVisitors;
     }
 
+    public function getCandidatesData(): array
+    {
+        if (!$this->candidatesData) {
+            $allCandidates = get_field('candidates', 'user_' . $this->getUserId());
+
+            if (empty($allCandidates)) {
+                return [];
+            }
+
+            $activeVacancies = $this->getActiveVacancies();
+
+            foreach ($allCandidates as $candidateData) {
+                if (!in_array($candidateData['vacancy'], $activeVacancies)) {
+                    continue;
+                }
+
+                $candidate = UserService::getUser($candidateData['employee']);
+
+                if ('publish' !== get_post_status($candidate->getCvId())) {
+                    continue;
+                }
+
+                $this->candidatesData[] = $candidateData;
+            }
+        }
+        return $this->candidatesData;
+    }
+
     public function getCandidates(): array
     {
         if (!$this->candidates) {
-            $vacancies = $this->getActiveVacancies();
-            foreach ($vacancies as $vacancy) {
-                $applied = get_field('applied', $vacancy);
-                if ($applied) {
-                    $resumes = [];
-                    foreach ($applied as $candidate) {
-                        $resume = new Candidate(get_user_by('id', $candidate));
-                        if ($resume->isPublished()) {
-                            $resumes[] = $resume;
-                        }
-                    }
-                    $this->candidates = array_merge($this->candidates, $resumes);
-                }
+            $candidatesData = $this->getCandidatesData();
+
+            if (empty($candidatesData)) {
+                return [];
+            }
+
+            foreach ($candidatesData as $data) {
+                $this->candidates[$data['employee']] = new Candidate(get_user_by('id', $data['employee']));
             }
         }
+
         return $this->candidates;
     }
 }

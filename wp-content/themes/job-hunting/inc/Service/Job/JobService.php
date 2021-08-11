@@ -2,6 +2,7 @@
 
 namespace EcJobHunting\Service\Job;
 
+use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Entity\Company;
 use EcJobHunting\Entity\Vacancy;
 use EcJobHunting\Front\SiteSettings;
@@ -76,7 +77,7 @@ class JobService
     public function createNewJobAjax()
     {
         try {
-            $vacancyId = $_POST['id'] ?? '';
+            $vacancyId = is_numeric($_POST['id'] ?? '') ? $_POST['id'] : '';
             $postData = [
                 'ID' => $vacancyId,
                 'post_title' => wp_strip_all_tags($_POST['title'] ?? 'Vacancy'),
@@ -559,11 +560,23 @@ class JobService
         }
 
         $candidates = $vacancy->getCandidates();
+        $employer = $vacancy->getEmployer();
+        $employerCandidates = $employer->getCandidates();
 
         if (!in_array($userId, $candidates)) {
             $candidates[] = $userId;
             $this->response->setMessage('applied');
             update_field('applied', $candidates, $vacancy->getId());
+        }
+
+        if (!array_key_exists($userId, $employerCandidates)) {
+            $row = [
+                'date' => date('F j, Y'),
+                'vacancy' => $vacancy->getId(),
+                'employee' => $userId
+            ];
+
+            add_row('candidates', $row, 'user_' . $employer->getUserId());
         }
 
 

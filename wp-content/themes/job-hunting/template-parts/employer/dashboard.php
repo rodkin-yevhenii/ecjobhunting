@@ -8,7 +8,7 @@ $company = new Company(wp_get_current_user());
 if (!$company) {
     return;
 }
-$candidates = $company->getCandidates();
+$candidatesData = $company->getCandidatesData();
 
 ?>
 <div class="page">
@@ -21,12 +21,14 @@ $candidates = $company->getCandidates();
                 <h3>Candidates</h3>
                 <div class="candidate-list">
                     <?php
-                    foreach ($candidates as $candidate) :
-                        $post = $candidate->getCvId();
-                        setup_postdata($post);
-                        get_template_part('template-parts/candidate/card', 'featured', ['candidate' => $candidate]);
+                    foreach ($candidatesData as $data) :
+                        get_template_part(
+                            'template-parts/candidate/card',
+                            'featured',
+                            ['candidateData' => $data]
+                        );
                     endforeach;
-                    wp_reset_postdata(); ?>
+                    ?>
                 </div>
             </div>
         </div>
