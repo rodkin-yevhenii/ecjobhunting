@@ -575,4 +575,43 @@ $(() => {
       }
     })
   })
+
+  $(document).on('click', '.rate-button', event => {
+    event.preventDefault()
+
+    if (isAjax) {
+      return
+    }
+
+    let isAjax = false;
+    const currentButton = $(event.currentTarget)
+    const buttons = currentButton.parent().find('.rate-button')
+
+    buttons.each((index, item) => {
+      $(item).removeClass('active')
+
+    })
+    currentButton.addClass('active')
+
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data: {
+        action: 'rate_candidate',
+        userId: currentButton.parent().attr('data-user'),
+        rating: currentButton.attr('data-rate'),
+        nonce: currentButton.parent().attr('data-nonce'),
+      },
+      dataType: 'json',
+      beforeSend: function () {
+        isAjax = true;
+      },
+      success: function (response) {
+        if (response.status !== 200) {
+          console.error(response.status, response.message)
+        }
+        isAjax = false;
+      }
+    })
+  })
 })

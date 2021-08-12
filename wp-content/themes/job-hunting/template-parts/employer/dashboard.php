@@ -25,7 +25,10 @@ $candidatesData = $company->getCandidatesData();
                         get_template_part(
                             'template-parts/candidate/card',
                             'featured',
-                            ['candidateData' => $data]
+                            [
+                                'candidateData' => $data,
+                                'company' => $company,
+                            ]
                         );
                     endforeach;
                     ?>
@@ -75,20 +78,28 @@ $candidatesData = $company->getCandidatesData();
             <div class="col-6 col-md-3"><strong class="text-huge text-regular"><?php
                     echo $company->getJobVisitors(); ?></strong>
                 <p class="text-large my-2">Job visitors</p>
-                <?php
-                if ($company->isActivated()) : ?>
-                    <a class="color-primary" href="<?php
-                    echo get_the_permalink() . '?type=visitors'; ?>">View report</a>
-                    <?php
-                endif;
-                ?>
+<!--                --><?php
+//                if ($company->isActivated() && !empty($company->getJobVisitors())) : ?>
+<!--                    <a class="color-primary" href="--><?php
+//                    echo get_the_permalink() . '?type=visitors'; ?><!--">View report</a>-->
+<!--                    --><?php
+//                endif;
+//                ?>
             </div>
             <div class="col-6 col-md-3 mt-4 mt-md-0">
                 <strong class="text-huge text-regular">
                     <?php echo count($company->getCandidates()); ?>
                 </strong>
                 <p class="text-large my-2">Candidates received</p>
-                <a class="color-primary" href="<?php echo get_the_permalink() . '?type=candidates'; ?>">View report</a>
+                <?php
+                if (!empty($company->getCandidates())) :
+                    ?>
+                    <a class="color-primary" href="<?php echo get_the_permalink() . '?type=candidates'; ?>">
+                        View report
+                    </a>
+                    <?php
+                endif;
+                ?>
             </div>
             <div class="col-6 col-md-3 mt-4 mt-md-0">
                 <strong class="text-huge text-regular">$0.00</strong>

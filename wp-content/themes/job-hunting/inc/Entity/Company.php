@@ -17,6 +17,7 @@ class Company extends UserAbstract
     private array $appliedVacancies = [];
     private array $candidatesData = [];
     private array $candidates = [];
+    private array $ratedCandidates = [];
     private int $jobPosted = 0;
     private int $jobVisitors = 0;
     private int $candidatesReceived;
@@ -273,5 +274,22 @@ class Company extends UserAbstract
         }
 
         return $this->candidates;
+    }
+
+    public function getRatedCandidates(): array
+    {
+        if (empty($this->ratedCandidates)) {
+            $ratedCandidates = get_field('rated_candidates', 'user_' . $this->getUserId());
+
+            if (!is_array($ratedCandidates) || empty($ratedCandidates)) {
+                return [];
+            }
+
+            foreach ($ratedCandidates as $data) {
+                $this->ratedCandidates[$data['employee']] = $data['rating'];
+            }
+        }
+
+        return $this->ratedCandidates;
     }
 }

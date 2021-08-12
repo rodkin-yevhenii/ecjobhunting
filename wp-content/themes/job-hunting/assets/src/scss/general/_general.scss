@@ -1490,6 +1490,10 @@ form {
     background-color: $color-white;
     border: none;
 
+    &.active {
+      background-color: $color-grey;
+    }
+
     &:last-of-type {
       margin: 0;
     }
