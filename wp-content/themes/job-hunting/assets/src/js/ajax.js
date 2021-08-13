@@ -246,11 +246,12 @@ $(() => {
   $applyBtn.on('click', (event) => {
     event.preventDefault()
 
-    const $btn = $(event.currentTarget);
-    const text = {
-      apply: $btn.attr('data-apply-text'),
-      revoke: $btn.attr('data-revoke-text')
+    if (isAjax) {
+      return
     }
+
+    let isAjax = false;
+    const $btn = $(event.currentTarget);
     const data = {
       action: 'apply_job',
       vacancyId: $btn.attr('data-vacancy-id')
@@ -258,17 +259,19 @@ $(() => {
 
     ajaxRequest(
       data,
-      () => {},
+      () => {
+        isAjax = true
+      },
       (response) => {
+        isAjax = false
         if (response.status !== 200) {
           console.error(response.status, response.message)
           return
         }
 
         if (response.message === 'applied') {
-          $btn.text(text.revoke)
-        } else {
-          $btn.text(text.apply)
+          $btn.text('Already Applied')
+          $btn.attr('disabled', true)
         }
       },
       (error) => {
