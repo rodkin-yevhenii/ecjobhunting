@@ -21,7 +21,13 @@ $candidatesData = $company->getCandidatesData();
                 <h3>Candidates</h3>
                 <div class="candidate-list">
                     <?php
+                    $counter = 0;
+
                     foreach ($candidatesData as $data) :
+                        if (10 <= $counter++) {
+                            break;
+                        }
+
                         get_template_part(
                             'template-parts/candidate/card',
                             'featured',
