@@ -18,6 +18,10 @@ class Company extends UserAbstract
     private array $candidatesData = [];
     private array $candidates = [];
     private array $ratedCandidates = [];
+    private array $greatMatchedCandidates = [];
+    private array $interestedCandidates = [];
+    private array $unratedCandidates = [];
+    private array $newCandidates = [];
     private int $jobPosted = 0;
     private int $jobVisitors = 0;
     private int $candidatesReceived;
@@ -70,14 +74,14 @@ class Company extends UserAbstract
     public function getNewVacancies(string $search = ''): array
     {
         if (!$this->newVacancies) {
-            add_filter('posts_where', [$this, 'getVacanciesForMonth']);
+            add_filter('posts_where', [$this, 'getDataForMonth']);
             $this->newVacancies = $this->getVacanciesList(
                 [
                     'suppress_filters' => false,
                     's' => $search
                 ]
             );
-            remove_filter('posts_where', [$this, 'getVacanciesForMonth']);
+            remove_filter('posts_where', [$this, 'getDataForMonth']);
         }
 
         return $this->newVacancies;
@@ -167,7 +171,7 @@ class Company extends UserAbstract
      *
      * @return string
      */
-    public function getVacanciesForMonth(string $where = ''): string
+    public function getDataForMonth(string $where = ''): string
     {
         $where .= " AND post_date > '" . date('Y-m-d', strtotime('-30 days')) . "'";
 
@@ -255,6 +259,8 @@ class Company extends UserAbstract
 
                 $this->candidatesData[] = $candidateData;
             }
+
+            usort($this->candidatesData, [$this, 'sortCandidatesDataByDate']);
         }
         return $this->candidatesData;
     }
@@ -279,17 +285,123 @@ class Company extends UserAbstract
     public function getRatedCandidates(): array
     {
         if (empty($this->ratedCandidates)) {
-            $ratedCandidates = get_field('rated_candidates', 'user_' . $this->getUserId());
+            $ratedCandidates = get_user_meta($this->getUserId(), 'rated_candidates', true);
 
             if (!is_array($ratedCandidates) || empty($ratedCandidates)) {
                 return [];
             }
 
-            foreach ($ratedCandidates as $data) {
-                $this->ratedCandidates[$data['employee']] = $data['rating'];
-            }
+            $this->ratedCandidates = $ratedCandidates;
         }
 
         return $this->ratedCandidates;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGreatMatchedCandidatesData(): array
+    {
+        if (empty($this->greatMatchedCandidates)) {
+            $ratedCandidates = $this->getRatedCandidates();
+
+            foreach ($this->getCandidatesData() as $data) {
+                $id = $data['employee'];
+
+                if (!array_key_exists($id, $ratedCandidates)) {
+                    continue;
+                }
+
+                if ('like' !== $ratedCandidates[$id]) {
+                    continue;
+                }
+
+                $this->greatMatchedCandidates[] = $data;
+            }
+
+            usort($this->greatMatchedCandidates, [$this, 'sortCandidatesDataByDate']);
+        }
+
+        return $this->greatMatchedCandidates;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInterestedCandidatesData(): array
+    {
+        if (empty($this->interestedCandidates)) {
+            $ratedCandidates = $this->getRatedCandidates();
+
+            foreach ($this->getCandidatesData() as $data) {
+                $id = $data['employee'];
+
+                if (!array_key_exists($id, $ratedCandidates)) {
+                    continue;
+                }
+
+                if ('normal' !== $ratedCandidates[$id]) {
+                    continue;
+                }
+
+                $this->interestedCandidates[] = $data;
+            }
+
+            usort($this->interestedCandidates, [$this, 'sortCandidatesDataByDate']);
+        }
+
+        return $this->interestedCandidates;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUnratedCandidatesData(): array
+    {
+        if (empty($this->unratedCandidates)) {
+            foreach ($this->getCandidatesData() as $data) {
+                if (array_key_exists($data['employee'], $this->getRatedCandidates())) {
+                    continue;
+                }
+
+                $this->unratedCandidates[] = $data;
+            }
+
+            usort($this->unratedCandidates, [$this, 'sortCandidatesDataByDate']);
+        }
+
+        return $this->unratedCandidates;
+    }
+
+    public function getNewCandidatesData(): array
+    {
+        if (empty($this->newCandidates)) {
+            $date = new \DateTime(date('F j, Y'));
+            $date->modify('-1 month');
+
+            foreach ($this->getCandidatesData() as $data) {
+                if (strtotime($data['date']) < $date->getTimestamp()) {
+                    continue;
+                }
+
+                $this->newCandidates[] = $data;
+            }
+
+            usort($this->newCandidates, [$this, 'sortCandidatesDataByDate']);
+        }
+
+        return $this->newCandidates;
+    }
+
+    private function sortCandidatesDataByDate(array $firstElem, array $secondElem): int
+    {
+        $date1st = strtotime($firstElem['date']);
+        $date2nd = strtotime($secondElem['date']);
+
+        if ($date1st === $date2nd) {
+            return 0;
+        }
+
+        return $date1st > $date2nd ? -1 : 1;
     }
 }

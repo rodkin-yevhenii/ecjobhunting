@@ -248,6 +248,96 @@ class Vacancy
         return $this->candidates;
     }
 
+    public function getCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
+    public function getGreatMatchedCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getGreatMatchedCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
+    public function getInterestedCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getInterestedCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
+    public function getUnratedCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getUnratedCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
+    public function getNewCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getNewCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
     /**
      * @return int
      */

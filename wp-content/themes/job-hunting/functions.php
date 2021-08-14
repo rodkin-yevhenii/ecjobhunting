@@ -181,10 +181,10 @@ function renderRateButtons(int $id, array $ratedCandidates): void
         <button class="rate-button <?php echo $rate === 'like' ? 'active' : ''; ?>" data-rate="like">
             <?php echo getLikeIcon(); ?>
         </button>
-        <button class="rate-button <?php echo $rate === 'dislike' ? 'active' : ''; ?>" data-rate="dislike">
+        <button class="rate-button <?php echo $rate === 'normal' ? 'active' : ''; ?>" data-rate="normal">
             <?php echo getNotSureIcon(); ?>
         </button>
-        <button class="rate-button <?php echo $rate === 'normal' ? 'active' : ''; ?>" data-rate="normal">
+        <button class="rate-button <?php echo $rate === 'dislike' ? 'active' : ''; ?>" data-rate="dislike">
             <?php echo getDislikeIcon(); ?>
         </button>
     </div>

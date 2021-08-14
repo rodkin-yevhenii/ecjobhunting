@@ -227,8 +227,26 @@
         margin: 10px 0;
       }
 
+      .skills {
+        display: flex;
+        flex-flow: row wrap;
+
+        .skills__item {
+          min-width: auto;
+          margin-left: 10px;
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+      }
+
       .rate-buttons button {
         background-color: $color-grey-light;
+
+        &.active {
+          background-color: $color-grey;
+        }
 
         &:hover {
           background-color: $color-grey;

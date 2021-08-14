@@ -617,4 +617,94 @@ $(() => {
       }
     })
   })
+
+  $(document).on('click', '.js-vacancies-filter li', event => {
+    event.preventDefault()
+
+    const li = $(event.currentTarget)
+    const id = li.attr('data-id')
+    $('#vacancy').val(id)
+    $(`.vacancies-select li[data-id=${id}]`).click()
+  })
+
+  $(document).on('click', '.js-vacancies-select li', event => {
+    event.preventDefault()
+
+    if (isAjax) {
+      return
+    }
+
+    let isAjax = false;
+    const li = $(event.currentTarget)
+    const id = li.attr('data-id')
+    $('#vacancy').val(id)
+
+    const data = {
+      action: 'load_vacancy_candidates',
+      id: li.attr('data-id'),
+      type: $('.js-employer-candidates-types a.active').parent().attr('data-type'),
+      nonce: li.parents('.employer').attr('data-nonce')
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data,
+      dataType: 'json',
+      beforeSend: function () {
+        isAjax = true;
+      },
+      success: function (response) {
+        if (response && response.status === 200) {
+          $('.js-candidates-container').html(response.html)
+        } else if (response.status === 404) {
+          $('.js-candidates-container').html(`<p>${response.message}</p>`)
+        } else {
+          console.log(response.message)
+        }
+        isAjax = false;
+      }
+    })
+  })
+
+  $(document).on('click', '.js-employer-candidates-types li', event => {
+    event.preventDefault()
+
+    if (isAjax) {
+      return
+    }
+
+    let isAjax = false;
+    const currentLi = $(event.currentTarget)
+    const id = $('#vacancy').val()
+    currentLi.parent().find('li a').removeClass('active')
+    currentLi.find('a').addClass('active')
+
+    const data = {
+      action: id ? 'load_vacancy_candidates' : 'load_employer_candidates',
+      id,
+      type: currentLi.attr('data-type'),
+      nonce: currentLi.parents('.employer').attr('data-nonce')
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data,
+      dataType: 'json',
+      beforeSend: function () {
+        isAjax = true;
+      },
+      success: function (response) {
+        if (response && response.status === 200) {
+          $('.js-candidates-container').html(response.html)
+        } else if (response.status === 404) {
+          $('.js-candidates-container').html(`<p>${response.message}</p>`)
+        } else {
+          console.log(response.message)
+        }
+        isAjax = false;
+      }
+    })
+  })
 })
