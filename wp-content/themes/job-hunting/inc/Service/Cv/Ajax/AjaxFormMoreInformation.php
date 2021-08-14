@@ -59,7 +59,7 @@ class AjaxFormMoreInformation extends AjaxFormAbstract
                 wp_create_term($category, 'job-category');
             }
 
-            wp_set_post_terms($cvId, $term->term_id, 'job-category');
+            wp_set_post_terms($cvId, $term->name, 'job-category');
         } else {
             wp_set_post_terms($cvId, '', 'job-category');
         }
