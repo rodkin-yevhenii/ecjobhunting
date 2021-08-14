@@ -104,13 +104,17 @@ $(() => {
         )
       }
 
+      let additionalEmployerEmails = [];
 
-      const additionalEmployerEmails = job.additionalEmailsToInform.map((item) => {
-        return '<li data-key="' + item.email + '">' +
-          '<span>' + item.email + '</span>' +
-          '<span class="custom-list__item-close js-custom-list-item-close"></span>' +
-          '</li>'
-      })
+      if (job.additionalEmailsToInform.length) {
+        additionalEmployerEmails = job.additionalEmailsToInform.map((item) => {
+          return '<li data-key="' + item.email + '">' +
+            '<span>' + item.email + '</span>' +
+            '<span class="custom-list__item-close js-custom-list-item-close"></span>' +
+            '</li>'
+        })
+      }
+
 
       job.options.forEach((item) => {
         $('#' + item).attr('checked', 'checked')
