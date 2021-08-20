@@ -61,6 +61,7 @@ gulp.task('scripts', function (done) {
       'src/js/api.js',
       'src/js/vacancies.js',
       'src/js/cv.js',
+      'src/js/cv-filter.js',
     ]
   }
   Object.keys(scripts).forEach(name => {
@@ -76,6 +77,7 @@ gulp.task('scripts', function (done) {
           api: './src/js/api.js',
           vacancies: './src/js/vacancies.js',
           cv: './src/js/cv.js',
+          'cv-filter': './src/js/cv-filter.js',
         },
         module: {
           rules: [

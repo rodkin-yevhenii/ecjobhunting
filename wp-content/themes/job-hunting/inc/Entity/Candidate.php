@@ -38,6 +38,7 @@ class Candidate extends UserAbstract
     private array $certificates;
     private array $savedJobs;
     private array $dismissedJobs;
+    private string $lastActivity;
 
     public function __construct($user)
     {
@@ -344,7 +345,14 @@ class Candidate extends UserAbstract
     public function getHighestDegreeEarned(): string
     {
         if (empty($this->highestDegreeEarned)) {
-            $this->highestDegreeEarned = $this->fields['degree_earned'] ?? '';
+            $fieldObj = get_field_object('degree_earned', $this->getCvId());
+            $degree = $this->fields['degree_earned'] ?? '';
+
+            if (array_key_exists($degree, $fieldObj['choices'])) {
+                $this->highestDegreeEarned = $fieldObj['choices'][$degree];
+            } else {
+                $this->highestDegreeEarned = '';
+            }
         }
 
         return $this->highestDegreeEarned;
@@ -458,5 +466,17 @@ class Candidate extends UserAbstract
         }
 
         return $this->dismissedJobs;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastActivity(): string
+    {
+        if (empty($this->lastActivity)) {
+            $this->lastActivity = empty($this->fields['last_activity']) ? '' : $this->fields['last_activity'];
+        }
+
+        return $this->lastActivity;
     }
 }

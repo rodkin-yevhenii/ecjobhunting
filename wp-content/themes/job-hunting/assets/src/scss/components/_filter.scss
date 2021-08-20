@@ -89,6 +89,13 @@
       display: block;
     }
 
+    .ys-select {
+      ul {
+        max-height:405px;
+        overflow-y: auto;
+      }
+    }
+
     &-handler {
 
       &:not(.active):hover,

@@ -1,54 +1,54 @@
 <?php
 
+use EcJobHunting\Entity\Candidate;
+
 get_header(); ?>
     <div class="page employer">
         <div class="container">
-            <div class="row mb-5">
-                <div class="col-12 col-md-11 col-xl-7">
-                    <div class="ys-select ys-select-bordered" data-select><span data-select-value>Filter by job</span>
-                        <ul>
-                            <li data-select-item>Item 1</li>
-                            <li data-select-item>Item 2</li>
-                            <li data-select-item>Item 3</li>
-                        </ul>
-                        <input class="d-none" type="text">
-                    </div>
+            <div class="row">
+                <div class="col-12">
+                    <h1>Resume Database</h1>
                 </div>
             </div>
             <div class="row">
-                <?php if (have_posts()): ?>
-                    <div class="col-12 col-xl-8">
-                        <h3>Candidates <span>(20)</span></h3>
-                        <ul class="filter-list">
-                            <li><a class="active color-black" href="#">All</a></li>
-                            <li><a class="color-black" href="#">New</a></li>
-                            <li><a class="color-black" href="#">Great Matches</a></li>
-                            <li><a class="color-black" href="#">Unrated</a></li>
-                            <li><a class="color-black" href="#">Interested</a></li>
-                            <li><a class="color-black" href="#">Within 100 Mi</a></li>
-                        </ul>
-                        <?php
-                        $isFirst = true;
-                        while (have_posts()): the_post();
-                            get_template_part('template-parts/candidate/card', 'default', ['isFirst' => $isFirst]);
-                            if ($isFirst) {
-                                $isFirst = false;
-                            }
-                        endwhile; ?>
-                    </div>
-                <?php else: ?>
-                    <?php get_template_part('content-none'); ?>
-                <?php endif; ?>
-                <div class="col-12 col-xl-4 d-none d-xl-block">
-                    <div class="filter-sidebar">
-                        <h3 class="m-0">Filter by Recently Posted Job</h3>
-                        <p class="m-0">Showing up to 10 active jobs, newest first</p>
-                        <ul class="mt-4">
-                            <li><strong class="d-block text-regular color-primary">Manager</strong><span
-                                        class="color-secondary">London</span></li>
-                            <li><strong class="d-block text-regular color-primary">Graphic Designer</strong><span
-                                        class="color-secondary">London</span></li>
-                        </ul>
+                <div class="col-12" data-tab>
+                    <ul class="results-header results-header-large">
+                        <li class="d-md-none" data-tab-value><span>Search Resumes</span></li>
+                        <li class="active" data-tab-item="search">Search Resumes</li>
+                        <li data-tab-item="saved">My Saved Searches</li>
+                        <li data-tab-item="viewed">My Viewed Resumes</li>
+                    </ul>
+                    <div class="results-content pt-0 pt-md-4">
+                        <div class="active" data-tab-content="search">
+                            <div class="container-fluid p-0">
+                                <div class="row">
+                                    <div id="cv-filter" class="col-12 col-md-6 col-xl-4">
+                                        <?php
+                                        get_template_part(
+                                            'template-parts/candidate/filter/filter',
+                                            'form'
+                                        );
+                                        ?>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-xl-8 mt-4 js-candidates-container">
+                                        <?php
+                                        while (have_posts()) :
+                                            the_post();
+
+                                            get_template_part(
+                                                'template-parts/candidate/card',
+                                                'search',
+                                                [
+                                                    'candidate' => new Candidate(get_user_by('id', $post->post_author))
+                                                ]
+                                            );
+                                        endwhile; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-tab-content="saved"><span>My saved searches</span></div>
+                        <div data-tab-content="viewed"><span>My viewed resumes</span></div>
                     </div>
                 </div>
             </div>

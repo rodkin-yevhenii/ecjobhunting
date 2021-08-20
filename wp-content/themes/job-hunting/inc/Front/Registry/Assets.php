@@ -42,6 +42,10 @@ class Assets
         if (current_user_can('employer')) {
             wp_enqueue_script('vacancies', $this->baseSrc . 'js/index/vacancies.js', [$this->handle], '1.0', true);
         }
+
+        if (is_post_type_archive('cv')) {
+            wp_enqueue_script('cv-filter', $this->baseSrc . 'js/index/cv-filter.js', [$this->handle], '1.0', true);
+        }
     }
 
     private function localizeScripts()

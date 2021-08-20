@@ -92,36 +92,20 @@ if (!$candidate) {
             <?php _e('Highest Degree Earned', 'ecjobhunting'); ?>
         </label>
         <select id="highest_degree_earned" class="field-text">
-            <option
-                value=""
-                <?php echo '' === $candidate->getHighestDegreeEarned() ? 'selected' : ''; ?>
-            >
-                -- Select option --
-            </option>
-            <option
-                value="High School Diploma/GED"
-                <?php echo 'High School Diploma/GED' === $candidate->getHighestDegreeEarned() ? 'selected' : ''; ?>
-            >
-                High School Diploma/GED
-            </option>
-            <option
-                value="Associates Degree"
-                <?php echo 'Associates Degree' === $candidate->getHighestDegreeEarned() ? 'selected' : ''; ?>
-            >
-                Associates Degree
-            </option>
-            <option
-                value="Bachelors Degree"
-                <?php echo 'Bachelors Degree' === $candidate->getHighestDegreeEarned() ? 'selected' : ''; ?>
-            >
-                Bachelors Degree
-            </option>
-            <option
-                value="Masters or Ph.D"
-                <?php echo 'Masters or Ph.D' === $candidate->getHighestDegreeEarned() ? 'selected' : ''; ?>
-            >
-                Masters or Ph.D
-            </option>
+            <?php
+            $fieldObj = get_field_object('degree_earned', $candidate->getCvId());
+
+            foreach ($fieldObj['choices'] as $key => $val) :
+                ?>
+                <option
+                    value="<?php echo $key; ?>"
+                    <?php selected($candidate->getHighestDegreeEarned(), $val); ?>
+                >
+                    <?php echo $val; ?>
+                </option>
+                <?php
+            endforeach;
+            ?>
         </select>
 
         <label class="field-label" for="category">

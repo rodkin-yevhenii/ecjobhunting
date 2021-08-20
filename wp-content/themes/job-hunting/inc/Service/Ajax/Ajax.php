@@ -2,6 +2,7 @@
 
 namespace EcJobHunting\Service\Ajax;
 
+use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Entity\Company;
 use EcJobHunting\Entity\Vacancy;
 use EcJobHunting\Front\EcResponse;
@@ -27,6 +28,7 @@ class Ajax extends AjaxCallbackAbstract
         $this->actions['rate_candidate'] = 'rateEmployee';
         $this->actions['load_vacancy_candidates'] = 'loadVacancyCandidates';
         $this->actions['load_employer_candidates'] = 'loadEmployerCandidates';
+        $this->actions['get-filtered-cvs'] = 'loadFilteredCvs';
 
         parent::__construct();
     }
@@ -216,6 +218,163 @@ class Ajax extends AjaxCallbackAbstract
         endforeach;
         wp_reset_postdata();
         $html = ob_get_clean();
+
+        $this->response
+            ->setStatus(200)
+            ->setResponseBody($html)
+            ->send();
+    }
+
+    public function loadFilteredCvs(): void
+    {
+        if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'get-filtered-cvs')) {
+            $this->response
+                ->setStatus(403)
+                ->setMessage('You are unauthorized. Access denied.')
+                ->send();
+        }
+
+        $args = [
+            'post_type' => 'cv',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'tax_query' => [],
+        ];
+
+        // Filter by vacancy ID
+        if (!empty($_POST['vacancyId'])) {
+            $vacancy = new Vacancy($_POST['vacancyId']);
+            foreach ($vacancy->getCandidates() as $id) {
+                $candidate = new Candidate(get_user_by('id', $id));
+                $args['post__in'][] = $candidate->getCvId();
+            }
+        }
+
+        // Filter by skills. Use logic OR for skills.
+        if (!empty($_POST['skills'])) {
+            $skills = explode(',', $_POST['skills']);
+            $args['tax_query'][] = [
+                'taxonomy' => 'skill',
+                'field' => 'name',
+                'terms' => $skills,
+                'include_children' => false
+            ];
+        }
+
+        // Filter by location.
+        if (!empty($_POST['location'])) {
+            $args['tax_query'][] = [
+                'taxonomy' => 'location',
+                'field' => 'name',
+                'terms' => $_POST['location'],
+                'include_children' => false
+            ];
+        }
+
+        // Filter by headline.
+        if (!empty($_POST['jobTitle'])) {
+            $args['meta_query'][] = [
+                'key' => 'headline',
+                'value' => $_POST['jobTitle'],
+                'compare' => 'LIKE',
+                'type' => 'CHAR'
+            ];
+        }
+
+        // Filter by company name.
+        if (!empty($_POST['company'])) {
+            $args['meta_query'][] = [
+                'key' => 'work_experience_$_company_name',
+                'value' => $_POST['company'],
+                'compare' => 'LIKE',
+                'type' => 'CHAR'
+            ];
+        }
+
+        // Filter by published date.
+        if (!empty($_POST['daysAgo'])) {
+            $date = new \DateTime();
+            $date->modify('-' . (int) $_POST['daysAgo'] . ' day');
+            $args['date_query'] = [
+                'column' => 'post_date',
+                'after' => $date->format('F j, Y'),
+                'inclusive' => true
+            ];
+        }
+
+        // Filter by highest degree.
+        if (!empty($_POST['degree']) && 'any' !== $_POST['degree']) {
+            $value = [];
+
+            switch ($_POST['degree']) {
+                case 'high_school':
+                    $value = ['high_school', 'college', 'bachelors', 'master', 'doctorate'];
+                    break;
+                case 'college':
+                    $value = ['college', 'bachelors', 'master', 'doctorate'];
+                    break;
+                case 'bachelors':
+                    $value = ['bachelors', 'master', 'doctorate'];
+                    break;
+                case 'master':
+                    $value = ['master', 'doctorate'];
+                    break;
+                case 'doctorate':
+                    $value = ['doctorate'];
+                    break;
+            }
+
+            $args['meta_query'][] = [
+                'key' => 'degree_earned',
+                'value' => $value,
+                'compare' => 'IN',
+                'type' => 'CHAR'
+            ];
+        }
+
+        // Filter by job category.
+        if (!empty($_POST['category'])) {
+            $args['tax_query'][] = [
+                'taxonomy' => 'job-category',
+                'field' => 'name',
+                'terms' => $_POST['category'],
+                'include_children' => false
+            ];
+        }
+
+        // Filter by veteran status.
+        if (!empty($_POST['isVeteran'])) {
+            $args['meta_query'][] = [
+                'key' => 'veteran_status',
+                'value' => 'I am a Veteran',
+                'compare' => '=',
+                'type' => 'CHAR'
+            ];
+        }
+
+        $query = new \WP_Query($args);
+
+        if (!$query->have_posts()) {
+            $this->response
+                ->setStatus(404)
+                ->setMessage('Candidates not found')
+                ->send();
+        }
+
+        ob_start();
+        while ($query->have_posts()) {
+            $query->the_post();
+
+            get_template_part(
+                'template-parts/candidate/card',
+                'search',
+                [
+                    'candidate' => new Candidate(get_user_by('id', $query->post->post_author))
+                ]
+            );
+        }
+        $html = ob_get_clean();
+        wp_reset_postdata();
 
         $this->response
             ->setStatus(200)

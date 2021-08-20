@@ -2,6 +2,7 @@
 
 namespace EcJobHunting\Service\Cv;
 
+use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormAboutMe;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormAchievements;
 use EcJobHunting\Service\Cv\Ajax\AjaxFormActivation;
@@ -35,6 +36,9 @@ class CvService
     public function __invoke()
     {
         add_action('ecjob-save-new-data', [$this, 'updateAvatar']);
+        add_action('wp_loaded', [$this, 'updateLastActivity']);
+        add_filter('posts_where', [$this, 'replaceCompanyNameRepeaterField']);
+
 
         $this->registerAjaxControllers();
 
@@ -142,5 +146,25 @@ class CvService
         }
 
         return ceil($progress);
+    }
+
+    public function updateLastActivity(): void
+    {
+        if (!UserService::isCandidate()) {
+            return;
+        }
+
+        $date = new \DateTime();
+        $userId = get_current_user_id();
+        $candidate = new Candidate(get_user_by('id', $userId));
+
+        if ($candidate->getLastActivity() !== $date->format('F j, Y')) {
+            update_field('last_activity', $date->format('F j, Y'), $candidate->getCvId());
+        }
+    }
+
+    public function replaceCompanyNameRepeaterField($where)
+    {
+        return str_replace("meta_key = 'work_experience_$", "meta_key LIKE 'work_experience_%", $where);
     }
 }
