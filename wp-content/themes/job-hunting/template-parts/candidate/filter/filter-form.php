@@ -23,7 +23,11 @@ $categories = get_terms(
 );
 ?>
 <button class="filter-database-handler btn btn-outline-primary px-5 mb-3 d-md-none">Filter</button>
-<form class="filter-database" data-nonce="<?php echo wp_create_nonce('get-filtered-cvs'); ?>">
+<form
+    class="filter-database"
+    data-nonce="<?php echo wp_create_nonce('get-filtered-cvs'); ?>"
+    data-paged="2"
+>
     <?php
     // Vacancies
     if (!empty($activeVacancies)) :

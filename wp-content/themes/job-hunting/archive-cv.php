@@ -30,19 +30,44 @@ get_header(); ?>
                                         );
                                         ?>
                                     </div>
-                                    <div class="col-12 col-md-6 col-xl-8 mt-4 js-candidates-container">
-                                        <?php
-                                        while (have_posts()) :
-                                            the_post();
-
-                                            get_template_part(
-                                                'template-parts/candidate/card',
-                                                'search',
+                                    <div class="col-12 col-md-6 col-xl-8 mt-4">
+                                        <div class="js-candidates-container">
+                                            <?php
+                                            $counter = 0;
+                                            query_posts(
                                                 [
-                                                    'candidate' => new Candidate(get_user_by('id', $post->post_author))
+                                                    'post_type' => 'cv',
+                                                    'post_status' => 'publish',
+                                                    'posts_per_page' => 15
                                                 ]
                                             );
-                                        endwhile; ?>
+
+                                            while (have_posts()) :
+                                                the_post();
+                                                $counter++;
+
+                                                get_template_part(
+                                                    'template-parts/candidate/card',
+                                                    'search',
+                                                    [
+                                                        'candidate' => new Candidate(
+                                                            get_user_by('id', $post->post_author)
+                                                        ),
+                                                    ]
+                                                );
+                                            endwhile;
+
+                                            wp_reset_query();
+                                            ?>
+                                        </div>
+                                        <div class="col-12 text-center mt-4">
+                                            <button
+                                                <?php echo $counter < 15 ? 'style="display:none"' : ''; ?>
+                                                class="btn btn-primary js-load-more-cvs"
+                                            >
+                                                Load More
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

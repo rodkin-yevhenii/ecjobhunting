@@ -23,7 +23,6 @@ export default class CustomList {
 
   addItem (parentContainer)
   {
-    console.log(parentContainer)
     const input = $(parentContainer).find('.js-custom-list-input'),
     value = input.val(),
     list = $(parentContainer).find('.js-custom-list-items')

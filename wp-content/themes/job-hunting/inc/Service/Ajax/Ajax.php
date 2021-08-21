@@ -5,9 +5,7 @@ namespace EcJobHunting\Service\Ajax;
 use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Entity\Company;
 use EcJobHunting\Entity\Vacancy;
-use EcJobHunting\Front\EcResponse;
 use EcJobHunting\Service\Ajax\Callbacks\Autocomplete;
-use EcJobHunting\Service\User\UserService;
 
 /**
  * Class Ajax
@@ -29,6 +27,7 @@ class Ajax extends AjaxCallbackAbstract
         $this->actions['load_vacancy_candidates'] = 'loadVacancyCandidates';
         $this->actions['load_employer_candidates'] = 'loadEmployerCandidates';
         $this->actions['get-filtered-cvs'] = 'loadFilteredCvs';
+        $this->actions['load-more-cvs'] = 'loadMoreCvs';
 
         parent::__construct();
     }
@@ -237,7 +236,8 @@ class Ajax extends AjaxCallbackAbstract
         $args = [
             'post_type' => 'cv',
             'post_status' => 'publish',
-            'posts_per_page' => -1,
+            'posts_per_page' => 15,
+            'paged' => $_POST['paged'] ?? 1,
             'tax_query' => [],
         ];
 
@@ -354,7 +354,7 @@ class Ajax extends AjaxCallbackAbstract
 
         $query = new \WP_Query($args);
 
-        if (!$query->have_posts()) {
+        if (!$query->have_posts() && $args['paged'] === 1) {
             $this->response
                 ->setStatus(404)
                 ->setMessage('Candidates not found')
@@ -377,6 +377,7 @@ class Ajax extends AjaxCallbackAbstract
         wp_reset_postdata();
 
         $this->response
+            ->setIsEnd($args['posts_per_page'] * $args['paged'] >= $query->found_posts)
             ->setStatus(200)
             ->setResponseBody($html)
             ->send();

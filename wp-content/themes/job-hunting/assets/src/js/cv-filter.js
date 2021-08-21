@@ -6,11 +6,27 @@ $(() => {
     return
   }
 
-  $(document).on('submit', event => {
+  $form.on('submit', event => {
     event.preventDefault()
 
+    loadCvs()
+  })
+
+  $(document).on('click', '.js-load-more-cvs', event => {
+    event.preventDefault()
+
+    loadCvs(true)
+  })
+
+  function loadCvs(isLoadMore = false) {
     if (isAjax !== undefined && isAjax) {
       return
+    }
+
+    let paged = 1;
+
+    if (isLoadMore) {
+      paged = $form.attr('data-paged')
     }
 
     let isAjax = false;
@@ -36,11 +52,10 @@ $(() => {
       company: $('#resumes-company').val() || null,
       daysAgo: $daysAgoRange.text() === '0' ? null : parseInt($daysAgoRange.text()),
       degree,
+      paged: paged,
       category: $('#resume-category').val() || null,
       isVeteran: $('#resume-veteran')[0].checked ? 1 : null
     }
-
-    console.log(data)
 
     $.ajax({
       type: 'POST',
@@ -53,11 +68,25 @@ $(() => {
       success: function (response) {
         if (response.status === 200) {
           isAjax = false;
-          $('.js-candidates-container').html(response.html)
+          paged++
+          $form.attr('data-paged', paged)
+
+          if (isLoadMore) {
+            $('.js-candidates-container').append(response.html)
+          } else {
+            $('.js-candidates-container').html(response.html)
+            $('.js-load-more-cvs').show()
+          }
+
+          if (response.isEnd) {
+            $('.js-load-more-cvs').hide()
+          }
+
           $([document.documentElement, document.body]).animate({
             scrollTop: $(".js-candidates-container").offset().top - 20
           }, 300);
         } else if (response.status === 404) {
+          $('.js-load-more-cvs').hide()
           $('.js-candidates-container').html(response.message)
           $([document.documentElement, document.body]).animate({
             scrollTop: $(".js-candidates-container").offset().top - 20
@@ -70,5 +99,5 @@ $(() => {
         console.error(error)
       }
     })
-  })
+  }
 })
