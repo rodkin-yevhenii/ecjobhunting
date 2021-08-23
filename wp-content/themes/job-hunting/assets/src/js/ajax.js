@@ -504,9 +504,10 @@ $(() => {
     e.preventDefault()
     const $form = $(e.currentTarget)
     const isEmployer = 'register-employer-form' === $form.attr('id')
+    let rules = {}
 
     if (isEmployer) {
-      const rules = {
+      rules = {
         email: "required",
         password: "required",
         employer_pwd_confirmation: {
@@ -514,7 +515,7 @@ $(() => {
         }
       }
     } else {
-      const rules = {
+      rules = {
         email: "required",
         password: "required",
         candidate_pwd_confirmation: {
@@ -523,8 +524,10 @@ $(() => {
       }
     }
 
+    console.log(rules)
+
     const validator = $form.validate({
-      rules: this.rules,
+      rules: rules,
       highlight: function (element) {
         $(element).parent().addClass('form-invalid')
       },
