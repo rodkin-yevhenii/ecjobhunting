@@ -83,7 +83,7 @@ class AjaxFormAboutMe extends AjaxFormAbstract
         update_field('zip_code', $data['zip_code'], $cvId);
         update_field('relocate', $data['relocate'], $cvId);
 
-        $candidate = UserService::getUser($_POST['userId']);
+        $candidate = UserService::getUser($_POST['user']);
 
         ob_start();
         get_template_part(

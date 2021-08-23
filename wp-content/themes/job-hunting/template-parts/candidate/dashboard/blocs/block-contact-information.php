@@ -1,4 +1,11 @@
 <?php
+
+use EcJobHunting\Entity\Candidate;
+
+/**
+ * @var $candidate Candidate
+ */
+
 $candidate = $args['candidate'] ?? null;
 $isOwner = $args['isOwner'] ?? false;
 
