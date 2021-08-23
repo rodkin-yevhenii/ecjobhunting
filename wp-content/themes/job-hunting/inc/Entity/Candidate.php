@@ -125,7 +125,7 @@ class Candidate extends UserAbstract
     public function isReadyToRelocate()
     {
         if (empty($this->relocate)) {
-            $this->relocate = (bool)$this->fields['relocate'] ?? false;
+            $this->relocate = (bool) ($this->fields['relocate'] ?? false);
         }
 
         return $this->relocate;
@@ -176,7 +176,7 @@ class Candidate extends UserAbstract
     public function isEmailConfirmed(): bool
     {
         if (empty($this->isEmailConfirmed)) {
-            $this->isEmailConfirmed = (bool)$this->fields['is_email_confirmed'] ?? false;
+            $this->isEmailConfirmed = $this->fields['is_email_confirmed'] ?? true;
         }
         return $this->isEmailConfirmed;
     }
@@ -348,7 +348,7 @@ class Candidate extends UserAbstract
             $fieldObj = get_field_object('degree_earned', $this->getCvId());
             $degree = $this->fields['degree_earned'] ?? '';
 
-            if (array_key_exists($degree, $fieldObj['choices'])) {
+            if (!empty($fieldObj['choices']) && array_key_exists($degree, $fieldObj['choices'])) {
                 $this->highestDegreeEarned = $fieldObj['choices'][$degree];
             } else {
                 $this->highestDegreeEarned = '';
