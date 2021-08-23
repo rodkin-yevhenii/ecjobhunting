@@ -354,7 +354,7 @@ class Ajax extends AjaxCallbackAbstract
 
         $query = new \WP_Query($args);
 
-        if (!$query->have_posts() && $args['paged'] === 1) {
+        if (!$query->have_posts() && $args['paged'] == 1) {
             $this->response
                 ->setStatus(404)
                 ->setMessage('Candidates not found')

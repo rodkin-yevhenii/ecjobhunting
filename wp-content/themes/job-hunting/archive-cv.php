@@ -72,8 +72,16 @@ get_header(); ?>
                                 </div>
                             </div>
                         </div>
-                        <div data-tab-content="saved"><span>My saved searches</span></div>
-                        <div data-tab-content="viewed"><span>My viewed resumes</span></div>
+                        <div data-tab-content="saved">
+                            <div class="container-fluid">
+                                <div class="row js-query-cards-container">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div data-tab-content="viewed">
+                            <span>My viewed resumes</span>
+                        </div>
                     </div>
                 </div>
             </div>

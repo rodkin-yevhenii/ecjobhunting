@@ -32,12 +32,12 @@ $categories = get_terms(
     // Vacancies
     if (!empty($activeVacancies)) :
         ?>
-        <fieldset>
+        <fieldset id="vacancy">
             <div class="field-label mb-2">Your Active Jobs:</div>
             <div class="ys-select ys-select-bordered" data-select>
                 <span data-select-value>Show all candidates</span>
-                <ul>
-                    <li data-select-item data-id>Show all candidates</li>
+                <ul class="js-vacancy">
+                    <li data-select-item data-default>Show all candidates</li>
                     <?php
                     foreach ($activeVacancies as $id) :
                         $vacancy = new Vacancy($id);
@@ -58,7 +58,7 @@ $categories = get_terms(
         <?php
     endif;
     ?>
-    <fieldset class="field-skills mt-4 js-custom-list-component">
+    <fieldset id="skills" class="field-skills mt-4 js-custom-list-component">
         <div class="field-label mb-2">Keywords:</div>
         <ul class="field-skills-list custom-list__items js-skills-list js-custom-list-items"></ul>
         <div class="field-skills-panel mt-2">
@@ -76,12 +76,12 @@ $categories = get_terms(
     <?php
     if (!empty($locations)) :
         ?>
-        <fieldset class="mt-4">
+        <fieldset id="locations" class="mt-4">
             <div class="field-label mb-2">Location:</div>
             <div class="ys-select ys-select-bordered" data-select>
                 <span data-select-value>City, state or zip code</span>
                 <ul>
-                    <li data-select-item data-term-id>Any location</li>
+                    <li data-select-item data-default>Any location</li>
                     <?php
                     foreach ($locations as $id => $name) :
                         ?>
@@ -113,7 +113,7 @@ $categories = get_terms(
 <!--            data-noui-end="50"-->
 <!--        ></div>-->
 <!--    </fieldset>-->
-    <fieldset class="mt-4">
+    <fieldset id="headline" class="mt-4">
         <label class="field-label mb-2" for="resumes-job">Job Title:</label>
         <input
             class="field-text"
@@ -122,7 +122,7 @@ $categories = get_terms(
             placeholder="Past or present job titles"
         />
     </fieldset>
-    <fieldset class="mt-4">
+    <fieldset id="prev-company" class="mt-4">
         <label class="field-label mb-2" for="resumes-company">
             Previous Companies:
         </label>
@@ -133,7 +133,7 @@ $categories = get_terms(
             placeholder="Past or current employers"
         />
     </fieldset>
-    <fieldset class="mt-4">
+    <fieldset id="posted" class="mt-4">
         <div id="resume-days-ago" class="field-label mb-3">
             Freshness: posted <span data-noui-value="posted">0</span> days ago
         </div>
@@ -144,10 +144,10 @@ $categories = get_terms(
             data-noui-end="30"
         ></div>
     </fieldset>
-    <fieldset class="mt-4">
+    <fieldset id="degree" class="mt-4">
         <div class="field-label">Minimum Education:</div>
         <div class="mt-2">
-            <input type="radio" name="resume-education" id="resume-education-1" value="any" checked>
+            <input type="radio" name="resume-education" id="resume-education-1" value="any" data-default checked>
             <label for="resume-education-1">Any</label>
         </div>
         <div class="mt-2">
@@ -175,13 +175,14 @@ $categories = get_terms(
     if (!empty($categories)) :
         $counter = 1;
         ?>
-        <fieldset class="mt-4">
+        <fieldset id="category" class="mt-4">
             <div class="field-label mb-2">Industry:</div>
             <div class="ys-select ys-select-bordered" data-select>
                 <span data-select-value>Jobs categories</span>
                 <ul>
                     <li
                         data-select-item
+                        data-default
                         data-select-item-value
                     >
                         Any category
@@ -205,10 +206,11 @@ $categories = get_terms(
         <?php
     endif;
     ?>
-    <fieldset class="mt-4">
+    <fieldset id="veteran-status" class="mt-4">
         <div class="field-label mb-2">Veteran Status:</div>
         <input name="veteran-status" type="checkbox" id="resume-veteran">
         <label for="resume-veteran">Self-identified as Veteran</label>
     </fieldset>
     <button class="btn btn-primary btn-full mt-4" type="submit">Apply</button>
+    <button class="btn btn-primary btn-full mt-4 js-save-query">Save search params</button>
 </form>
