@@ -23,7 +23,11 @@ $candidate = $args['candidate'];
                 </div>
             </div>
             <div class="col-12 col-md-9 col-xl-10 d-flex flex-wrap">
-                <h4 class="color-primary"><?php echo $candidate->getName(); ?></h4>
+                <h4 class="color-primary">
+                    <a href="<?php echo $candidate->getPermalink(); ?>">
+                        <?php echo $candidate->getName(); ?>
+                    </a>
+                </h4>
                 <span class="results-country color-secondary"><?php echo $candidate->getLocation(); ?></span>
                 <ul>
                     <?php
