@@ -479,4 +479,9 @@ class Candidate extends UserAbstract
 
         return $this->lastActivity;
     }
+
+    public function getPermalink()
+    {
+        return get_post_permalink($this->getCvId());
+    }
 }
