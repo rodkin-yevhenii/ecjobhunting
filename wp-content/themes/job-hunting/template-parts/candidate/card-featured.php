@@ -19,7 +19,9 @@ $workExperience = $cv->getExperience();
 ?>
 <div class="candidate-card">
     <h4 class="text-large text-regular color-primary m-0">
-         <?php echo $candidate->getName(); ?>
+        <a class="color-primary" href="<?php echo $candidate->getPermalink(); ?>">
+            <?php echo $candidate->getName(); ?>
+        </a>
     </h4>
     <p class="m-0 mt-2">Applied to: <?php echo $vacancy->getTitle(); ?></p>
     <p class="m-0 color-secondary"><?php echo $data['date']; ?></p>

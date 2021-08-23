@@ -251,6 +251,10 @@ class Company extends UserAbstract
                     continue;
                 }
 
+                if (!$candidateData['employee']) {
+                    continue;
+                }
+
                 $candidate = UserService::getUser($candidateData['employee']);
 
                 if ('publish' !== get_post_status($candidate->getCvId())) {

@@ -26,7 +26,11 @@ $education = $cv->getEducation();
                 </div>
                 <div class="col-12 col-md-6 col-xl-7 d-flex flex-wrap">
                     <small><?php echo $data['date']; ?></small>
-                    <h4 class="color-primary"><?php echo $candidate->getName(); ?></h4>
+                    <h4 class="color-primary">
+                        <a href="<?php echo $candidate->getPermalink(); ?>">
+                            <?php echo $candidate->getName(); ?>
+                        </a>
+                    </h4>
                     <span class="results-country color-secondary"><?php echo $candidate->getLocation(); ?></span>
                     <ul>
                         <li>
