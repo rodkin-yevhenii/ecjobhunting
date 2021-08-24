@@ -1,6 +1,17 @@
 <?php
 
 use EcJobHunting\Entity\Candidate;
+use EcJobHunting\Entity\Company;
+use EcJobHunting\Service\User\UserService;
+
+if (!UserService::isEmployer()) {
+    return;
+}
+
+/**
+* @var $company Company
+ */
+$company = UserService::getUser(get_current_user_id());
 
 get_header(); ?>
     <div class="page employer">
@@ -80,7 +91,18 @@ get_header(); ?>
                             </div>
                         </div>
                         <div data-tab-content="viewed">
-                            <span>My viewed resumes</span>
+                            <?php foreach ($company->getViewedCandidates() as $id) {
+                                get_template_part(
+                                    'template-parts/candidate/card',
+                                    'search',
+                                    [
+                                        'candidate' => new Candidate(
+                                            get_user_by('id', $id)
+                                        ),
+                                    ]
+                                );
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>

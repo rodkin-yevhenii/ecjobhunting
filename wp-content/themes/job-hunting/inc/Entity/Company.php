@@ -22,6 +22,7 @@ class Company extends UserAbstract
     private array $interestedCandidates = [];
     private array $unratedCandidates = [];
     private array $newCandidates = [];
+    private array $viewedCandidates = [];
     private int $jobPosted = 0;
     private int $jobVisitors = 0;
     private int $candidatesReceived;
@@ -395,6 +396,20 @@ class Company extends UserAbstract
         }
 
         return $this->newCandidates;
+    }
+
+    /**
+     * @return array
+     */
+    public function getViewedCandidates(): array
+    {
+        if (empty($this->viewedCandidates)) {
+            $candidates = get_user_meta($this->getUserId(), 'viewed_candidates', true);
+            $this->viewedCandidates = !empty($candidates) ? $candidates : [];
+            krsort($this->viewedCandidates, SORT_NUMERIC);
+        }
+
+        return $this->viewedCandidates;
     }
 
     private function sortCandidatesDataByDate(array $firstElem, array $secondElem): int

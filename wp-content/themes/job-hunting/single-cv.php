@@ -7,6 +7,25 @@ global $post;
 $candidate = UserService::getUser($post->post_author);
 $isOwner = false;
 
+// Add candidate to viewed list.
+if (UserService::isEmployer()) {
+    $company = UserService::getUser(get_current_user_id());
+    $viewedCandidates = $company->getViewedCandidates();
+    $key = array_search($candidate->getUserId(), $viewedCandidates);
+
+    if (false !== $key) {
+        unset($viewedCandidates[$key]);
+    }
+
+    $viewedCandidates[strtotime('now')] = $candidate->getUserId();
+
+    if (50 < count($viewedCandidates)) {
+        array_splice($viewedCandidates, 50);
+    }
+
+    update_user_meta($company->getUserId(), 'viewed_candidates', $viewedCandidates);
+}
+
 get_header();
 ?>
     <div
