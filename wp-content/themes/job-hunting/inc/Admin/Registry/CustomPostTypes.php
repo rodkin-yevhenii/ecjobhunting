@@ -1,6 +1,5 @@
 <?php
 
-
 namespace EcJobHunting\Admin\Registry;
 
 class CustomPostTypes
@@ -9,6 +8,7 @@ class CustomPostTypes
     {
         $this->registerVacancy();
         $this->registerResume();
+        $this->registerChat();
     }
 
     private function registerVacancy()
@@ -81,6 +81,44 @@ class CustomPostTypes
                 'rewrite' => ['feeds' => false],
                 'supports' => [
                     'editor',
+                    'custom-fields',
+                    'author',
+                    'comments',
+                ],
+            ]
+        );
+    }
+
+    private function registerChat()
+    {
+        register_post_type(
+            'chat',
+            [
+                'labels' => [
+                    'name' => 'Chat',
+                    'singular_name' => 'Chat',
+                    'add_new' => 'Create Chat',
+                    'add_new_item' => 'Create new Chat',
+                    'edit_item' => 'Edit Chat',
+                    'new_item' => 'New Chat',
+                    'view_item' => 'View Chat',
+                    'search_items' => 'Find Chats',
+                    'not_found' => 'Chats not found',
+                    'not_found_in_trash' => 'Chats not found in trash',
+                    'parent_item_colon' => '',
+                    'menu_name' => 'Chats',
+
+                ],
+                'public' => true,
+                'has_archive' => false,
+                'show_ui' => true,
+                'show_in_menu' => true,
+                'show_in_rest' => true,
+                'rest_base' => 'chats',
+                'show_in_nav_menus' => true,
+                'menu_icon' => 'dashicons-admin-post',
+                'rewrite' => ['feeds' => false],
+                'supports' => [
                     'custom-fields',
                     'author',
                     'comments',

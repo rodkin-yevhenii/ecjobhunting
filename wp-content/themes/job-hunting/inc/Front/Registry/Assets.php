@@ -46,6 +46,10 @@ class Assets
         if (is_post_type_archive('cv')) {
             wp_enqueue_script('cv-filter', $this->baseSrc . 'js/index/cv-filter.js', [$this->handle], '1.0', true);
         }
+
+        if (is_page('messages')) {
+            wp_enqueue_script('chat', $this->baseSrc . 'js/index/chat.js', [$this->handle], '1.0', true);
+        }
     }
 
     private function localizeScripts()

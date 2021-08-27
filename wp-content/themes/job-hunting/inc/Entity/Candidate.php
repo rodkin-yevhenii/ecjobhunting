@@ -39,6 +39,8 @@ class Candidate extends UserAbstract
     private array $savedJobs;
     private array $dismissedJobs;
     private string $lastActivity;
+    private string $currentPosition = '';
+    private string $currentCompany = '';
 
     public function __construct($user)
     {
@@ -65,6 +67,17 @@ class Candidate extends UserAbstract
         }
         $fields = get_fields($this->cvId);
         $this->fields = $fields ? $fields : [];
+
+        if (!empty($fields['work_experience']) && is_array($fields['work_experience'])) {
+            foreach ($fields['work_experience'] as $work) {
+                if (!isset($work['period']['is_in_progress']) || !$work['period']['is_in_progress']) {
+                    continue;
+                }
+
+                $this->currentCompany = $work['company_name'] ?? '';
+                $this->currentPosition = $work['job_position'] ?? '';
+            }
+        }
     }
 
     /**
@@ -483,5 +496,37 @@ class Candidate extends UserAbstract
     public function getPermalink()
     {
         return get_post_permalink($this->getCvId());
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getCurrentPosition()
+    {
+        return $this->currentPosition;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getCurrentCompany()
+    {
+        return $this->currentCompany;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentPositionAndCompanyText(): string
+    {
+        if (empty($this->currentPosition) && empty($this->currentCompany)) {
+            return '';
+        } elseif (!empty($this->currentCompany) && !empty($this->currentPosition)) {
+            return sprintf('For %s at %s', $this->currentPosition, $this->currentCompany);
+        } elseif (!empty($this->currentCompany)) {
+            return sprintf('At %s', $this->currentCompany);
+        } else {
+            return sprintf('For %s', $this->currentPosition);
+        }
     }
 }

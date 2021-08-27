@@ -10,11 +10,20 @@ abstract class UserAbstract implements SiteUser
 {
     private ?int $id;
     private ?WP_User $user;
+    private string $role;
 
     public function __construct($user)
     {
         $this->user = $user;
         $this->id = $this->user->ID ?? null;
+
+        if (in_array('candidate', $user->roles)) {
+            $this->role = 'candidate';
+        } elseif (in_array('employer', $user->roles)) {
+            $this->role = 'employer';
+        } else {
+            $this->role = 'admin';
+        }
     }
 
     public function getUserId()
@@ -61,5 +70,13 @@ abstract class UserAbstract implements SiteUser
         }
 
         return $jobBookmarks;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRole(): string
+    {
+        return $this->role;
     }
 }

@@ -7,6 +7,7 @@ use EcJobHunting\Admin\Registry\ThemeSettings;
 use EcJobHunting\Admin\Registry\UserRoles;
 use EcJobHunting\Front\FrontInit;
 use EcJobHunting\Service\Ajax\Ajax;
+use EcJobHunting\Service\Chat\ChatService;
 use EcJobHunting\Service\Cv\CvService;
 use EcJobHunting\Service\Job\JobService;
 use EcJobHunting\Service\User\Login;
@@ -28,6 +29,7 @@ final class ThemeInit
         $this->registerUserRoles();
         $this->registerUserServices();
         $this->registerAjaxCallbacks();
+        $this->registerChatServices();
         add_action('rest_api_init', [$this, 'registerRestApiField']);
     }
 
@@ -77,6 +79,11 @@ final class ThemeInit
     private function registerUserServices()
     {
         add_action('init', new UserService());
+    }
+
+    private function registerChatServices()
+    {
+        add_action('init', new ChatService());
     }
 
     private function registerAjaxCallbacks(): void
