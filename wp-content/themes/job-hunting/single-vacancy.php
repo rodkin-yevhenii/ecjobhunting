@@ -132,7 +132,17 @@ get_header(); ?>
                                 </div>
                             <?php endif; ?>
                             <div class="vacancy-info">
-                                <h2 class="vacancy-company no-decor"><?php echo $vacancy->getCompanyName(); ?></h2>
+                                <?php
+                                if (!empty($vacancy->getCompanyId())) :
+                                    ?>
+                                    <a
+                                        class="vacancy-company no-decor"
+                                        href="/jobs/?company=<?php echo $vacancy->getCompanyId(); ?>"
+                                    >
+                                        <?php echo $vacancy->getCompanyName(); ?>
+                                    </a>
+                                    <?php
+                                endif; ?>
                                 <span class="color-secondary"><?php echo nicetime($vacancy->getDatePosted()); ?></span>
 <!--TODO Add block with share links to vacancy single-->
 <!--                                <div class="social mt-4"><span>Share this job:</span>-->

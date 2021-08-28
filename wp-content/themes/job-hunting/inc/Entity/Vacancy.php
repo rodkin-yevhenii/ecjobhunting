@@ -3,7 +3,6 @@
 namespace EcJobHunting\Entity;
 
 use EcJobHunting\Service\User\UserService;
-use EcJobHunting\Service\Vacancy\VacancyService;
 
 class Vacancy
 {
@@ -27,7 +26,7 @@ class Vacancy
     private array $location = []; // taxonomy Location
     private array $employmentType = []; //taxonomy types
     private array $skills = []; //taxonomy Skills
-    private array $company = []; //taxonomy Company
+    private ?\WP_Term $company; //taxonomy Company
 
     //employer info
     private $employer;
@@ -73,7 +72,8 @@ class Vacancy
                     : $this->compensationRange;
                 $this->streetAddress = !empty($fields['street_address']) ? $fields['street_address'] : '';
                 $this->logoId = $fields['company_logo'] ?? 0;
-                $this->company = wp_get_post_terms($id, 'company', ['fields' => 'names']);
+                $companies = wp_get_post_terms($id, 'company');
+                $this->company = $companies[0] ?? null;
                 $this->reasonsToWork = $fields['why_work_at_this_company'] ?? '';
                 $this->companyDescription = $fields['hiring_company_description'] ?? '';
                 $this->notifyEmployer = (bool)($fields['emails_to_inform'] ?? true);
@@ -163,11 +163,27 @@ class Vacancy
     }
 
     /**
-     * @return mixed|string
+     * @return null|string
      */
     public function getCompanyName()
     {
-        return $this->company[0] ?? '';
+        if (empty($this->company)) {
+            return '';
+        }
+
+        return $this->company->name;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getCompanyId()
+    {
+        if (empty($this->company)) {
+            return null;
+        }
+
+        return $this->company->term_id;
     }
 
     /**
