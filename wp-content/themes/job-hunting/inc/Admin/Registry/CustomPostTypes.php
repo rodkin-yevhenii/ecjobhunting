@@ -111,7 +111,7 @@ class CustomPostTypes
                 ],
                 'public' => true,
                 'has_archive' => false,
-                'show_ui' => true,
+                'show_ui' => false,
                 'show_in_menu' => true,
                 'show_in_rest' => true,
                 'rest_base' => 'chats',
