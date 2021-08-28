@@ -111,6 +111,9 @@ class ChatService
         add_action("wp_ajax_reload_contacts", [$this, 'reloadContactsAjaxCallback']);
         add_action("wp_ajax_nopriv_reload_contacts", [$this, 'reloadContactsAjaxCallback']);
 
+        add_action("wp_ajax_create_chat", [$this, 'createChatAjaxCallback']);
+        add_action("wp_ajax_nopriv_create_chat", [$this, 'createChatAjaxCallback']);
+
         // Other actions
         add_filter('posts_where', [$this, 'replaceContactsRepeaterField']);
         add_filter('duplicate_comment_id', '__return_false');
@@ -321,5 +324,70 @@ class ChatService
     public function replaceContactsRepeaterField($where)
     {
         return str_replace("meta_key = 'contacts_$", "meta_key LIKE 'contacts_%", $where);
+    }
+
+    /**
+     * Create new Chat with user.
+     */
+    public function createChatAjaxCallback(): void
+    {
+        if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'create_chat')) {
+            $this->response
+                ->setStatus(403)
+                ->setMessage('You are unauthorized. Access denied.')
+                ->send();
+        }
+
+        if (empty($_POST['userId'])) {
+            $this->response
+                ->setStatus(204)
+                ->setMessage('User ID is required')
+                ->send();
+        }
+
+        $date = new DateTime();
+        $currentUserId = get_current_user_id();
+        $opponentId = (int)$_POST['userId'];
+        $chatId = wp_insert_post(
+            [
+                'post_type'     => 'chat',
+                'post_status'   => 'publish',
+                'post_author'   => $currentUserId
+            ]
+        );
+
+        if (!$chatId || is_wp_error($chatId)) {
+            $this->response
+                ->setStatus(500)
+                ->setMessage('Error. Something went wrong.')
+                ->send();
+        }
+
+        add_row(
+            'contacts',
+            [
+                'user' => $opponentId,
+                'is_viewed' => false,
+                'is_closed' => false,
+            ],
+            $chatId
+        );
+
+        add_row(
+            'contacts',
+            [
+                'user' => $currentUserId,
+                'is_viewed' => false,
+                'is_closed' => false,
+            ],
+            $chatId
+        );
+
+        update_field('last_update_date', $date->format('Y-m-d H:i:s'), $chatId);
+
+        $this->response
+            ->setStatus(200)
+            ->setData(['chatId' => $chatId])
+            ->send();
     }
 }

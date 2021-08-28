@@ -10,6 +10,30 @@ $(() => {
   const $suggestedJobsContainer = $('.js-suggested-jobs')
   const $dismissedJobsContainer = $('.js-dismissed-jobs')
 
+  $(document).on('click', '.js-start-chat', event => {
+    event.preventDefault()
+
+    const data = {
+      action: 'create_chat',
+      nonce: $(event.currentTarget).attr('data-nonce'),
+      userId: $(event.currentTarget).attr('data-user-id')
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data: data,
+      dataType: 'json',
+      success: function (response) {
+        if (response.status === 200) {
+          window.location.href = `/messages/?chatId=${response.data.chatId}`
+        } else {
+          console.error(response.message)
+        }
+      }
+    })
+  })
+
   $(document).on('click', '.js-employer-my-jobs-types a', event => {
     event.preventDefault();
 

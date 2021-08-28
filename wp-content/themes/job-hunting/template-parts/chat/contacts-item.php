@@ -12,7 +12,7 @@ if (empty($args['chat'])) {
  */
 $chat = $args['chat'];
 $user = $chat->getOpponent();
-$activeChat = $args['active_chat'] ?? null;
+$activeChat = $_GET['chatId'] ?? $args['active_chat'] ?? null;
 ?>
 <li
     class="js-chat-card <?php echo (int)$activeChat === $chat->getId() ? 'active' : ''; ?>"

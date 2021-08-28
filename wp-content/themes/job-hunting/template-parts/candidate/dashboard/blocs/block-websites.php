@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * @var $candidate Candidate
+ */
+
+use EcJobHunting\Entity\Candidate;
+
 $candidate = $args['candidate'] ?? null;
 $isOwner = $args['isOwner'] ?? false;
 //$isOwner = false;
@@ -70,6 +77,20 @@ if (!$candidate) {
             <?php else : ?>
                 <span><?php _e('none', 'ecjobhunting'); ?></span>
             <?php endif; ?>
+        </li>
+    <?php endif;
+
+    if (!$isOwner) : ?>
+        <li>
+            <div class="profile-icon"><?php echo getEnvelopIcon(); ?></div>
+            <a
+                href="#"
+                class="js-start-chat"
+                data-user-id="<?php echo $candidate->getUserId(); ?>"
+                data-nonce="<?php echo wp_create_nonce('create_chat'); ?>"
+            >
+                Start chat
+            </a>
         </li>
     <?php endif; ?>
 </ul>

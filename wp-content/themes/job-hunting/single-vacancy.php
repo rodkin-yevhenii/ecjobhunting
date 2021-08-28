@@ -104,6 +104,14 @@ get_header(); ?>
                                             : __('Already Applied', 'ecjobhunting');
                                         ?>
                                     </button>
+                                    <a
+                                        href="#"
+                                        class="btn btn-primary btn-lg js-start-chat ml-md-4"
+                                        data-user-id="<?php echo $vacancy->getAuthor(); ?>"
+                                        data-nonce="<?php echo wp_create_nonce('create_chat'); ?>"
+                                    >
+                                        Start chat
+                                    </a>
                                 <?php endif; ?>
                             </div>
 <!--TODO Clarify with client what should do button "Am I Qualified?"-->

@@ -43,11 +43,10 @@ get_header();
                         <form
                             id="chat-form"
                             data-chat-id
-                            data-paged="1"
                             data-nonce="<?php echo wp_create_nonce('send_message'); ?>"
                         >
                             <label>
-                                <input class="field-text" type="text" placeholder="Reply to Christopher Kallini">
+                                <input class="field-text" type="text" placeholder="Reply to ...">
                             </label>
                             <button class="btn btn-primary d-block" type="submit">send</button>
                         </form>

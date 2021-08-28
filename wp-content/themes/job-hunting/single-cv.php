@@ -49,24 +49,13 @@ get_header();
                         ['candidate' => $candidate, 'isOwner' => $isOwner]
                     ); ?>
                 </div>
-                <?php
-                if (
-                    !empty($candidate->getWebSite())
-                    || !empty($candidate->getTwitter())
-                    || !empty($candidate->getLinkedin())
-                    || !empty($candidate->getFacebook())
-                ) :
-                    ?>
-                    <div class="profile-item" id="websites-holder">
-                        <?php get_template_part(
-                            'template-parts/candidate/dashboard/blocs/block',
-                            'websites',
-                            ['candidate' => $candidate, 'isOwner' => $isOwner]
-                        ); ?>
-                    </div>
-                    <?php
-                endif;
-                ?>
+                <div class="profile-item" id="websites-holder">
+                    <?php get_template_part(
+                        'template-parts/candidate/dashboard/blocs/block',
+                        'websites',
+                        ['candidate' => $candidate, 'isOwner' => $isOwner]
+                    ); ?>
+                </div>
             </div>
             <div class="col-12 order-1 col-md-7 float-md-right col-xl-9 order-xl-1 mb-5">
                 <?php if ($isOwner) :
