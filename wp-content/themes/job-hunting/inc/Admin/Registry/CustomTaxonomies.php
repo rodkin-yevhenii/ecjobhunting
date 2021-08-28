@@ -7,6 +7,7 @@ class CustomTaxonomies
     public function __construct()
     {
         $this->registerType();
+        $this->registerCompany();
         $this->registerSkills();
         $this->registerLocation();
         $this->registerJobCategories();
@@ -43,6 +44,41 @@ class CustomTaxonomies
                 'show_admin_column' => false,
                 'show_in_rest' => true,
                 'rest_base' => 'job-types',
+            ]
+        );
+    }
+
+    private function registerCompany()
+    {
+        register_taxonomy(
+            'company',
+            ['vacancy'],
+            [
+                'label' => 'Hiring Company',
+                'labels' => [
+                    'name' => 'Hiring Company',
+                    'singular_name' => 'Hiring Company',
+                    'add_new' => 'Add Company',
+                    'add_new_item' => 'Create new Company',
+                    'edit_item' => 'Edit Company',
+                    'new_item' => 'New Company',
+                    'view_item' => 'View Company',
+                    'search_items' => 'Find Companys',
+                    'not_found' => 'Companies not found',
+                    'not_found_in_trash' => 'Companies not found in trash',
+                    'parent_item_colon' => '',
+                    'menu_name' => 'Companies',
+
+                ],
+                'description' => '',
+                'public' => true,
+                'hierarchical' => false,
+                'rewrite' => true,
+                'capabilities' => [],
+                'meta_box_cb' => null,
+                'show_admin_column' => false,
+                'show_in_rest' => true,
+                'rest_base' => 'companies',
             ]
         );
     }

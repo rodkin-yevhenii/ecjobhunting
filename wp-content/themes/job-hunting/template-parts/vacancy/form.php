@@ -218,11 +218,20 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
     </div>
     <div class="row mt-3 mt-md-5">
         <div class="col-12 col-md-5 col-xl-3">
-            <label class="field-label mb-2 mb-md-0 mt-md-3" for="post-job-company">Hiring Company <span
-                        class="color-primary">*</span></label>
+            <label class="field-label mb-2 mb-md-0 mt-md-3" for="post-job-company">
+                Hiring Company
+                <span class="color-primary">*</span>
+            </label>
         </div>
         <div class="col-12 col-md-7">
-            <input class="field-text" type="text" id="post-job-company" required>
+            <input
+                class="field-text js-auto-complete"
+                type="text"
+                id="post-job-company"
+                name="company"
+                autocomplete="off"
+                required
+            >
         </div>
     </div>
     <div class="row mt-3 mt-md-4">

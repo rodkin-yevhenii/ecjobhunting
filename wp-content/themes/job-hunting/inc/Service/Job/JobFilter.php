@@ -30,7 +30,7 @@ class JobFilter
      * @param array $filters    Filters values
      * @param int $paged        Attribute for pagination
      */
-    private function getJobs(array $filters, int $paged) : void
+    private function getJobs(array $filters, int $paged): void
     {
         $args = [
             'post_type' => 'vacancy',
@@ -83,10 +83,10 @@ class JobFilter
         }
 
         if (! empty($filters['company'])) {
-            $args['meta_query'][] = [
-                'key' => 'hiring_company',
-                'value'  => $filters['company'],
-                'compare' => '>LIKE'
+            $args['tax_query'][] = [
+                'taxonomy' => 'company',
+                'field' => 'term_id ',
+                'terms' => $filters['company']
             ];
         }
 
@@ -103,7 +103,7 @@ class JobFilter
      *
      * @return string
      */
-    public function render() : string
+    public function render(): string
     {
         global $post;
 

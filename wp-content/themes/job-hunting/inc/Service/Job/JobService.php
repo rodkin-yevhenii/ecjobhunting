@@ -90,6 +90,7 @@ class JobService
                     'skill' => explode(',', $_POST['skills']) ?? [],
                     'location' => explode(',', $_POST['location']) ?? [],
                     'job-category' => explode(',', $_POST['category']) ?? [],
+                    'company' => $_POST['category'],
                 ],
             ];
 
@@ -144,7 +145,7 @@ class JobService
                 $postId
             );
             update_field('street_address', $_POST['street'] ?? '', $postId);
-            update_field('hiring_company', $_POST['company'] ?? '', $postId);
+//            update_field('hiring_company', $_POST['company'] ?? '', $postId);
             update_field('why_work_at_this_company', $_POST['reasonsToWork'] ?? '', $postId);
             update_field('hiring_company_description', $_POST['companyDesc'] ?? '', $postId);
             update_field(

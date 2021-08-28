@@ -27,11 +27,11 @@ class Vacancy
     private array $location = []; // taxonomy Location
     private array $employmentType = []; //taxonomy types
     private array $skills = []; //taxonomy Skills
+    private array $company = []; //taxonomy Company
 
     //employer info
     private $employer;
     private string $streetAddress = '';
-    private string $companyName = '';
     private string $reasonsToWork = '';
     private string $companyDescription = '';
     private bool $notifyEmployer = true;
@@ -73,7 +73,7 @@ class Vacancy
                     : $this->compensationRange;
                 $this->streetAddress = !empty($fields['street_address']) ? $fields['street_address'] : '';
                 $this->logoId = $fields['company_logo'] ?? 0;
-                $this->companyName = $fields['hiring_company'] ?? '';
+                $this->company = wp_get_post_terms($id, 'company', ['fields' => 'names']);
                 $this->reasonsToWork = $fields['why_work_at_this_company'] ?? '';
                 $this->companyDescription = $fields['hiring_company_description'] ?? '';
                 $this->notifyEmployer = (bool)($fields['emails_to_inform'] ?? true);
@@ -167,7 +167,7 @@ class Vacancy
      */
     public function getCompanyName()
     {
-        return $this->companyName;
+        return $this->company[0] ?? '';
     }
 
     /**
