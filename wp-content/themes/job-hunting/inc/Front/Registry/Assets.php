@@ -50,6 +50,10 @@ class Assets
         if (is_page('messages')) {
             wp_enqueue_script('chat', $this->baseSrc . 'js/index/chat.js', [$this->handle], '1.0', true);
         }
+
+        if (is_page('profile')) {
+            wp_enqueue_script('profile', $this->baseSrc . 'js/index/profile.js', [$this->handle], '1.0', true);
+        }
     }
 
     private function localizeScripts()

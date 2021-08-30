@@ -70,6 +70,7 @@ export default class NotificationPopup {
    * @param type   Alert type: primary, secondary, success, danger, warning, info.
    */
   setAlertType(type) {
+    this.restore()
     const alert = this.popup.find('.alert')
 
     if (!this.allowedTypes.includes(type)) {

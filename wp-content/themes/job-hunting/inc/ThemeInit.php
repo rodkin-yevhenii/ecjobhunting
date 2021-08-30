@@ -10,6 +10,7 @@ use EcJobHunting\Service\Ajax\Ajax;
 use EcJobHunting\Service\Chat\ChatService;
 use EcJobHunting\Service\Cv\CvService;
 use EcJobHunting\Service\Job\JobService;
+use EcJobHunting\Service\User\ChangePassword;
 use EcJobHunting\Service\User\Login;
 use EcJobHunting\Service\User\Registration;
 use EcJobHunting\Service\User\RetrievePassword;
@@ -56,6 +57,7 @@ final class ThemeInit
         add_action('init', new Login());
         add_action('init', new Registration());
         add_action('init', new RetrievePassword());
+        add_action('init', new ChangePassword());
         add_action('init', new CvService());
     }
 
