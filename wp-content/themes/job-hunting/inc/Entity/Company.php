@@ -8,6 +8,7 @@ use WP_Query;
 class Company extends UserAbstract
 {
     private bool $isActivated = false;
+    private bool $isUsedTrial = false;
     private float $credits = 0;
     private array $vacancies = [];
     private array $newVacancies = [];
@@ -31,6 +32,7 @@ class Company extends UserAbstract
     {
         parent::__construct($user);
         $this->isActivated = get_field('is_activated', 'user_' . $this->getUserId()) ?? false;
+        $this->isUsedTrial = get_field('is_trial_used', 'user_' . $this->getUserId()) ?? false;
         $this->credits = floatval(get_field('avaible_credits', 'user_' . $this->getUserId()) ?? 0);
     }
 
@@ -40,6 +42,14 @@ class Company extends UserAbstract
     public function isActivated(): bool
     {
         return $this->isActivated;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUsedTrial(): bool
+    {
+        return $this->isUsedTrial;
     }
 
     /**

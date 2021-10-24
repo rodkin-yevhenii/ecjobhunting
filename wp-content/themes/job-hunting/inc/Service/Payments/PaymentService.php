@@ -13,6 +13,7 @@ class PaymentService
     public function __construct()
     {
         $this->registerSubscriptionsSettings();
+        $this->registerPayPalSettings();
     }
 
     /**
@@ -21,5 +22,13 @@ class PaymentService
     private function registerSubscriptionsSettings(): void
     {
         new SubscriptionsPlans();
+    }
+
+    /**
+     * Register settings fields for subscriptions plans.
+     */
+    private function registerPayPalSettings(): void
+    {
+        new PayPalService();
     }
 }
