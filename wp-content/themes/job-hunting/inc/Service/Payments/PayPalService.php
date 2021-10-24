@@ -36,7 +36,7 @@ class PayPalService
      */
     protected function registerHooks(): void
     {
-        add_action('wp_paypal_order_processed', [$this, 'addPayPalOrderMeta']);
+        add_action('wp_paypal_ipn_processed', [$this, 'addPayPalOrderMeta']);
         add_filter('acf/load_field/key=field_order_subscription', [$this, 'subscriptionChoices']);
     }
 
