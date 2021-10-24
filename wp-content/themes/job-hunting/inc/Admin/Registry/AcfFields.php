@@ -1961,69 +1961,6 @@ class AcfFields
     {
         acf_add_local_field_group(
             [
-                'key' => 'group_5ff1f2fc6b631',
-                'title' => 'Employer Data',
-                'fields' => [
-                    [
-                        'key' => 'field_5ff1f319b9bd4',
-                        'label' => 'Is Activated',
-                        'name' => 'is_activated',
-                        'type' => 'true_false',
-                        'instructions' => '',
-                        'required' => 0,
-                        'conditional_logic' => 0,
-                        'wrapper' => [
-                            'width' => '',
-                            'class' => '',
-                            'id' => '',
-                        ],
-                        'message' => '',
-                        'default_value' => 0,
-                        'ui' => 1,
-                        'ui_on_text' => 'Premium',
-                        'ui_off_text' => 'Standart',
-                    ],
-                    [
-                        'key' => 'field_5ff1f3b6b9bd5',
-                        'label' => 'Avaible credits',
-                        'name' => 'avaible_credits',
-                        'type' => 'text',
-                        'instructions' => '',
-                        'required' => 0,
-                        'conditional_logic' => 0,
-                        'wrapper' => [
-                            'width' => '',
-                            'class' => '',
-                            'id' => '',
-                        ],
-                        'default_value' => 0,
-                        'placeholder' => '$0.00',
-                        'prepend' => '',
-                        'append' => '',
-                        'maxlength' => '',
-                    ],
-                ],
-                'location' => [
-                    [
-                        [
-                            'param' => 'user_role',
-                            'operator' => '==',
-                            'value' => 'employer',
-                        ],
-                    ],
-                ],
-                'menu_order' => 0,
-                'position' => 'normal',
-                'style' => 'default',
-                'label_placement' => 'top',
-                'instruction_placement' => 'label',
-                'hide_on_screen' => '',
-                'active' => true,
-                'description' => '',
-            ]
-        );
-        acf_add_local_field_group(
-            [
                 'key' => 'group_61130a931857b',
                 'title' => 'Candidates',
                 'fields' => [

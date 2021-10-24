@@ -146,51 +146,6 @@ class PayPalService
                 'description' => '',
             ]
         );
-
-        acf_add_local_field_group(
-            [
-                'key' => 'group_616c220ba6a26',
-                'title' => 'Trial Settings',
-                'fields' => [
-                    [
-                        'key' => 'field_616c2250ed0da',
-                        'label' => 'Is trial used?',
-                        'name' => 'is_trial_used',
-                        'type' => 'true_false',
-                        'instructions' => '',
-                        'required' => 0,
-                        'conditional_logic' => 0,
-                        'wrapper' => [
-                            'width' => '',
-                            'class' => '',
-                            'id' => '',
-                        ],
-                        'message' => '',
-                        'default_value' => 0,
-                        'ui' => 1,
-                        'ui_on_text' => '',
-                        'ui_off_text' => '',
-                    ],
-                ],
-                'location' => [
-                    [
-                        [
-                            'param' => 'user_role',
-                            'operator' => '==',
-                            'value' => 'employer',
-                        ],
-                    ],
-                ],
-                'menu_order' => 0,
-                'position' => 'normal',
-                'style' => 'default',
-                'label_placement' => 'top',
-                'instruction_placement' => 'label',
-                'hide_on_screen' => '',
-                'active' => true,
-                'description' => '',
-            ]
-        );
     }
 
     /**
