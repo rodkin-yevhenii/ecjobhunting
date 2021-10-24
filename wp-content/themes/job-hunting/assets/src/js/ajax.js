@@ -734,4 +734,35 @@ $(() => {
       }
     })
   })
+
+  $(document).on('click', '.js-subscription-card input[name=submit]', function (event) {
+    if (isAjax) {
+      return
+    }
+
+    let isAjax = false;
+    const $card = $(this).closest('.js-subscription-card')
+    const $form =  $card.find('form')
+
+    const data = {
+      action: 'activate_subscription_trial',
+      subscriptionId: $card.attr('data-subscriptionId'),
+      trialPeriod:  $form.find('input[name=p1]').val(),
+      nonce: $card.attr('data-nonce')
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: ajaxUrl,
+      data,
+      dataType: 'json',
+      beforeSend: function () {
+        isAjax = true;
+      },
+      success: function (response) {
+        $card.find('form').remove();
+        isAjax = false;
+      }
+    })
+  })
 })

@@ -374,12 +374,12 @@ class SubscriptionsPlans
     {
         $subscriptionsPlans = self::getSubscriptionsPlans();
 
-        if (!empty($subscriptionsPlans) && !is_array($subscriptionsPlans)) {
+        if (empty($subscriptionsPlans) || !is_array($subscriptionsPlans)) {
             return [];
         }
 
         foreach ($subscriptionsPlans as $plan) {
-            if ($subscriptionId === $plan['id']) {
+            if ($subscriptionId === (int) $plan['id']) {
                 return $plan;
             }
         }

@@ -2,6 +2,9 @@
 
 namespace EcJobHunting\Service\Payments;
 
+use EcJobHunting\Front\EcResponse;
+use EcJobHunting\Service\User\UserService;
+
 /**
  * Class PaymentService
  *
@@ -10,11 +13,16 @@ namespace EcJobHunting\Service\Payments;
  */
 class PaymentService
 {
+    private EcResponse $response;
+
     public function __construct()
     {
+        $this->response = new EcResponse();
+
         $this->registerSubscriptionsSettings();
         $this->registerPayPalSettings();
         $this->registerAcfFields();
+        $this->registerHooks();
     }
 
     /**
@@ -123,5 +131,56 @@ class PaymentService
                 'description' => '',
             ]
         );
+    }
+
+    /**
+     * Register hooks
+     */
+    private function registerHooks(): void
+    {
+        add_action("wp_ajax_activate_subscription_trial", [$this, 'activateSubscriptionTrial']);
+        add_action("wp_ajax_nopriv_activate_subscription_trial", [$this, 'activateSubscriptionTrial']);
+    }
+
+    /**
+     * Activate trial period
+     */
+    public function activateSubscriptionTrial(): void
+    {
+        if (empty($_POST['subscriptionId'])) {
+            $this->response
+                ->setStatus(204)
+                ->send();
+        }
+
+        if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'activate_subscription_trial')) {
+            $this->response
+                ->setStatus(403)
+                ->send();
+        }
+
+        if (!UserService::isEmployer()) {
+            $this->response
+                ->setStatus(403)
+                ->send();
+        }
+
+        $subscriptionId = $_POST['subscriptionId'];
+        $employer = UserService::getUser();
+        $subscriptionPlan = SubscriptionsPlans::getSubscriptionPlan($subscriptionId);
+        $trialPeriod = $_POST['trialPeriod'] ?? 1;
+
+        if ($employer->isActivated() || $employer->isUsedTrial() || !$subscriptionPlan['is_trial_enabled']) {
+            $this->response
+                ->setStatus(403)
+                ->send();
+        }
+
+        $date = new \DateTime();
+        $date->modify("+$trialPeriod week");
+
+        update_field('is_activated', true, 'user_' . $employer->getUserId());
+        update_field('is_trial_used', true, 'user_' . $employer->getUserId());
+        update_field('next_user_payment_date', $date->format('F j, Y'), 'user_' . $employer->getUserId());
     }
 }

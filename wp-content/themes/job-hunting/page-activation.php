@@ -29,7 +29,8 @@ get_header();
                 <?php foreach ($subscriptionsPlans as $plan) : ?>
                     <div
                         class="ys-card js-subscription-card"
-                        data-subscriptionId="<?php echo $plan['description']; ?>"
+                        data-subscriptionId="<?php echo $plan['id']; ?>"
+                        data-nonce="<?php echo wp_create_nonce('activate_subscription_trial'); ?>"
                     >
                         <h3 class="text-large m-0 p-0 d-md-inline">
                             <?php echo $plan['title']; ?>:
