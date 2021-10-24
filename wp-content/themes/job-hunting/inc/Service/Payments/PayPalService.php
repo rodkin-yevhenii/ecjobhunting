@@ -222,7 +222,7 @@ class PayPalService
         $shortcode .= 'custom="' . $employer->getUserId() . '" ';
 
         // End
-        $shortcode .= 'target="_blank"]';
+        $shortcode .= 'no_shipping="1" target="_blank"]';
 
         ob_start();
         echo do_shortcode($shortcode);

@@ -39,7 +39,9 @@ get_header();
                             $<?php echo $plan['price']; ?>.00/month
                         </span>
                         <p class="mb-xl-0"><?php echo $plan['description']; ?></p>
-                        <?php echo do_shortcode('[subscription_btn subscription_id="' . $plan['id'] . '"]'); ?>
+                        <?php if (!$employer->isActivated()) :
+                            echo do_shortcode('[subscription_btn subscription_id="' . $plan['id'] . '"]');
+                        endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
