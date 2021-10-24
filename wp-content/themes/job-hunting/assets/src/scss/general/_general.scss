@@ -1653,10 +1653,14 @@ form {
     padding: 20px 300px 20px 90px;
     position: relative;
 
-    a {
+    a, form {
       position: absolute;
       right: 100px;
       top: 22px;
+    }
+
+    form {
+      top: calc(50% - 11px);
     }
 
   }
