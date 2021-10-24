@@ -182,23 +182,9 @@ class PayPalService
             return '';
         }
 
-        $subscriptionsPlans = SubscriptionsPlans::getSubscriptionsPlans();
         $employer = UserService::getUser();
-
-        if (!empty($subscriptionsPlans) && !is_array($subscriptionsPlans)) {
-            return '';
-        }
-
         $subscriptionId = $atts['subscription_id'];
-        $currentPlan = [];
-
-        foreach ($subscriptionsPlans as $plan) {
-            if ($subscriptionId !== $plan['id']) {
-                continue;
-            }
-
-            $currentPlan = $plan;
-        }
+        $currentPlan = SubscriptionsPlans::getSubscriptionPlan($subscriptionId);
 
         if (empty($currentPlan)) {
             return '';

@@ -363,4 +363,27 @@ class SubscriptionsPlans
     {
         return get_field('subscriptions_plan', 'option');
     }
+
+    /**
+     * Get subscription plan by ID.
+     *
+     * @param int $subscriptionId
+     * @return array
+     */
+    public static function getSubscriptionPlan(int $subscriptionId): array
+    {
+        $subscriptionsPlans = self::getSubscriptionsPlans();
+
+        if (!empty($subscriptionsPlans) && !is_array($subscriptionsPlans)) {
+            return [];
+        }
+
+        foreach ($subscriptionsPlans as $plan) {
+            if ($subscriptionId === $plan['id']) {
+                return $plan;
+            }
+        }
+
+        return [];
+    }
 }
