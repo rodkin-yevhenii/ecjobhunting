@@ -266,6 +266,7 @@ class PayPalService
         $shortcode .= 'a3="' . $currentPlan['price'] . '" ';
         $shortcode .= 'p3="' . ($currentPlan['duration'] ?? 1) . '" ';
         $shortcode .= 't3="M" ';
+        $shortcode .= 'src="1" ';
 
         // Subscription ID
         $shortcode .= 'item_number="' . $subscriptionId . '" ';
