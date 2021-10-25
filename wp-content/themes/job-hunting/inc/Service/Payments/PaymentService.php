@@ -140,6 +140,8 @@ class PaymentService
     {
         add_action("wp_ajax_activate_subscription_trial", [$this, 'activateSubscriptionTrial']);
         add_action("wp_ajax_nopriv_activate_subscription_trial", [$this, 'activateSubscriptionTrial']);
+        add_action('wp', [$this, 'registerCronJobs']);
+        add_action('deactivate_subscriptions', [$this, 'deactivateSubscriptions']);
     }
 
     /**
@@ -176,11 +178,56 @@ class PaymentService
                 ->send();
         }
 
-        $date = new \DateTime();
+        $timezone = new \DateTimeZone('UTC');
+        $date = new \DateTime('now', $timezone);
         $date->modify("+$trialPeriod week");
 
         update_field('is_activated', true, 'user_' . $employer->getUserId());
         update_field('is_trial_used', true, 'user_' . $employer->getUserId());
-        update_field('next_user_payment_date', $date->format('F j, Y'), 'user_' . $employer->getUserId());
+        update_field('next_user_payment_date', $date->format('Ymd'), 'user_' . $employer->getUserId());
+    }
+
+    /**
+     * Register cron jobs.
+     */
+    public function registerCronJobs(): void
+    {
+        if (!wp_next_scheduled('deactivate_subscriptions')) {
+            wp_schedule_event(time(), 'twicedaily', 'deactivate_subscriptions');
+        }
+    }
+
+    /**
+     * Deactivate subscription for user whose next
+     * payment date was yesterday.
+     *
+     * @throws \Exception
+     */
+    public function deactivateSubscriptions(): void
+    {
+        $timezone = new \DateTimeZone('UTC');
+        $date = new \DateTime('now', $timezone);
+        $date->modify('-1 day'); //yesterday
+
+        $usersArgs = [
+            'role' => 'employer',
+            'meta_query' => [
+                [
+                    'key' => 'is_activated',
+                    'value' => '1',
+                ],
+                [
+                    'key' => 'next_user_payment_date',
+                    'value' => $date->format('Ymd'),
+                ]
+            ],
+            'fields' => 'ids',
+        ];
+
+        $usersList = get_users($usersArgs);
+
+        foreach ($usersList as $userId) {
+             update_field('is_activated', false, "user_$userId");
+        }
     }
 }

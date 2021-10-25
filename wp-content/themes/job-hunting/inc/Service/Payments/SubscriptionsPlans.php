@@ -47,6 +47,7 @@ class SubscriptionsPlans
     {
         add_filter('acf/load_field/key=field_payment_plan_id', [$this, 'disableField']);
         add_action('acf/save_post', [$this, 'generatePaymentsIds'], 5);
+        add_filter('acf/load_field/key=field_user_subscription_id', [PayPalService::class, 'subscriptionChoices']);
     }
 
     /**
@@ -301,6 +302,55 @@ class SubscriptionsPlans
                             'param' => 'options_page',
                             'operator' => '==',
                             'value' => 'payments-settings',
+                        ],
+                    ],
+                ],
+                'menu_order' => 0,
+                'position' => 'normal',
+                'style' => 'default',
+                'label_placement' => 'top',
+                'instruction_placement' => 'label',
+                'hide_on_screen' => '',
+                'active' => true,
+                'description' => '',
+            ]
+        );
+
+        acf_add_local_field_group(
+            [
+                'key' => 'group_user_subscription_meta',
+                'title' => 'Order Meta',
+                'fields' => [
+                    [
+                        'key' => 'field_user_subscription_id',
+                        'label' => 'Subscription',
+                        'name' => 'user_subscription_id',
+                        'type' => 'select',
+                        'instructions' => '',
+                        'required' => 1,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '50',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'choices' => [
+                        ],
+                        'default_value' => false,
+                        'allow_null' => 0,
+                        'multiple' => 0,
+                        'ui' => 0,
+                        'return_format' => 'value',
+                        'ajax' => 0,
+                        'placeholder' => '',
+                    ],
+                ],
+                'location' => [
+                    [
+                        [
+                            'param' => 'user_role',
+                            'operator' => '==',
+                            'value' => 'employer',
                         ],
                     ],
                 ],

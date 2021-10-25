@@ -64,15 +64,16 @@ class PayPalService
         $subscriptionId = (int) $ipn_response['item_number'];
         $subscriptionPlan = SubscriptionsPlans::getSubscriptionPlan($subscriptionId);
         $period = (int) $subscriptionPlan['duration'];
+        $timezone = new \DateTimeZone('UTC');
         $date = new \DateTime($ipn_response['payment_date']);
-        $date->setTimezone(new \DateTimeZone('UTC'));
+        $date->setTimezone($timezone);
         $date->modify("+$period month");
 
         update_field('order_employer', $userId, $orderId);
         update_field('order_subscription', $subscriptionId, $orderId);
         update_field('is_activated', true, 'user_' . $userId);
         update_field('is_trial_used', true, 'user_' . $userId);
-        update_field('next_user_payment_date', $date->format('F j, Y'), 'user_' . $userId);
+        update_field('next_user_payment_date', $date->format('Ymd'), 'user_' . $userId);
     }
 
     /**
@@ -131,6 +132,23 @@ class PayPalService
                         'return_format' => 'value',
                         'ajax' => 0,
                         'placeholder' => '',
+                    ],
+                    [
+                        'key' => 'field_payment_date',
+                        'label' => 'Payment date',
+                        'name' => 'payment_date',
+                        'type' => 'date_picker',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'display_format' => 'F j, Y',
+                        'return_format' => 'F j, Y',
+                        'first_day' => 0,
                     ],
                 ],
                 'location' => [

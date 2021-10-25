@@ -27,13 +27,23 @@ class Company extends UserAbstract
     private int $jobPosted = 0;
     private int $jobVisitors = 0;
     private int $candidatesReceived;
+    private int $subscriptionId;
 
     public function __construct($user)
     {
         parent::__construct($user);
         $this->isActivated = get_field('is_activated', 'user_' . $this->getUserId()) ?? false;
         $this->isUsedTrial = get_field('is_trial_used', 'user_' . $this->getUserId()) ?? false;
+        $this->subscriptionId = get_field('user_subscription_id', 'user_' . $this->getUserId()) ?? 0;
         $this->credits = floatval(get_field('avaible_credits', 'user_' . $this->getUserId()) ?? 0);
+    }
+
+    /**
+     * @return int|mixed
+     */
+    public function getSubscriptionId()
+    {
+        return $this->subscriptionId;
     }
 
     /**
