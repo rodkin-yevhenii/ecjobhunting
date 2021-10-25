@@ -19,6 +19,138 @@ class ChatService
 {
     private EcResponse $response;
 
+    public function __construct()
+    {
+        $this->registerAcfFields();
+    }
+
+    private function registerAcfFields(): void
+    {
+        if (!function_exists('acf_add_local_field_group')) {
+            return;
+        }
+
+        acf_add_local_field_group(
+            [
+                'key' => 'group_6124c5ea680b2',
+                'title' => 'Chat settings',
+                'fields' => [
+                    [
+                        'key' => 'field_61765479bae42',
+                        'label' => 'Contacts',
+                        'name' => 'contacts',
+                        'type' => 'repeater',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'collapsed' => '',
+                        'min' => 0,
+                        'max' => 0,
+                        'layout' => 'table',
+                        'button_label' => '',
+                        'sub_fields' => [
+                            [
+                                'key' => 'field_617654d8bae44',
+                                'label' => 'Is closed',
+                                'name' => 'is_closed',
+                                'type' => 'true_false',
+                                'instructions' => '',
+                                'required' => 0,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '20',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'message' => '',
+                                'default_value' => 0,
+                                'ui' => 0,
+                                'ui_on_text' => '',
+                                'ui_off_text' => '',
+                            ],
+                            [
+                                'key' => 'field_6176552abae46',
+                                'label' => 'Is viewed',
+                                'name' => 'is_viewed',
+                                'type' => 'true_false',
+                                'instructions' => '',
+                                'required' => 0,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '20',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'message' => '',
+                                'default_value' => 0,
+                                'ui' => 0,
+                                'ui_on_text' => '',
+                                'ui_off_text' => '',
+                            ],
+                            [
+                                'key' => 'field_617654e5bae45',
+                                'label' => 'User',
+                                'name' => 'user',
+                                'type' => 'user',
+                                'instructions' => '',
+                                'required' => 0,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '60',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'role' => '',
+                                'allow_null' => 0,
+                                'multiple' => 0,
+                                'return_format' => 'id',
+                            ],
+                        ],
+                    ],
+                    [
+                        'key' => 'field_61765547bae47',
+                        'label' => 'Last update date',
+                        'name' => 'last_update_date',
+                        'type' => 'date_time_picker',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'display_format' => 'F j, Y g:i a',
+                        'return_format' => 'Y-m-d H:i:s',
+                        'first_day' => 0,
+                    ],
+                ],
+                'location' => [
+                    [
+                        [
+                            'param' => 'post_type',
+                            'operator' => '==',
+                            'value' => 'chat',
+                        ],
+                    ],
+                ],
+                'menu_order' => 0,
+                'position' => 'normal',
+                'style' => 'default',
+                'label_placement' => 'top',
+                'instruction_placement' => 'label',
+                'hide_on_screen' => '',
+                'active' => true,
+                'description' => '',
+            ]
+        );
+    }
+
     /**
      * @param int $id
      */
@@ -350,9 +482,9 @@ class ChatService
         $opponentId = (int)$_POST['userId'];
         $chatId = wp_insert_post(
             [
-                'post_type'     => 'chat',
-                'post_status'   => 'publish',
-                'post_author'   => $currentUserId
+                'post_type' => 'chat',
+                'post_status' => 'publish',
+                'post_author' => $currentUserId
             ]
         );
 
