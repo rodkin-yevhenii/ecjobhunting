@@ -14,6 +14,9 @@ $appliedUsersList = $vacancy->getCandidates();
 $isApplied = in_array($user->ID, $appliedUsersList);
 $visitorsList = !empty($vacancy->getVisitors()) && is_array($vacancy->getVisitors()) ? $vacancy->getVisitors() : [];
 $currencySymbol = VacancyService::getCurrencySymbol($vacancy->getCurrency());
+$agreements = $vacancy->getAgreementOptions();
+$isCovidAdded = in_array('covid', $vacancy->getAgreementOptions());
+$isNoResumeAllowed = in_array('accept-all', $vacancy->getAgreementOptions());
 
 if (!in_array($user->ID, $visitorsList) && UserService::isCandidate()) {
     $visitorsList[] = $user->ID;
@@ -91,19 +94,22 @@ get_header(); ?>
                                     <p class="mb-4"><?php echo $vacancy->getCompanyDescription(); ?></p>
                                 <?php endif; ?>
                             </article>
-                            <div class="vacancy-footer">
-                                <?php if (in_array('candidate', $user->roles)) : ?>
-                                    <button
-                                        class="btn btn-primary btn-lg js-apply"
-                                        data-vacancy-id="<?php echo $vacancy->getId(); ?>"
-                                        data-apply-text="<?php _e('Apply Now', 'ecjobhunting'); ?>"
-                                        <?php echo $isApplied ? 'disabled' : ''; ?>
-                                    >
-                                        <?php echo !$isApplied
-                                            ? __('Apply Now', 'ecjobhunting')
-                                            : __('Already Applied', 'ecjobhunting');
-                                        ?>
-                                    </button>
+                            <?php if (UserService::isCandidate()) :
+                                $candidate = UserService::getUser(); ?>
+                                <div class="vacancy-footer">
+                                    <?php if (!empty($candidate->getResumeFile()) || $isNoResumeAllowed) : ?>
+                                        <button
+                                            class="btn btn-primary btn-lg <?php echo !$isApplied ? 'js-apply' : ''; ?>"
+                                            data-vacancy-id="<?php echo $vacancy->getId(); ?>"
+                                            data-apply-text="<?php _e('Apply Now', 'ecjobhunting'); ?>"
+                                            <?php echo $isApplied ? 'disabled' : ''; ?>
+                                        >
+                                            <?php echo !$isApplied
+                                                ? __('Apply Now', 'ecjobhunting')
+                                                : __('Already Applied', 'ecjobhunting');
+                                            ?>
+                                        </button>
+                                    <?php endif; ?>
                                     <a
                                         href="#"
                                         class="btn btn-primary btn-lg js-start-chat ml-md-4"
@@ -112,8 +118,9 @@ get_header(); ?>
                                     >
                                         Start chat
                                     </a>
-                                <?php endif; ?>
-                            </div>
+
+                                </div>
+                            <?php endif; ?>
 <!--TODO Clarify with client what should do button "Am I Qualified?"-->
                         </div>
                         <div class="col-12 col-xl-3 my-5 d-md-flex d-xl-block">
