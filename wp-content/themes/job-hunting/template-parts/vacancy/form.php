@@ -263,7 +263,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
         <div class="col-12 col-md-7 custom-list js-custom-list-component">
             <fieldset>
                 <input type="checkbox" name="post-job-send" id="post-job-send">
-                <label for="post-job-send">EmployerName (You!)</label>
+                <label for="post-job-send"><?php echo $employer->getName(); ?> (You!)</label>
             </fieldset>
             <ul
                 class="mb-md-4 custom-list__items custom-list__items--vertical js-custom-list-items js-emails-list"
