@@ -90,7 +90,7 @@ class JobService
                     'skill' => explode(',', $_POST['skills']) ?? [],
                     'location' => explode(',', $_POST['location']) ?? [],
                     'job-category' => explode(',', $_POST['category']) ?? [],
-                    'company' => $_POST['category'],
+                    'company' => $_POST['company'],
                 ],
             ];
 
@@ -232,6 +232,7 @@ class JobService
                     'skill' => wp_get_post_terms($post->ID, 'skill', ['fields' => 'ids']),
                     'location' => wp_get_post_terms($post->ID, 'location', ['fields' => 'ids']),
                     'job-category' => wp_get_post_terms($post->ID, 'job-category', ['fields' => 'ids']),
+                    'company' => wp_get_post_terms($post->ID, 'company', ['fields' => 'ids']),
                 ],
                 'meta_input' => $meta,
             ];
