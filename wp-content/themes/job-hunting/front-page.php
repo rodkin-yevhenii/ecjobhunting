@@ -78,8 +78,11 @@ get_header(); ?>
                     <?php if ($jobCategories) : ?>
                         <ul>
                             <?php foreach ($jobCategories as $term) : ?>
-                                <li><a href="<?php echo get_term_link($term->term_id); ?>"
-                                       class="btn btn-outline-secondary" data-abc="true"><?php echo $term->name; ?></a>
+                                <li><a href="/jobs/?category=<?php echo $term->term_id; ?>"
+                                       class="btn btn-outline-secondary" data-abc="true"
+                                    >
+                                        <?php echo $term->name; ?>
+                                    </a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
