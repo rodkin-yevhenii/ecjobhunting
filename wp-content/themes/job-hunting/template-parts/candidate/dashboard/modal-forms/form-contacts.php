@@ -8,6 +8,14 @@ $candidate = $args['candidate'] ?? null;
 if (!$candidate) {
     return;
 }
+
+if (!empty($candidate->getNewEmail())) {
+    $email = $candidate->getNewEmail();
+} elseif (!empty($candidate->getEmail())) {
+    $email = $candidate->getEmail();
+} else {
+    $email = '';
+}
 ?>
 <form class="modal-content" id="contacts">
     <?php get_template_part(
@@ -24,7 +32,7 @@ if (!$candidate) {
         <label class="field-label" for="public_email">
             <?php _e('Public email', 'ecjobhunting'); ?>
         </label>
-        <input class="field-text" type="email" id="public_email" value="<?php echo $candidate->getEmail(); ?>" required>
+        <input class="field-text" type="email" id="public_email" value="<?php echo $email; ?>" required>
 
         <?php echo wp_nonce_field('update_contacts', 'update_contacts_nonce'); ?>
     </div>

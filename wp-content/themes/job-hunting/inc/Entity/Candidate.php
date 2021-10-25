@@ -2,6 +2,8 @@
 
 namespace EcJobHunting\Entity;
 
+use EcJobHunting\Service\User\UserService;
+
 class Candidate extends UserAbstract
 {
     private ?int $cvId;
@@ -42,7 +44,7 @@ class Candidate extends UserAbstract
     private string $currentPosition = '';
     private string $currentCompany = '';
 
-    public function __construct($user)
+    public function __construct(\WP_User $user)
     {
         parent::__construct($user);
         $cvs = get_posts(
@@ -54,7 +56,7 @@ class Candidate extends UserAbstract
                 'author' => $this->getUserId(),
             ]
         );
-        if (!$cvs) {
+        if (!$cvs && UserService::isCandidate()) {
             $this->cvId = wp_insert_post(
                 [
                     'post_type' => 'cv',
@@ -62,9 +64,17 @@ class Candidate extends UserAbstract
                     'post_author' => $this->getUserId(),
                 ]
             );
-        } else {
+
+            if ($this->cvId && !is_wp_error($this->cvId)) {
+                update_field('new_email', $user->user_email, $this->cvId);
+                update_field('is_email_confirmed', false, $this->cvId);
+            }
+        } elseif ($cvs) {
             $this->cvId = $cvs[0];
+        } else {
+            return;
         }
+
         $fields = get_fields($this->cvId);
         $this->fields = $fields ? $fields : [];
 
@@ -153,7 +163,7 @@ class Candidate extends UserAbstract
     public function getEmail(): string
     {
         if (empty($this->email)) {
-            $this->email = $this->fields['public_email'] ?? parent::getEmail();
+            $this->email = $this->fields['public_email'] ?? '';
         }
 
         return $this->email;
