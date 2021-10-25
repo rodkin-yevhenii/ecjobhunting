@@ -51,10 +51,18 @@ get_header(); ?>
                 </div>
             </div>
             <div class="row">
-                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $latestJobs->found_posts; ?></strong><span>Jobs</span></div>
-                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $counts['total_users']; ?></strong><span>Members</span></div>
-                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $latestResume->found_posts; ?></strong><span>Resumes</span></div>
-                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $counts['avail_roles']['employer']; ?></strong><span>Companies</span></div>
+                <div class="col-6 col-md-3 hero-numbers">
+                    <strong><?php echo $latestJobs->found_posts; ?></strong><span>Jobs</span>
+                </div>
+                <div class="col-6 col-md-3 hero-numbers">
+                    <strong><?php echo $counts['total_users']; ?></strong><span>Members</span>
+                </div>
+                <div class="col-6 col-md-3 hero-numbers">
+                    <strong><?php echo $latestResume->found_posts; ?></strong><span>Resumes</span>
+                </div>
+                <div class="col-6 col-md-3 hero-numbers">
+                    <strong><?php echo $counts['avail_roles']['employer'] ?? 0; ?></strong><span>Companies</span>
+                </div>
             </div>
         </div>
     </form>
@@ -67,9 +75,9 @@ get_header(); ?>
             </div>
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-xl-12">
-                    <?php if ($jobCategories): ?>
+                    <?php if ($jobCategories) : ?>
                         <ul>
-                            <?php foreach ($jobCategories as $term): ?>
+                            <?php foreach ($jobCategories as $term) : ?>
                                 <li><a href="<?php echo get_term_link($term->term_id); ?>"
                                        class="btn btn-outline-secondary" data-abc="true"><?php echo $term->name; ?></a>
                                 </li>
@@ -137,9 +145,12 @@ get_header(); ?>
             </div>
         </div>
     </section>
-<?php if (have_posts()): the_post(); ?>
-    <?php the_content(); ?>
-<?php endif; ?>
+    <?php
+    if (have_posts()) :
+        the_post();
+        the_content();
+    endif;
+    ?>
     <section class="register">
         <div class="container">
             <div class="row">
