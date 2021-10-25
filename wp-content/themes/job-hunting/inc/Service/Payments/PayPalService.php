@@ -37,7 +37,7 @@ class PayPalService
     protected function registerHooks(): void
     {
         add_action('wp_paypal_ipn_processed', [$this, 'addPayPalOrderMeta']);
-        add_filter('acf/load_field/key=field_order_subscription', [$this, 'subscriptionChoices']);
+        add_filter('acf/load_field/key=field_order_subscription', [self::class, 'subscriptionChoices']);
     }
 
     /**
@@ -180,7 +180,7 @@ class PayPalService
      * @param $field
      * @return array
      */
-    public function subscriptionChoices($field)
+    public static function subscriptionChoices($field)
     {
         $subscriptionsPlans = SubscriptionsPlans::getSubscriptionsPlans();
 
