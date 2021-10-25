@@ -29,7 +29,7 @@ get_header(); ?>
         method="get"
         id="searchform"
         class="hero searchform"
-        action="<?php echo get_field('search_page_url', 'option'); ?>"
+        action="/jobs/"
     >
         <div class="container">
             <div class="row d-flex justify-content-xl-center">
@@ -38,12 +38,19 @@ get_header(); ?>
                 </div>
                 <div class="col-12 col-md-5 col-xl-4">
                     <label class="my-2">
-                        <input class="field-text" type="text" placeholder="Job Title" name="s" id="s">
+                        <input class="field-text" type="text" placeholder="Job Title" name="search" id="s">
                     </label>
                 </div>
                 <div class="col-12 col-md-5 col-xl-4">
                     <label class="my-2">
-                        <input class="field-text" type="text" placeholder="Location" name="location" id="location">
+                        <input
+                            class="field-text js-auto-complete"
+                            type="text"
+                            placeholder="Location"
+                            name="location"
+                            id="location"
+                            autocomplete="off"
+                        >
                     </label>
                 </div>
                 <div class="col-12 col-md-2">
