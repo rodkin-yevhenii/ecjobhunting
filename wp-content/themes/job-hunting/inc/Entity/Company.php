@@ -211,6 +211,7 @@ class Company extends UserAbstract
             'fields' => 'ids',
             'post_type' => 'vacancy',
             'post_status' => 'any',
+            'author' => $this->getUserId(),
         ];
         $args = array_merge($defaultArgs, $args);
 
