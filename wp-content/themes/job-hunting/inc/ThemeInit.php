@@ -196,6 +196,15 @@ final class ThemeInit
 
         register_rest_field(
             'vacancy',
+            'company',
+            [
+                'get_callback' => [$this, 'retrieveJobCompany'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
             'skills',
             [
                 'get_callback' => [$this, 'retrieveJobSkills'],
@@ -268,6 +277,11 @@ final class ThemeInit
     public function retrieveJobLocation($object)
     {
         return wp_get_post_terms($object['id'], 'location', ['fields' => 'names']);
+    }
+
+    public function retrieveJobCompany($object)
+    {
+        return wp_get_post_terms($object['id'], 'company', ['fields' => 'names']);
     }
 
     public function retrieveJobSkills($object)

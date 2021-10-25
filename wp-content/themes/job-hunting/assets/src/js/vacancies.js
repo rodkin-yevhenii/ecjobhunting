@@ -71,7 +71,7 @@ $(() => {
         street: r.meta.street_address,
         reasonToWork: r.meta.why_work_at_this_company,
         skills: r.skills,
-        companyName: r.meta.hiring_company,
+        companyName: r.company,
         companyDesc: r.meta.hiring_company_description,
         isEmailsToInform: r.isInformEmployer,
         additionalEmailsToInform: r.additionalEmailsToInform,
@@ -106,7 +106,7 @@ $(() => {
 
       let additionalEmployerEmails = [];
 
-      if (job.additionalEmailsToInform.length) {
+      if (!!job.additionalEmailsToInform && job.additionalEmailsToInform.length) {
         additionalEmployerEmails = job.additionalEmailsToInform.map((item) => {
           return '<li data-key="' + item.email + '">' +
             '<span>' + item.email + '</span>' +
@@ -120,9 +120,11 @@ $(() => {
         $('#' + item).attr('checked', 'checked')
       })
 
-      job.benefits.forEach((item) => {
-        $('#' + item).attr('checked', 'checked')
-      })
+      if (!!job.benefits && job.benefits.length) {
+        job.benefits.forEach((item) => {
+          $('#' + item).attr('checked', 'checked')
+        })
+      }
 
       // Update Employment type view
       renderCustomSelect(job.employmentType, $('.js-employment-type'))
