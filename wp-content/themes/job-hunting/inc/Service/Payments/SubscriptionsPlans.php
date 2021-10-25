@@ -46,6 +46,7 @@ class SubscriptionsPlans
     private function registerHooks(): void
     {
         add_filter('acf/load_field/key=field_payment_plan_id', [$this, 'disableField']);
+        add_filter('acf/load_field/key=field_616cb63398789', [$this, 'disableField']);
         add_action('acf/save_post', [$this, 'generatePaymentsIds'], 5);
         add_filter('acf/load_field/key=field_user_subscription_id', [PayPalService::class, 'subscriptionChoices']);
     }
