@@ -25,7 +25,11 @@ get_header();
         <div class="row">
             <div class="col-12">
                 <h1><?php echo $employer->getName(); ?>, we're so glad to see you!</h1>
-                <p>Just click 'Subscribe' to get full access to your account.</p>
+                <?php if (!$employer->isActivated()) : ?>
+                    <p>Just click 'Subscribe' to get full access to your account</p>
+                <?php else : ?>
+                    <p>Your active subscription plan:</p>
+                <?php endif; ?>
                 <?php foreach ($subscriptionsPlans as $plan) : ?>
                     <div
                         class="ys-card js-subscription-card"
