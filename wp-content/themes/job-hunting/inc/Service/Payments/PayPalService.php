@@ -52,6 +52,8 @@ class PayPalService
      * Update order & user meta.
      *
      * @param array $ipn_response
+     *
+     * @throws \Exception
      */
     public function addPayPalOrderMeta(array $ipn_response): void
     {
