@@ -44,7 +44,7 @@ if (!$company) {
                     global $post;
                     foreach ($company->getVacancies() as $post) :
                         setup_postdata($post);
-                        get_template_part('template-parts/vacancy/card', 'dashboard');
+                        get_template_part('template-parts/vacancy/card', 'dashboard', ['company' => $company]);
                     endforeach;
                     wp_reset_postdata();
                 else :

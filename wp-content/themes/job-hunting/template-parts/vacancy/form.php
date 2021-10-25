@@ -2,12 +2,14 @@
 
 use EcJobHunting\Entity\Vacancy;
 use EcJobHunting\Service\Job\JobService;
+use EcJobHunting\Service\User\UserService;
 
 if (!empty($args['vacancyId'])) {
     $vacancy = new Vacancy($args['vacancyId']);
 } else {
     $vacancy = new Vacancy();
 }
+$employer = UserService::getUser();
 $jobService = new JobService();
 $employmentTypes = get_terms(['taxonomy' => 'type', 'hide_empty' => false,]);
 $benefits = get_field_object('field_5fecd57ec26b9')['choices']; // benefits option
@@ -293,8 +295,12 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                 job advertisement on its site and through its distribution partners.</p>
         </div>
         <div class="col-12 col-md-7 d-md-flex align-items-md-start">
-            <button class="btn btn-primary mr-md-4" type="submit" data-status="publish">Save & Post Now</button>
-            <button class="btn btn-outline-primary" type="submit" data-status="draft">Save Draft</button>
+            <?php if (UserService::isEmployer()) :
+                if ($employer->isActivated()) : ?>
+                    <button class="btn btn-primary mr-md-4" type="submit" data-status="publish">Save & Post Now</button>
+                <?php endif; ?>
+                <button class="btn btn-outline-primary" type="submit" data-status="draft">Save Draft</button>
+            <?php endif; ?>
         </div>
     </div>
 </form>

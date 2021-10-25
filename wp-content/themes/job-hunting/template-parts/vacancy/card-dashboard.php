@@ -1,9 +1,12 @@
 <?php
 
 use EcJobHunting\Entity\Vacancy;
+use EcJobHunting\Service\User\UserService;
 
 $vacancy = new Vacancy(get_the_ID());
-if (!$vacancy) {
+$company = $args['company'] ?? UserService::getUser();
+
+if (!$vacancy || !$company) {
     return;
 }
 ?>
@@ -80,10 +83,16 @@ if (!$vacancy) {
                                         </ul>
                                     </div>
                                     <?php
-                                    if ($vacancy->getStatus() !== 'publish') : ?>
-                                        <a class="btn btn-grey btn-sm js-publish-job" data-job-id="<?php the_ID();?>">
-                                            Publish Job
-                                        </a>
+                                    if ($vacancy->getStatus() !== 'publish') :
+                                        if ($company->isActivated()) : ?>
+                                            <a
+                                                class="btn btn-grey btn-sm js-publish-job"
+                                                data-job-id="<?php the_ID();?>"
+                                            >
+                                                Publish Job
+                                            </a>
+                                            <?php
+                                        endif; ?>
                                     <?php else : ?>
                                         <a class="btn btn-grey btn-sm js-archive-job" data-job-id="<?php the_ID();?>">
                                             Archive Job

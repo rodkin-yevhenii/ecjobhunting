@@ -5,8 +5,9 @@
  */
 
 use EcJobHunting\Service\Redirection\UserRedirect;
+use EcJobHunting\Service\User\UserService;
 
-if (!current_user_can('employer')) {
+if (!UserService::isEmployer()) {
     UserRedirect::redirectToJobs();
 }
 
