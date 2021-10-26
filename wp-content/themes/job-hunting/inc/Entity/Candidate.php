@@ -68,6 +68,7 @@ class Candidate extends UserAbstract
             if ($this->cvId && !is_wp_error($this->cvId)) {
                 update_field('new_email', $user->user_email, $this->cvId);
                 update_field('is_email_confirmed', false, $this->cvId);
+                update_field('degree_earned', 'no_degree', $this->cvId);
             }
         } elseif ($cvs) {
             $this->cvId = $cvs[0];
