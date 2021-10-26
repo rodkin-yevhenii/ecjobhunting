@@ -76,10 +76,14 @@ $candidatesData = $company->getCandidatesData();
             <div class="col-12">
                 <h2>Account Activity</h2>
             </div>
-            <div class="col-6 col-md-3"><strong class="text-huge text-regular"><?php
-                    echo $company->getJobPosted(); ?></strong>
-                <p class="text-large my-2">Jobs posted</p><a class="color-primary" href="<?php
-                echo get_the_permalink() . '?type=jobs'; ?>">View report</a>
+            <div class="col-6 col-md-3">
+                <strong class="text-huge text-regular">
+                    <?php echo $company->getJobPosted(); ?>
+                </strong>
+                <p class="text-large my-2">Jobs posted</p>
+                <?php if ($company->getJobPosted() > 0 && $company->isActivated()) : ?>
+                    <a class="color-primary" href="<?php echo get_the_permalink() . '?type=jobs'; ?>">View report</a>
+                <?php endif; ?>
             </div>
             <div class="col-6 col-md-3"><strong class="text-huge text-regular"><?php
                     echo $company->getJobVisitors(); ?></strong>
@@ -98,22 +102,11 @@ $candidatesData = $company->getCandidatesData();
                 </strong>
                 <p class="text-large my-2">Candidates received</p>
                 <?php
-                if (!empty($company->getCandidates())) :
+                if (!empty($company->getCandidates() && $company->isActivated())) :
                     ?>
                     <a class="color-primary" href="<?php echo get_the_permalink() . '?type=candidates'; ?>">
                         View report
                     </a>
-                    <?php
-                endif;
-                ?>
-            </div>
-            <div class="col-6 col-md-3 mt-4 mt-md-0">
-                <strong class="text-huge text-regular">$0.00</strong>
-                <p class="text-large my-2">Avaible credits</p>
-                <?php
-                if ($company->isActivated()) : ?>
-                    <a class="color-primary" href="<?php
-                    echo get_the_permalink() . '?type=credits'; ?>">View report</a>
                     <?php
                 endif;
                 ?>

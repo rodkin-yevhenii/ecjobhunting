@@ -9,6 +9,7 @@ if (!$company) {
 }
 global $post;
 $candidates = $company->getCandidatesData();
+$company->getJobVisitors()
 ?>
 
     <div class="page employer" data-nonce="<?php echo wp_create_nonce('load_employer_candidates'); ?>">
