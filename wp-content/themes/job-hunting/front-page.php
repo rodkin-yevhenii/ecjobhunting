@@ -113,7 +113,7 @@ get_header(); ?>
                         </li>
                         <li data-tab-item="companies" data-tab-message="<?php printf(
                             __('We have founds %d companies for you', 'ecjobhunting'),
-                            $counts['avail_roles']['employer']
+                            count($latestCompanies)
                         ); ?>">Latest Companies
                         </li>
                     </ul>
