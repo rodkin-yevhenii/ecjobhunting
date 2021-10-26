@@ -477,15 +477,15 @@ class ChatService
                 ->send();
         }
 
-        $currentUserId = get_current_user_id();
-        $userChats = self::getUserChats($currentUserId);
-        $opponentId = (int)$_POST['userId'];
+        $author = wp_get_current_user();
+        $opponent = new \WP_User($_POST['userId']);
+        $userChats = self::getUserChats($author->ID);
 
         /**
          * @var $chat Chat
          */
         foreach ($userChats as $chat) {
-            if ($opponentId === $chat->getOpponent()->getUserId()) {
+            if ($opponent->ID === $chat->getOpponent()->getUserId()) {
                 $this->response
                     ->setStatus(200)
                     ->setData(['chatId' => $chat->getId()])
@@ -496,9 +496,17 @@ class ChatService
         $date = new DateTime();
         $chatId = wp_insert_post(
             [
+                'post_title' => 'Chat with ',
                 'post_type' => 'chat',
                 'post_status' => 'publish',
-                'post_author' => $currentUserId
+                'post_author' => $author->ID
+            ]
+        );
+
+        wp_update_post(
+            [
+                'id' => $chatId,
+                'post_title' => "Chat #$chatId, author $author->user_login, opponent $opponent->user_login",
             ]
         );
 
@@ -512,7 +520,7 @@ class ChatService
         add_row(
             'contacts',
             [
-                'user' => $opponentId,
+                'user' => $opponent->ID,
                 'is_viewed' => false,
                 'is_closed' => false,
             ],
@@ -522,7 +530,7 @@ class ChatService
         add_row(
             'contacts',
             [
-                'user' => $currentUserId,
+                'user' => $author->ID,
                 'is_viewed' => false,
                 'is_closed' => false,
             ],
