@@ -14,13 +14,8 @@ $latestJobs = new WP_Query($args);
 $args['post_type'] = 'cv';
 $latestResume = new WP_Query($args);
 
-$latestCompanies = get_users(
-    [
-        'role' => 'employer',
-        'orderby' => 'registered',
-        'order' => 'DESC',
-        'number' => 5,
-    ]
+$latestCompanies = get_terms(
+    ['taxonomy' => 'company', 'hide_empty' => true, 'orderby' => 'name', 'order' => 'ASC']
 );
 $counts = count_users();
 get_header(); ?>
@@ -145,8 +140,8 @@ get_header(); ?>
                         <?php endif;
                         if ($latestCompanies) : ?>
                             <li data-tab-content="companies">
-                                <?php foreach ($latestCompanies as $user) :
-                                    get_template_part('template-parts/employer/card', 'default', ['user' => $user]);
+                                <?php foreach ($latestCompanies as $company) :
+                                    get_template_part('template-parts/employer/card', 'default', ['company' => $company]);
                                 endforeach; ?>
                             </li>
                         <?php endif; ?>
