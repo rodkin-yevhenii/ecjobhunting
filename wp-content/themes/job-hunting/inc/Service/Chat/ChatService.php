@@ -496,7 +496,6 @@ class ChatService
         $date = new DateTime();
         $chatId = wp_insert_post(
             [
-                'post_title' => 'Chat with ',
                 'post_type' => 'chat',
                 'post_status' => 'publish',
                 'post_author' => $author->ID
@@ -505,8 +504,8 @@ class ChatService
 
         wp_update_post(
             [
-                'id' => $chatId,
-                'post_title' => "Chat #$chatId, author $author->user_login, opponent $opponent->user_login",
+                'ID' => $chatId,
+                'post_title' => "Chat #$chatId, author: $author->user_login, opponent: $opponent->user_login",
             ]
         );
 
