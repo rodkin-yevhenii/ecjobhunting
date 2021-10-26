@@ -398,6 +398,7 @@ $(() => {
 
   $(document).on('click', '.js-show-dismissed-jobs', event => {
     event.preventDefault()
+    $('li[data-tab-item=suggested]').click()
 
     $suggestedJobsContainer.toggle()
     $dismissedJobsContainer.toggle()
@@ -406,6 +407,7 @@ $(() => {
 
   $(document).on('click', '.js-show-suggested-jobs', event => {
     event.preventDefault()
+    $('li[data-tab-item=suggested]').click()
 
     $suggestedJobsContainer.toggle()
     $dismissedJobsContainer.toggle()
