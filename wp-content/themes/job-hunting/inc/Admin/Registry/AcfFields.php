@@ -15,6 +15,7 @@ class AcfFields
             $this->userFields();
             $this->employerFields();
             $this->jobsFilterFields();
+            $this->employerHelpPageFields();
         }
         //job settings
         add_filter('acf/load_field/key=field_5fecd57ec26b9', [$this, 'benefitsChoices']);
@@ -2263,6 +2264,121 @@ class AcfFields
                 'label_placement' => 'top',
                 'instruction_placement' => 'label',
                 'hide_on_screen' => '',
+                'active' => true,
+                'description' => '',
+            ]
+        );
+    }
+
+    public function employerHelpPageFields(): void
+    {
+        acf_add_local_field_group(
+            [
+                'key' => 'group_617815436ee9a',
+                'title' => 'FAQ',
+                'fields' => [
+                    [
+                        'key' => 'field_617815f6469d7',
+                        'label' => 'FAQ',
+                        'name' => 'faq',
+                        'type' => 'repeater',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'collapsed' => 'field_61781611469d8',
+                        'min' => 0,
+                        'max' => 0,
+                        'layout' => 'block',
+                        'button_label' => 'Add question',
+                        'sub_fields' => [
+                            [
+                                'key' => 'field_61781611469d8',
+                                'label' => 'Question',
+                                'name' => 'question',
+                                'type' => 'text',
+                                'instructions' => '',
+                                'required' => 1,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'default_value' => '',
+                                'placeholder' => '',
+                                'prepend' => '',
+                                'append' => '',
+                                'maxlength' => '',
+                            ],
+                            [
+                                'key' => 'field_6178161e469d9',
+                                'label' => 'Answer',
+                                'name' => 'answer',
+                                'type' => 'textarea',
+                                'instructions' => '',
+                                'required' => 1,
+                                'conditional_logic' => 0,
+                                'wrapper' => [
+                                    'width' => '',
+                                    'class' => '',
+                                    'id' => '',
+                                ],
+                                'default_value' => '',
+                                'placeholder' => '',
+                                'maxlength' => '',
+                                'rows' => 5,
+                                'new_lines' => 'wpautop',
+                            ],
+                        ],
+                    ],
+                    [
+                        'key' => 'field_617817fbe1cbc',
+                        'label' => 'Contacts page',
+                        'name' => 'contacts_page',
+                        'type' => 'page_link',
+                        'instructions' => '',
+                        'required' => 1,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'post_type' => [
+                            0 => 'page',
+                        ],
+                        'taxonomy' => '',
+                        'allow_null' => 0,
+                        'allow_archives' => 0,
+                        'multiple' => 0,
+                    ],
+                ],
+                'location' => [
+                    [
+                        [
+                            'param' => 'page_template',
+                            'operator' => '==',
+                            'value' => 'page-help.php',
+                        ],
+                    ],
+                ],
+                'menu_order' => 0,
+                'position' => 'normal',
+                'style' => 'default',
+                'label_placement' => 'top',
+                'instruction_placement' => 'label',
+                'hide_on_screen' => [
+                    0 => 'the_content',
+                    1 => 'excerpt',
+                    2 => 'discussion',
+                    3 => 'comments',
+                    4 => 'revisions',
+                ],
                 'active' => true,
                 'description' => '',
             ]
