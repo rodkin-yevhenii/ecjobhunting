@@ -63,7 +63,7 @@ get_header(); ?>
                     <strong><?php echo $latestResume->found_posts; ?></strong><span>Resumes</span>
                 </div>
                 <div class="col-6 col-md-3 hero-numbers">
-                    <strong><?php echo $counts['avail_roles']['employer'] ?? 0; ?></strong><span>Companies</span>
+                    <strong><?php echo count($latestCompanies); ?></strong><span>Companies</span>
                 </div>
             </div>
         </div>
