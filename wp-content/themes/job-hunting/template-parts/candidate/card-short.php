@@ -27,7 +27,17 @@ if (!$cv) {
                 </h4>
                 <span class="results-country color-secondary"><?php echo $cv->getLocation(); ?></span>
                 <ul>
-                    <li><span class="color-secondary"><?php echo $cv->getSalaryExpectation(); ?></span></li>
+                    <?php if (!empty($cv->$cv->getSalaryExpectation())) : ?>
+                        <li><span class="color-secondary"><?php echo $cv->getSalaryExpectation(); ?></span></li>
+                    <?php endif;
+
+                    if (!empty($cv->getLastActivity())) : ?>
+                        <li><span class="color-secondary"><?php echo $cv->getLastActivity(); ?></span></li>
+                    <?php endif;
+
+                    if (!empty($cv->getCategory())) : ?>
+                        <li><span class="color-secondary"><?php echo $cv->getCategory(); ?></span></li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
