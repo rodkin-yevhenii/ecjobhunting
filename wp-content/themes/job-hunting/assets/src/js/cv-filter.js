@@ -141,7 +141,7 @@ $(() => {
       },
 
       update: (id) => {
-        this.DOM.vacancy.find(`li[data-select-item-value=${id}]`).click()
+        this.DOM.vacancy.find(`li[data-select-item-value="${id}"]`).click()
       }
     }
 
@@ -167,7 +167,7 @@ $(() => {
       },
 
       update: (name) => {
-        this.DOM.location.find(`li[data-select-item-value=${name}]`).click()
+        this.DOM.location.find(`li[data-select-item-value="${name}"]`).click()
       }
     }
 
@@ -207,7 +207,7 @@ $(() => {
       },
 
       update: (degree) => {
-        this.DOM.degree.find(`input[value=${degree}]`).click()
+        this.DOM.degree.find(`input[value="${degree}"]`).click()
       }
     }
 
@@ -217,7 +217,7 @@ $(() => {
       },
 
       update: (name) => {
-        this.DOM.category.find(`li[data-select-item-value=${name}]`).click()
+        this.DOM.category.find(`li[data-select-item-value="${name}"]`).click()
       }
     }
 
