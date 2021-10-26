@@ -32,7 +32,9 @@ if (!$cv) {
                     <?php endif;
 
                     if (!empty($cv->getLastActivity())) : ?>
-                        <li><span class="color-secondary"><?php echo $cv->getLastActivity(); ?></span></li>
+                        <li>
+                            <span class="color-secondary">Last activity: <?php echo $cv->getLastActivity(); ?></span>
+                        </li>
                     <?php endif;
 
                     if (!empty($cv->getCategory())) : ?>
