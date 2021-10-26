@@ -58,7 +58,7 @@ $currencySymbol = VacancyService::getCurrencySymbol($vacancy->getCurrency())
                     </span>
                 </li>
             </ul>
-            <p><?php echo $vacancy->getDescription(); ?></p>
+            <p><?php echo substr($vacancy->getDescription(), 0, 150); ?>...</p>
         </div>
         <div class="card-vacancy-footer">
             <a class="btn btn-primary" href="<?php echo $vacancy->getPermalink(); ?>">View Details</a>
