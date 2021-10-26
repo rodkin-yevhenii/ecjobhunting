@@ -27,7 +27,7 @@ if (!$cv) {
                 </h4>
                 <span class="results-country color-secondary"><?php echo $cv->getLocation(); ?></span>
                 <ul>
-                    <?php if (!empty($cv->$cv->getSalaryExpectation())) : ?>
+                    <?php if (!empty($cv->getSalaryExpectation())) : ?>
                         <li><span class="color-secondary"><?php echo $cv->getSalaryExpectation(); ?></span></li>
                     <?php endif;
 
