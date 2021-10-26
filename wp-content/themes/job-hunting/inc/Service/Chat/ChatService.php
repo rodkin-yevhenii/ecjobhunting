@@ -477,9 +477,23 @@ class ChatService
                 ->send();
         }
 
-        $date = new DateTime();
         $currentUserId = get_current_user_id();
+        $userChats = self::getUserChats($currentUserId);
         $opponentId = (int)$_POST['userId'];
+
+        /**
+         * @var $chat Chat
+         */
+        foreach ($userChats as $chat) {
+            if ($opponentId === $chat->getOpponent()->getUserId()) {
+                $this->response
+                    ->setStatus(200)
+                    ->setData(['chatId' => $chat->getId()])
+                    ->send();
+            }
+        }
+
+        $date = new DateTime();
         $chatId = wp_insert_post(
             [
                 'post_type' => 'chat',
