@@ -20,9 +20,12 @@ if (!$cv) {
                                                 alt="<?php echo $cv->getName(); ?>"></div>
             </div>
             <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                <h4 class="color-primary"><a href="<?php echo $cv->getProfileUrl(); ?>"> <?php echo $cv->getName(
-                        ); ?></a></h4><span
-                        class="results-country color-secondary"><?php echo $cv->getLocation(); ?></span>
+                <h4 class="color-primary">
+                    <a href="<?php echo get_permalink($cv->getCvId()); ?>">
+                        <?php echo $cv->getName(); ?>
+                    </a>
+                </h4>
+                <span class="results-country color-secondary"><?php echo $cv->getLocation(); ?></span>
                 <ul>
                     <li><span class="color-secondary"><?php echo $cv->getSalaryExpectation(); ?></span></li>
                 </ul>

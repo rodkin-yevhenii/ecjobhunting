@@ -89,7 +89,6 @@ get_header(); ?>
                             <?php endforeach; ?>
                         </ul>
                     <?php endif; ?>
-
                 </div>
             </div>
         </div>
@@ -141,7 +140,11 @@ get_header(); ?>
                         if ($latestCompanies) : ?>
                             <li data-tab-content="companies">
                                 <?php foreach ($latestCompanies as $company) :
-                                    get_template_part('template-parts/employer/card', 'default', ['company' => $company]);
+                                    get_template_part(
+                                        'template-parts/employer/card',
+                                        'default',
+                                        ['company' => $company]
+                                    );
                                 endforeach; ?>
                             </li>
                         <?php endif; ?>

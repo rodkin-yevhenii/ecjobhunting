@@ -21,7 +21,9 @@ if (!$company) {
 <!--                                                    alt="--><?php //echo $employer->getName(); ?><!--"></div>-->
 <!--                </div>-->
                 <div class="col-12 col-md-7 col-xl-7 d-flex flex-wrap">
-                    <h4 class="color-primary"><?php echo $company->name; ?></h4>
+                    <a href="/jobs/?company=<?php echo $company->term_id; ?>">
+                        <h4 class="color-primary"><?php echo $company->name; ?></h4>
+                    </a>
                 </div>
                 <div class="col d-none d-md-block col-md-3 col-xl-2"><span
                             class="color-secondary"><?php echo $company->count; ?> vacancies</span></div>
