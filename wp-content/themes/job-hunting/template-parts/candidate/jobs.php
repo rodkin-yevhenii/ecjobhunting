@@ -7,7 +7,6 @@ use EcJobHunting\Service\User\UserService;
  * @var $candidate Candidate
  */
 $candidate = UserService::getUser();
-$savedJobs = $candidate->getSavedJobs();
 $args = [
     'posts_per_page' => -1,
     'post_type' => 'vacancy',
@@ -29,6 +28,7 @@ $appliedJobsArgs = array_merge(
 );
 
 $appliedJobsQuery = new WP_Query($appliedJobsArgs);
+$appliedJobs = $appliedJobsQuery->posts;
 
 $savedJobsArgs = array_merge(
     $args,
@@ -38,12 +38,13 @@ $savedJobsArgs = array_merge(
 );
 
 $savedJobsQuery = new WP_Query($savedJobsArgs);
+$savedJobs = !empty($candidate->getSavedJobs()) ? $savedJobsQuery->posts : [];
 
 $suggestedJobsArgs = array_merge(
     $args,
     [
         'posts_per_page' => 9,
-        'post__not_in' => array_merge($savedJobsQuery->posts, $appliedJobsQuery->posts, $candidate->getDismissedJobs()),
+        'post__not_in' => array_merge($savedJobs, $appliedJobs, $candidate->getDismissedJobs()),
         'tax_query' => [
             [
                 'taxonomy' => 'location',
@@ -146,7 +147,7 @@ $suggestedJobsQuery = new WP_Query($suggestedJobsArgs);
                     <li data-tab-content="saved">
                         <div class="container-fluid p-0">
                             <div class="row">
-                                <?php if ($savedJobsQuery->have_posts()) :
+                                <?php if ($savedJobsQuery->have_posts() && !empty($candidate->getSavedJobs())) :
                                     foreach ($savedJobsQuery->posts as $jobId) :
                                         get_template_part('template-parts/vacancy/card', 'vacancy', ['id' => $jobId]);
                                     endforeach;
