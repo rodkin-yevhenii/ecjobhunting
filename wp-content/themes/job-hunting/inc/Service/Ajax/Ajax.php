@@ -244,6 +244,14 @@ class Ajax extends AjaxCallbackAbstract
         // Filter by vacancy ID
         if (!empty($_POST['vacancyId'])) {
             $vacancy = new Vacancy($_POST['vacancyId']);
+
+            if (empty($vacancy->getCandidates())) {
+                $this->response
+                    ->setStatus(404)
+                    ->setMessage('Candidates not found')
+                    ->send();
+            }
+
             foreach ($vacancy->getCandidates() as $id) {
                 $candidate = new Candidate(get_user_by('id', $id));
                 $args['post__in'][] = $candidate->getCvId();
