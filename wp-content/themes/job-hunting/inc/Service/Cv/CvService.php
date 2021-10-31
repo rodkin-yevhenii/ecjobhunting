@@ -84,6 +84,13 @@ class CvService
             return;
         }
 
+        if (
+            $_FILES['avatar']['size'] > 1000000
+            || !in_array($_FILES['avatar']['type'], ['image/png', 'image/jpg', 'image/jpg'])
+        ) {
+            return;
+        }
+
         if (!is_admin()) {
             require_once ABSPATH . 'wp-admin/includes/media.php';
             require_once ABSPATH . 'wp-admin/includes/file.php';
