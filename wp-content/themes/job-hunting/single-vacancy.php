@@ -12,15 +12,35 @@ $vacancy = new Vacancy(get_the_ID());
 $user = wp_get_current_user();
 $appliedUsersList = $vacancy->getCandidates();
 $isApplied = in_array($user->ID, $appliedUsersList);
-$visitorsList = !empty($vacancy->getVisitors()) && is_array($vacancy->getVisitors()) ? $vacancy->getVisitors() : [];
 $currencySymbol = VacancyService::getCurrencySymbol($vacancy->getCurrency());
 $agreements = $vacancy->getAgreementOptions();
 $isCovidAdded = in_array('covid', $vacancy->getAgreementOptions());
 $isNoResumeAllowed = in_array('accept-all', $vacancy->getAgreementOptions());
 
-if (!in_array($user->ID, $visitorsList) && UserService::isCandidate()) {
-    $visitorsList[] = $user->ID;
-    update_field('visitors', $visitorsList, $vacancy->getId());
+if (UserService::isCandidate()) {
+    // Update employer visitors.
+    $allEmployerVisitors = get_field('visitors', 'user_' . $vacancy->getAuthor()) ?? [];
+
+    foreach ($allEmployerVisitors as $index => $row) {
+        if ($row['visitor'] === $user->ID && $row['vacancy'] === $vacancy->getId()) {
+            delete_row('visitors', $index + 1, 'user_' . $vacancy->getAuthor());
+        }
+    }
+
+    $row = [
+        'date' => date('F j, Y'),
+        'vacancy' => $vacancy->getId(),
+        'visitor' => $user->ID
+    ];
+    add_row('field_employer_visitors', $row, 'user_' . $vacancy->getAuthor());
+
+    // Update vacancy visitors.
+    $visitorsList = !empty($vacancy->getVisitors()) && is_array($vacancy->getVisitors()) ? $vacancy->getVisitors() : [];
+
+    if (!in_array($user->ID, $visitorsList) && UserService::isCandidate()) {
+        $visitorsList[] = $user->ID;
+        update_field('visitors', $visitorsList, $vacancy->getId());
+    }
 }
 
 get_header(); ?>
