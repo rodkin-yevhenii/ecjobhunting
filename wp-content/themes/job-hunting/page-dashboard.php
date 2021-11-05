@@ -20,6 +20,9 @@ if (UserService::isCandidate()) {
         case 'candidates':
             get_template_part('template-parts/employer/dashboard', 'candidates');
             break;
+        case 'visitors':
+            get_template_part('template-parts/employer/dashboard', 'visitors');
+            break;
         default:
             get_template_part('template-parts/employer/dashboard');
             break;

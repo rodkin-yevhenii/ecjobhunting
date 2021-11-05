@@ -26,6 +26,8 @@ class Ajax extends AjaxCallbackAbstract
         $this->actions['rate_candidate'] = 'rateEmployee';
         $this->actions['load_vacancy_candidates'] = 'loadVacancyCandidates';
         $this->actions['load_employer_candidates'] = 'loadEmployerCandidates';
+        $this->actions['load_vacancy_visitors'] = 'loadVacancyVisitors';
+        $this->actions['load_employer_visitors'] = 'loadEmployerVisitors';
         $this->actions['get-filtered-cvs'] = 'loadFilteredCvs';
         $this->actions['load-more-cvs'] = 'loadMoreCvs';
 
@@ -155,6 +157,80 @@ class Ajax extends AjaxCallbackAbstract
         $this->response
             ->setStatus(200)
             ->setResponseBody($html)
+            ->setData(['count' => count($candidates)])
+            ->send();
+    }
+
+    /**
+     * Ajax callback for rendering vacancy candidates
+     */
+    public function loadVacancyVisitors(): void
+    {
+        if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'load_employer_visitors')) {
+            $this->response
+                ->setStatus(403)
+                ->setMessage('You are unauthorized. Access denied.')
+                ->send();
+        }
+
+        $id = $_POST['id'] ?? false;
+        $type = $_POST['type'] ?? 'all';
+
+        if ($id) {
+            $object = new Vacancy($id);
+        } else {
+            $object = new Company(wp_get_current_user());
+        }
+
+        switch ($type) {
+            case 'new':
+                $candidates = $object->getNewVisitorsData();
+                break;
+            case 'great_matches':
+                $candidates = $object->getGreatMatchedVisitorsData();
+                break;
+            case 'unrated':
+                $candidates = $object->getUnratedVisitorsData();
+                break;
+            case 'interested':
+                $candidates = $object->getInterestedVisitorsData();
+                break;
+            default:
+                $candidates = $object->getVisitorsData();
+                break;
+        }
+
+        if (empty($candidates)) {
+            $this->response
+                ->setStatus(404)
+                ->setMessage('Candidates not found')
+                ->send();
+        }
+
+        ob_start();
+        $isFirst = true;
+
+        foreach ($candidates as $candidate) :
+            get_template_part(
+                'template-parts/candidate/card',
+                'visitor',
+                [
+                    'visitorData' => $candidate,
+                    'company' => $id ? $object->getEmployer() : $object,
+                    'isFirst' => $isFirst,
+                ]
+            );
+            if ($isFirst) {
+                $isFirst = false;
+            }
+        endforeach;
+        wp_reset_postdata();
+        $html = ob_get_clean();
+
+        $this->response
+            ->setStatus(200)
+            ->setResponseBody($html)
+            ->setData(['count' => count($candidates)])
             ->send();
     }
 
@@ -221,6 +297,74 @@ class Ajax extends AjaxCallbackAbstract
         $this->response
             ->setStatus(200)
             ->setResponseBody($html)
+            ->setData(['count' => count($candidates)])
+            ->send();
+    }
+
+    /**
+     * Ajax callback for rendering employer candidates
+     */
+    public function loadEmployerVisitors(): void
+    {
+        if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'load_employer_visitors')) {
+            $this->response
+                ->setStatus(403)
+                ->setMessage('You are unauthorized. Access denied.')
+                ->send();
+        }
+
+        $type = $_POST['type'] ?? 'all';
+        $company = new Company(wp_get_current_user());
+
+        switch ($type) {
+            case 'new':
+                $candidates = $company->getNewVisitorsData();
+                break;
+            case 'great_matches':
+                $candidates = $company->getGreatMatchedVisitorsData();
+                break;
+            case 'unrated':
+                $candidates = $company->getUnratedVisitorsData();
+                break;
+            case 'interested':
+                $candidates = $company->getInterestedVisitorsData();
+                break;
+            default:
+                $candidates = $company->getVisitorsData();
+                break;
+        }
+
+        if (empty($candidates)) {
+            $this->response
+                ->setStatus(404)
+                ->setMessage('Candidates not found')
+                ->send();
+        }
+
+        ob_start();
+        $isFirst = true;
+
+        foreach ($candidates as $candidate) :
+            get_template_part(
+                'template-parts/candidate/card',
+                'visitor',
+                [
+                    'visitorData' => $candidate,
+                    'company' => $company,
+                    'isFirst' => $isFirst,
+                ]
+            );
+            if ($isFirst) {
+                $isFirst = false;
+            }
+        endforeach;
+        wp_reset_postdata();
+        $html = ob_get_clean();
+
+        $this->response
+            ->setStatus(200)
+            ->setResponseBody($html)
+            ->setData(['count' => count($candidates)])
             ->send();
     }
 

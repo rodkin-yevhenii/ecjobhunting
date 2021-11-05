@@ -282,6 +282,24 @@ class Vacancy
         return $candidates;
     }
 
+    public function getVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
+    }
+
     public function getGreatMatchedCandidatesData(): array
     {
         $company = $this->getEmployer();
@@ -298,6 +316,24 @@ class Vacancy
         }
 
         return $candidates;
+    }
+
+    public function getGreatMatchedVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getGreatMatchedVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
     }
 
     public function getInterestedCandidatesData(): array
@@ -318,6 +354,24 @@ class Vacancy
         return $candidates;
     }
 
+    public function getInterestedVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getInterestedVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
+    }
+
     public function getUnratedCandidatesData(): array
     {
         $company = $this->getEmployer();
@@ -336,6 +390,24 @@ class Vacancy
         return $candidates;
     }
 
+    public function getUnratedVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getUnratedVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
+    }
+
     public function getNewCandidatesData(): array
     {
         $company = $this->getEmployer();
@@ -352,6 +424,24 @@ class Vacancy
         }
 
         return $candidates;
+    }
+
+    public function getNewVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getNewVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
     }
 
     /**

@@ -86,15 +86,15 @@ $candidatesData = $company->getCandidatesData();
                 <?php endif; ?>
             </div>
             <div class="col-6 col-md-3"><strong class="text-huge text-regular"><?php
-                    echo $company->getJobVisitors(); ?></strong>
+                    echo $company->getVisitorsNumber(); ?></strong>
                 <p class="text-large my-2">Job visitors</p>
-<!--                --><?php
-//                if ($company->isActivated() && !empty($company->getJobVisitors())) : ?>
-<!--                    <a class="color-primary" href="--><?php
-//                    echo get_the_permalink() . '?type=visitors'; ?><!--">View report</a>-->
-<!--                    --><?php
-//                endif;
-//                ?>
+                <?php
+                if ($company->isActivated() && !empty($company->getVisitorsNumber())) : ?>
+                    <a class="color-primary" href="<?php
+                    echo get_the_permalink() . '?type=visitors'; ?>">View report</a>
+                    <?php
+                endif;
+                ?>
             </div>
             <div class="col-6 col-md-3 mt-4 mt-md-0">
                 <strong class="text-huge text-regular">

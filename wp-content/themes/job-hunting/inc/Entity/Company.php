@@ -17,6 +17,7 @@ class Company extends UserAbstract
     private array $closedVacancies = [];
     private array $appliedVacancies = [];
     private array $candidatesData = [];
+    private array $visitorsData = [];
     private array $candidates = [];
     private array $ratedCandidates = [];
     private array $greatMatchedCandidates = [];
@@ -24,8 +25,13 @@ class Company extends UserAbstract
     private array $unratedCandidates = [];
     private array $newCandidates = [];
     private array $viewedCandidates = [];
+    private array $greatMatchedVisitors = [];
+    private array $interestedVisitors = [];
+    private array $unratedVisitors = [];
+    private array $newVisitors = [];
+    private array $viewedVisitors = [];
     private int $jobPosted = 0;
-    private int $jobVisitors = 0;
+    private array $jobVisitors = [];
     private int $candidatesReceived;
     private int $subscriptionId;
 
@@ -241,18 +247,26 @@ class Company extends UserAbstract
     /**
      * @return int
      */
-    public function getJobVisitors(): int
+    public function getVisitorsNumber(): int
+    {
+        if (!$this->jobVisitors) {
+            return count($this->getVisitors());
+        }
+        return count($this->jobVisitors);
+    }
+
+    public function getVisitors(): array
     {
         if (!$this->jobVisitors) {
             $vacancies = $this->getActiveVacancies();
-            $counter = 0;
+            $visitors = [];
 
             foreach ($vacancies as $id) {
                 $vacancy = new Vacancy($id);
-                $counter += $vacancy->getVisitorsNumber();
+                $visitors = array_merge($visitors, $vacancy->getVisitors());
             }
 
-            $this->jobVisitors = $counter;
+            $this->jobVisitors = array_unique($visitors);
         }
         return $this->jobVisitors;
     }
@@ -289,6 +303,40 @@ class Company extends UserAbstract
             usort($this->candidatesData, [$this, 'sortCandidatesDataByDate']);
         }
         return $this->candidatesData;
+    }
+
+    public function getVisitorsData(): array
+    {
+        if (!$this->visitorsData) {
+            $allCandidates = get_field('visitors', 'user_' . $this->getUserId());
+
+            if (empty($allCandidates)) {
+                return [];
+            }
+
+            $activeVacancies = $this->getActiveVacancies();
+
+            foreach ($allCandidates as $candidateData) {
+                if (!in_array($candidateData['vacancy'], $activeVacancies)) {
+                    continue;
+                }
+
+                if (!$candidateData['visitor']) {
+                    continue;
+                }
+
+                $candidate = UserService::getUser($candidateData['visitor']);
+
+                if ('publish' !== get_post_status($candidate->getCvId())) {
+                    continue;
+                }
+
+                $this->visitorsData[] = $candidateData;
+            }
+
+            usort($this->visitorsData, [$this, 'sortCandidatesDataByDate']);
+        }
+        return $this->visitorsData;
     }
 
     public function getCandidates(): array
@@ -354,6 +402,34 @@ class Company extends UserAbstract
     /**
      * @return array
      */
+    public function getGreatMatchedVisitorsData(): array
+    {
+        if (empty($this->greatMatchedVisitors)) {
+            $ratedCandidates = $this->getRatedCandidates();
+
+            foreach ($this->getVisitorsData() as $data) {
+                $id = $data['visitor'];
+
+                if (!array_key_exists($id, $ratedCandidates)) {
+                    continue;
+                }
+
+                if ('like' !== $ratedCandidates[$id]) {
+                    continue;
+                }
+
+                $this->greatMatchedVisitors[] = $data;
+            }
+
+            usort($this->greatMatchedVisitors, [$this, 'sortCandidatesDataByDate']);
+        }
+
+        return $this->greatMatchedVisitors;
+    }
+
+    /**
+     * @return array
+     */
     public function getInterestedCandidatesData(): array
     {
         if (empty($this->interestedCandidates)) {
@@ -382,6 +458,34 @@ class Company extends UserAbstract
     /**
      * @return array
      */
+    public function getInterestedVisitorsData(): array
+    {
+        if (empty($this->interestedVisitors)) {
+            $ratedCandidates = $this->getRatedCandidates();
+
+            foreach ($this->getVisitorsData() as $data) {
+                $id = $data['visitor'];
+
+                if (!array_key_exists($id, $ratedCandidates)) {
+                    continue;
+                }
+
+                if ('normal' !== $ratedCandidates[$id]) {
+                    continue;
+                }
+
+                $this->interestedVisitors[] = $data;
+            }
+
+            usort($this->interestedVisitors, [$this, 'sortCandidatesDataByDate']);
+        }
+
+        return $this->interestedVisitors;
+    }
+
+    /**
+     * @return array
+     */
     public function getUnratedCandidatesData(): array
     {
         if (empty($this->unratedCandidates)) {
@@ -397,6 +501,26 @@ class Company extends UserAbstract
         }
 
         return $this->unratedCandidates;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUnratedVisitorsData(): array
+    {
+        if (empty($this->unratedVisitors)) {
+            foreach ($this->getVisitorsData() as $data) {
+                if (array_key_exists($data['visitor'], $this->getRatedCandidates())) {
+                    continue;
+                }
+
+                $this->unratedVisitors[] = $data;
+            }
+
+            usort($this->unratedVisitors, [$this, 'sortCandidatesDataByDate']);
+        }
+
+        return $this->unratedVisitors;
     }
 
     public function getNewCandidatesData(): array
@@ -417,6 +541,26 @@ class Company extends UserAbstract
         }
 
         return $this->newCandidates;
+    }
+
+    public function getNewVisitorsData(): array
+    {
+        if (empty($this->newVisitors)) {
+            $date = new \DateTime(date('F j, Y'));
+            $date->modify('-1 month');
+
+            foreach ($this->getVisitorsData() as $data) {
+                if (strtotime($data['date']) < $date->getTimestamp()) {
+                    continue;
+                }
+
+                $this->newVisitors[] = $data;
+            }
+
+            usort($this->newVisitors, [$this, 'sortCandidatesDataByDate']);
+        }
+
+        return $this->newVisitors;
     }
 
     /**

@@ -666,10 +666,11 @@ $(() => {
     let isAjax = false;
     const li = $(event.currentTarget)
     const id = li.attr('data-id')
+    const userType = $('.js-employer-candidates-types').attr('data-users-type')
     $('#vacancy').val(id)
 
     const data = {
-      action: 'load_vacancy_candidates',
+      action: userType === 'candidates' ? 'load_vacancy_candidates' : 'load_vacancy_visitors',
       id: li.attr('data-id'),
       type: $('.js-employer-candidates-types a.active').parent().attr('data-type'),
       nonce: li.parents('.employer').attr('data-nonce')
@@ -686,8 +687,10 @@ $(() => {
       success: function (response) {
         if (response && response.status === 200) {
           $('.js-candidates-container').html(response.html)
+          $('.js-users-counter').html(`(${response.data.count})`)
         } else if (response.status === 404) {
           $('.js-candidates-container').html(`<p>${response.message}</p>`)
+          $('.js-users-counter').html('(0)')
         } else {
           console.log(response.message)
         }
@@ -704,14 +707,28 @@ $(() => {
     }
 
     let isAjax = false;
+    let action
     const currentLi = $(event.currentTarget)
     const id = $('#vacancy').val()
+    const userType = $('.js-employer-candidates-types').attr('data-users-type')
     currentLi.parent().find('li a').removeClass('active')
     currentLi.find('a').addClass('active')
 
+    console.log(userType, id)
+    if (userType === 'candidates' && !!id) {
+      action = 'load_vacancy_candidates'
+    } else if (userType === 'visitors' && !!id) {
+      action = 'load_vacancy_visitors'
+    } else if (userType === 'candidates') {
+      action = 'load_employer_candidates'
+    } else {
+      action = 'load_employer_visitors'
+    }
+
     const data = {
-      action: id ? 'load_vacancy_candidates' : 'load_employer_candidates',
+      action,
       id,
+      userType,
       type: currentLi.attr('data-type'),
       nonce: currentLi.parents('.employer').attr('data-nonce')
     }
@@ -727,8 +744,10 @@ $(() => {
       success: function (response) {
         if (response && response.status === 200) {
           $('.js-candidates-container').html(response.html)
+          $('.js-users-counter').html(`(${response.data.count})`)
         } else if (response.status === 404) {
           $('.js-candidates-container').html(`<p>${response.message}</p>`)
+          $('.js-users-counter').html('(0)')
         } else {
           console.log(response.message)
         }

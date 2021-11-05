@@ -9,7 +9,6 @@ if (!$company) {
 }
 global $post;
 $candidates = $company->getCandidatesData();
-$company->getJobVisitors()
 ?>
 
     <div class="page employer" data-nonce="<?php echo wp_create_nonce('load_employer_candidates'); ?>">
@@ -53,14 +52,13 @@ $company->getJobVisitors()
             ?>
             <div class="row">
                 <div class="col-12 col-xl-8">
-                    <h3>Candidates <span>(20)</span></h3>
-                    <ul class="filter-list js-employer-candidates-types">
+                    <h3>Candidates <span class="js-users-counter">(<?php echo count($candidates); ?>)</span></h3>
+                    <ul class="filter-list js-employer-candidates-types" data-users-type="candidates">
                         <li data-type="all"><a class="active color-black" href="#">All</a></li>
                         <li data-type="new"><a class="color-black" href="#">New</a></li>
                         <li data-type="great_matches"><a class="color-black" href="#">Great Matches</a></li>
                         <li data-type="unrated"><a class="color-black" href="#">Unrated</a></li>
                         <li data-type="interested"><a class="color-black" href="#">Interested</a></li>
-<!--                    <li><a class="color-black" href="#">Within 100 Mi</a></li>-->
                     </ul>
                     <div class="js-candidates-container">
                         <?php
