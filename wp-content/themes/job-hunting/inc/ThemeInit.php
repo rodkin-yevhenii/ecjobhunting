@@ -9,6 +9,7 @@ use EcJobHunting\Front\FrontInit;
 use EcJobHunting\Service\Ajax\Ajax;
 use EcJobHunting\Service\Chat\ChatService;
 use EcJobHunting\Service\Cv\CvService;
+use EcJobHunting\Service\Email\EmailService;
 use EcJobHunting\Service\Job\JobService;
 use EcJobHunting\Service\Payments\PaymentService;
 use EcJobHunting\Service\User\ChangePassword;
@@ -32,6 +33,7 @@ final class ThemeInit
         $this->registerUserServices();
         $this->registerAjaxCallbacks();
         $this->registerChatServices();
+        $this->registerEmailServices();
         $this->registerPayments();
         add_action('rest_api_init', [$this, 'registerRestApiField']);
     }
@@ -88,6 +90,11 @@ final class ThemeInit
     private function registerChatServices()
     {
         add_action('init', new ChatService());
+    }
+
+    private function registerEmailServices()
+    {
+        add_action('init', new EmailService());
     }
 
     private function registerPayments(): void

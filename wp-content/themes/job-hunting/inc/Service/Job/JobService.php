@@ -2,16 +2,17 @@
 
 namespace EcJobHunting\Service\Job;
 
-use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Entity\Company;
+use EcJobHunting\Entity\Email;
 use EcJobHunting\Entity\Vacancy;
 use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Interfaces\AjaxResponse;
+use EcJobHunting\Service\Email\EmailMessages;
+use EcJobHunting\Service\Email\EmailService;
 use EcJobHunting\Service\Job\Response\JobsResponse;
 use EcJobHunting\Service\User\UserService;
 use PHPMailer\PHPMailer\Exception;
 use WP_Query;
-use WP_REST_Posts_Controller;
 
 class JobService
 {
@@ -552,7 +553,7 @@ class JobService
         }
 
         $vacancy = new Vacancy((int) $_POST['vacancyId']);
-        $userId = get_current_user_id();
+        $candidate = UserService::getUser();
 
         if (!$vacancy) {
             $this->response
@@ -565,20 +566,30 @@ class JobService
         $employer = $vacancy->getEmployer();
         $employerCandidates = $employer->getCandidates();
 
-        if (!in_array($userId, $candidates)) {
-            $candidates[] = $userId;
+        if (!in_array($candidate->getUserId(), $candidates)) {
+            $candidates[] = $candidate->getUserId();
             $this->response->setMessage('applied');
             update_field('applied', $candidates, $vacancy->getId());
+
+            $emailTemplates = new EmailMessages();
+            $message = $emailTemplates->getApplyMessage($employer, $candidate, $vacancy);
+            $email = new Email();
+            $email->setSubject("Your application {$vacancy->getTitle()} was accepted")
+                ->setMessage($message)
+                ->setToEmail($employer->getEmail());
+
+            $result = EmailService::sendEmail($email);
         }
 
-        if (!array_key_exists($userId, $employerCandidates)) {
+        if (!array_key_exists($candidate->getUserId(), $employerCandidates)) {
             $row = [
                 'date' => date('F j, Y'),
                 'vacancy' => $vacancy->getId(),
-                'employee' => $userId
+                'employee' => $candidate->getUserId()
             ];
 
             add_row('candidates', $row, 'user_' . $employer->getUserId());
+            $a = 2;
         }
 
 
