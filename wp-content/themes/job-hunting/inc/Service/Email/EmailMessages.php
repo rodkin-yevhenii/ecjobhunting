@@ -16,7 +16,7 @@ class EmailMessages
     public function __construct()
     {
         if (empty(self::$fields)) {
-            self::$fields = get_fields('email_templates', 'option') ?? [];
+            self::$fields = get_field('email_templates', 'option') ?? [];
         }
     }
 
