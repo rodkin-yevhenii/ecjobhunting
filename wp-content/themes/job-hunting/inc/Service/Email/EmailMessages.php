@@ -120,7 +120,7 @@ Please login to your account for more information <a href="{{{LOGIN_URL}}}">{{{L
 Sincerely yours,<br />
 EC Jobhunting.
             <?php
-            $template = !empty(self::$fields['new_chat_message_for_employer'])
+            $template = !empty(self::$fields['new_chat_message_for_employee'])
                 ? self::$fields['new_chat_message_for_employee']
                 : ob_get_clean();
 
