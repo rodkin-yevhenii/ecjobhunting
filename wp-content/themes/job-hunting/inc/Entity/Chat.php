@@ -27,11 +27,11 @@ class Chat
             if ($currentUserId === $contact['user']) {
                 $this->isViewed = $contact['is_viewed'];
                 $this->isHide = $contact['is_closed'];
-
-                continue;
             }
 
-            $this->opponent = UserService::getUser($contact['user']);
+            if ($this->authorId !== $contact['user']) {
+                $this->opponent = UserService::getUser($contact['user']);
+            }
         }
 
         $this->isClosed = $contacts[0]['is_closed'] && $contacts[1]['is_closed'];

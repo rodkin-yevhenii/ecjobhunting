@@ -18,29 +18,34 @@ class UserService
         $this->hooks();
     }
 
-    private static function getCurrentUserRole()
+    private static function getUserRole(int $id = 0)
     {
-        if (!is_user_logged_in()) {
+        if (!$id && !is_user_logged_in()) {
             return false;
         }
-        $user = wp_get_current_user();
-        return ( array )$user->roles;
+        if (!$id) {
+            $user = wp_get_current_user();
+        } else {
+            $user = get_user_by('id', $id);
+        }
+
+        return (array) $user->roles;
     }
 
-    public static function isCandidate()
+    public static function isCandidate(int $id = 0)
     {
-        if (!is_user_logged_in()) {
+        if (!$id && !is_user_logged_in()) {
             return false;
         }
-        return in_array(static::$candidateRoleName, self::getCurrentUserRole()) ?? false;
+        return in_array(static::$candidateRoleName, self::getUserRole($id)) ?? false;
     }
 
-    public static function isEmployer()
+    public static function isEmployer(int $id = 0)
     {
-        if (!is_user_logged_in()) {
+        if (!$id && !is_user_logged_in()) {
             return false;
         }
-        return in_array(static::$employerRoleName, self::getCurrentUserRole()) ?? false;
+        return in_array(static::$employerRoleName, self::getUserRole($id)) ?? false;
     }
 
     public static function getPhotoUrl($userId = null)

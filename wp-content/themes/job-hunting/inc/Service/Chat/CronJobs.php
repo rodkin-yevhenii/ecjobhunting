@@ -2,25 +2,46 @@
 
 namespace EcJobHunting\Service\Chat;
 
+use EcJobHunting\Entity\Chat;
 use EcJobHunting\Entity\Email;
 use EcJobHunting\Service\Email\EmailMessages;
 use EcJobHunting\Service\Email\EmailService;
+use EcJobHunting\Service\User\UserService;
 
 class CronJobs
 {
     public function __construct()
     {
         add_action('new_message_email_notification', [$this, 'sendEmailNotification'], 10, 2);
+//        $this->sendEmailNotification(4, 708);
     }
 
-    public function sendEmailNotification(int $userId, int $chatId): void
+    public function sendEmailNotification(int $recipientId, int $chatId): void
     {
-        $a = 2;
-        $messagesTemplates = new EmailMessages();
+        $emailMessages = new EmailMessages();
         $email = new Email();
-        $email->setToEmail('test@test.ru')
-            ->setMessage('test')
-            ->setSubject('test');
+        $chat = new Chat($chatId);
+        $vacancy = $chat->getVacancy();
+
+        if (UserService::isEmployer($recipientId)) {
+            $candidateId = $chat->getAuthorId() !== $recipientId
+                ? $chat->getAuthorId()
+                : $chat->getOpponent()->getUserId();
+            $candidate = UserService::getUser($candidateId);
+            $employer = UserService::getUser($recipientId);
+            $email->setToEmail($employer->getEmail())
+                ->setSubject("You have a new message from {$candidate->getName()} about your recent job listing")
+                ->setMessage($emailMessages->getNewChatMessageForEmployer($candidate, $vacancy));
+        } else {
+            $employerId = $chat->getAuthorId() !== $recipientId
+                ? $chat->getAuthorId()
+                : $chat->getOpponent()->getUserId();
+            $employer = UserService::getUser($employerId);
+            $candidate = UserService::getUser($recipientId);
+            $email->setToEmail($candidate->getEmail())
+                ->setSubject("You have a new message from {$employer->getName()} about your recent application.")
+                ->setMessage($emailMessages->getNewChatMessageForEmployee($employer));
+        }
 
         EmailService::sendEmail($email);
     }

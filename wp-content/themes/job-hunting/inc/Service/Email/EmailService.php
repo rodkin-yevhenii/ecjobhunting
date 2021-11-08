@@ -10,6 +10,8 @@ class EmailService
     {
         $this->registerAcfFields();
         $this->registerOptionsPage();
+        add_filter('comment_moderation_recipients', [$this, 'disableCommentsNotification'], 11);
+        add_filter('comment_notification_recipients', [$this, 'disableCommentsNotification'], 11);
     }
 
     private function registerOptionsPage(): void
@@ -118,8 +120,8 @@ class EmailService
                                 ],
                                 [
                                     'key' => 'field_6186e34679bfa',
-                                    'label' => 'New Chat Message from Employer',
-                                    'name' => 'new_chat_message_from_employer',
+                                    'label' => 'New Chat Message for Employer',
+                                    'name' => 'new_chat_message_for_employer',
                                     'type' => 'textarea',
                                     'instructions' => '',
                                     'required' => 0,
@@ -137,8 +139,8 @@ class EmailService
                                 ],
                                 [
                                     'key' => 'field_61880c82dc93e',
-                                    'label' => 'New Chat Message from Employee',
-                                    'name' => 'new_chat_message_from_employee',
+                                    'label' => 'New Chat Message for Employee',
+                                    'name' => 'new_chat_message_for_employee',
                                     'type' => 'textarea',
                                     'instructions' => '',
                                     'required' => 0,
@@ -177,5 +179,10 @@ class EmailService
                 ]
             );
         }
+    }
+
+    public function disableCommentsNotification(array $emails): array
+    {
+        return [];
     }
 }
