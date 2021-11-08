@@ -134,6 +134,7 @@ get_header(); ?>
                                         href="#"
                                         class="btn btn-primary btn-lg js-start-chat ml-md-4"
                                         data-user-id="<?php echo $vacancy->getAuthor(); ?>"
+                                        data-vacancy-id="<?php echo $vacancy->getId(); ?>"
                                         data-nonce="<?php echo wp_create_nonce('create_chat'); ?>"
                                     >
                                         Start chat

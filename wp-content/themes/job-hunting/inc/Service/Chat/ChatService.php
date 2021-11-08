@@ -5,6 +5,7 @@ namespace EcJobHunting\Service\Chat;
 use DateTime;
 use EcJobHunting\Entity\Chat;
 use EcJobHunting\Front\EcResponse;
+use EcJobHunting\Service\Cron\Cron;
 use WP_Comment;
 use WP_Comment_Query;
 use WP_Query;
@@ -111,6 +112,28 @@ class ChatService
                                 'return_format' => 'id',
                             ],
                         ],
+                    ],
+                    [
+                        'key' => 'field_61883cc5b32cc',
+                        'label' => 'Vacancy',
+                        'name' => 'vacancy',
+                        'type' => 'post_object',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'post_type' => [
+                            0 => 'vacancy',
+                        ],
+                        'taxonomy' => '',
+                        'allow_null' => 0,
+                        'multiple' => 0,
+                        'return_format' => 'id',
+                        'ui' => 1,
                     ],
                     [
                         'key' => 'field_61765547bae47',
@@ -232,6 +255,7 @@ class ChatService
     public function __invoke()
     {
         $this->response = new EcResponse();
+        new CronJobs();
 
         // Ajax actions
         add_action("wp_ajax_send_chat_message", [$this, 'sendMessageAjaxCallback']);
@@ -279,6 +303,7 @@ class ChatService
         }
 
         $chatId = abs($_POST['chat']);
+        $chat = new Chat($chatId);
         $user = wp_get_current_user();
         $commentData = array(
             'comment_post_ID' => $chatId,
@@ -299,6 +324,14 @@ class ChatService
                 ->setMessage('Massage was n\'t sent')
                 ->send();
         }
+
+        $emailNotificationArgs = [
+            $chat->getAuthorId() !== $user->ID ? $chat->getAuthorId() : $chat->getOpponent()->getUserId(),
+            $chatId
+        ];
+
+        Cron::unScheduleEvent('new_message_email_notification', $emailNotificationArgs);
+        Cron::scheduleSingleEvent(60 * 15, 'new_message_email_notification', $emailNotificationArgs);
 
         $date = new DateTime();
         update_field('last_update_date', $date->format('Y-m-d H:i:s'), $chatId);
@@ -355,6 +388,15 @@ class ChatService
 
         ob_start();
         $startDate = '';
+
+        $cronArgs = [
+            get_current_user_id(),
+            (int) $chatId
+        ];
+
+        if (wp_next_scheduled('new_message_email_notification', $cronArgs)) {
+            Cron::unScheduleEvent('new_message_email_notification', $cronArgs);
+        }
 
         for ($i = count($query->comments) - 1; $i >= 0; $i--) {
             $comment = $query->comments[$i];
@@ -480,12 +522,17 @@ class ChatService
         $author = wp_get_current_user();
         $opponent = new \WP_User($_POST['userId']);
         $userChats = self::getUserChats($author->ID);
+        $vacancyId = !empty($_POST['vacancyId']) ? $_POST['vacancyId'] : false;
 
         /**
          * @var $chat Chat
          */
         foreach ($userChats as $chat) {
             if ($opponent->ID === $chat->getOpponent()->getUserId()) {
+                if ($vacancyId) {
+                    update_field('vacancy', $vacancyId, $chat->getId());
+                }
+
                 $this->response
                     ->setStatus(200)
                     ->setData(['chatId' => $chat->getId()])
@@ -501,6 +548,11 @@ class ChatService
                 'post_author' => $author->ID
             ]
         );
+
+        if ($chatId && $vacancyId) {
+            update_field('vacancy', $vacancyId, $chatId);
+        }
+
 
         wp_update_post(
             [

@@ -4,6 +4,7 @@ use EcJobHunting\Service\Chat\ChatService;
 
 $currentUserId = get_current_user_id();
 $chats = ChatService::getUserChats($currentUserId);
+$chatId = !empty($_GET['chatId']) ? (int) $_GET['chatId'] : 0;
 get_header();
 ?>
 <div class="page employer messages">

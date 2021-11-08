@@ -16,7 +16,8 @@ $(() => {
     const data = {
       action: 'create_chat',
       nonce: $(event.currentTarget).attr('data-nonce'),
-      userId: $(event.currentTarget).attr('data-user-id')
+      userId: $(event.currentTarget).attr('data-user-id'),
+      vacancyId: $(event.currentTarget).attr('data-vacancy-id') ?? ''
     }
 
     $.ajax({

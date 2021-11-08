@@ -12,6 +12,7 @@ class Chat
     private bool $isViewed;
     private bool $isHide;
     private bool $isClosed;
+    private Vacancy $vacancy;
 
     public function __construct(int $id)
     {
@@ -58,6 +59,18 @@ class Chat
     public function getOpponent()
     {
         return $this->opponent;
+    }
+
+    /**
+     * @return Vacancy
+     */
+    public function getVacancy(): Vacancy
+    {
+        if (empty($this->vacancy)) {
+            $vacancyId = get_field('vacancy', $this->id);
+            $this->vacancy = new Vacancy($vacancyId);
+        }
+        return $this->vacancy;
     }
 
     /**
