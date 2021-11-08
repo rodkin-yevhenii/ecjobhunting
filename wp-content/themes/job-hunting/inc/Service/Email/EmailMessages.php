@@ -110,12 +110,12 @@ EC Jobhunting.
 
     public function getNewChatMessageForEmployee(Company $employer): string
     {
-        if (empty($this->newChatMessageForEmployer)) {
+        if (empty($this->newChatMessageForEmployee)) {
             ob_start();
             ?>
 You have a new message from {{{EMPLOYER}}} about your recent application.<br />
 <br />
-Please login to your account for more information <a href="{{{LOGIN_URL}}}">LOGIN_URL</a><br />
+Please login to your account for more information <a href="{{{LOGIN_URL}}}">{{{LOGIN_URL}}}</a><br />
 <br />
 Sincerely yours,<br />
 EC Jobhunting.
@@ -124,7 +124,7 @@ EC Jobhunting.
                 ? self::$fields['new_chat_message_for_employee']
                 : ob_get_clean();
 
-            $this->newChatMessageForEmployer = str_replace(
+            $this->newChatMessageForEmployee = str_replace(
                 [
                     '{{{EMPLOYER}}}',
                     '{{{LOGIN_URL}}}',
@@ -137,6 +137,6 @@ EC Jobhunting.
             );
         }
 
-        return $this->newChatMessageForEmployer;
+        return $this->newChatMessageForEmployee;
     }
 }
