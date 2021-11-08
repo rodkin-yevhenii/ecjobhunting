@@ -325,13 +325,18 @@ class ChatService
                 ->send();
         }
 
-        $emailNotificationArgs = [
-            $chat->getAuthorId() !== $user->ID ? $chat->getAuthorId() : $chat->getOpponent()->getUserId(),
-            $chatId
-        ];
+        $recipientId = $chat->getAuthorId() !== $user->ID ? $chat->getAuthorId() : $chat->getOpponent()->getUserId();
+        $isChatNotificationEnabled = get_field('is_chat_notification_enabled', 'user_' . $recipientId);
 
-        Cron::unScheduleEvent('new_message_email_notification', $emailNotificationArgs);
-        Cron::scheduleSingleEvent(60 * 15, 'new_message_email_notification', $emailNotificationArgs);
+        if ($isChatNotificationEnabled) {
+            $emailNotificationArgs = [
+                $recipientId,
+                $chatId
+            ];
+
+            Cron::unScheduleEvent('new_message_email_notification', $emailNotificationArgs);
+            Cron::scheduleSingleEvent(60 * 15, 'new_message_email_notification', $emailNotificationArgs);
+        }
 
         $date = new DateTime();
         update_field('last_update_date', $date->format('Y-m-d H:i:s'), $chatId);

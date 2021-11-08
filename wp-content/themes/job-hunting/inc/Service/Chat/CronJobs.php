@@ -13,7 +13,6 @@ class CronJobs
     public function __construct()
     {
         add_action('new_message_email_notification', [$this, 'sendEmailNotification'], 10, 2);
-//        $this->sendEmailNotification(4, 708);
     }
 
     public function sendEmailNotification(int $recipientId, int $chatId): void

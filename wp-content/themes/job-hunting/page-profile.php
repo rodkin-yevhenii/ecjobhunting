@@ -20,6 +20,16 @@ if (!empty($_POST['lastname'])) {
     update_user_meta($user->ID, 'last_name', $_POST['lastname']);
 }
 
+if (isset($_POST['update_notification_settings'])) {
+    update_field(
+        'is_chat_notification_enabled',
+        (bool)($_POST['is_chat_notification_enabled'] ?? false),
+        'user_' . $user->ID
+    );
+}
+
+$isChatNotificationEnabled = get_field('is_chat_notification_enabled', 'user_' . $user->ID);
+
 if (!empty($_POST['firstname']) && !empty($_POST['lastname'])) {
     wp_update_user(['ID' => $user->ID, 'display_name' => $_POST['firstname'] . ' ' . $_POST['lastname']]);
 } elseif (!empty($_POST['firstname'])) {
@@ -112,5 +122,29 @@ if (UserService::isEmployer()) : ?>
     </section>
     <?php
 endif;
-
+?>
+<section class="account">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="no-decor mb-4">Notifications</h2>
+                <form method="post">
+                    <input type="hidden" name="update_notification_settings" value="1">
+                    <h3>Messages</h3>
+                    <fieldset>
+                        <input
+                            type="checkbox"
+                            id="notifications-5"
+                            name="is_chat_notification_enabled"
+                            <?php echo !$isChatNotificationEnabled ?: 'checked'; ?>
+                        >
+                        <label for="notifications-5">Notifications when someone contacts you about a job.</label>
+                    </fieldset>
+                    <button class="btn btn-primary" type="submit">Save Name</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<?php
 get_footer();

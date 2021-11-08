@@ -1937,6 +1937,25 @@ class AcfFields
                         'max_size' => '',
                         'mime_types' => '',
                     ],
+                    [
+                        'key' => 'field_618999a3270b1',
+                        'label' => 'Notifications when someone contacts you about a job.',
+                        'name' => 'is_chat_notification_enabled',
+                        'type' => 'true_false',
+                        'instructions' => '',
+                        'required' => 0,
+                        'conditional_logic' => 0,
+                        'wrapper' => [
+                            'width' => '',
+                            'class' => '',
+                            'id' => '',
+                        ],
+                        'message' => '',
+                        'default_value' => 0,
+                        'ui' => 0,
+                        'ui_on_text' => '',
+                        'ui_off_text' => '',
+                    ],
                 ],
                 'location' => [
                     [
