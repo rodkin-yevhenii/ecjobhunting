@@ -86,7 +86,7 @@ class CvService
 
         if (
             $_FILES['avatar']['size'] > 1000000
-            || !in_array($_FILES['avatar']['type'], ['image/png', 'image/jpg', 'image/jpg'])
+            || !in_array($_FILES['avatar']['type'], ['image/png', 'image/jpg', 'image/jpeg'])
         ) {
             return;
         }
