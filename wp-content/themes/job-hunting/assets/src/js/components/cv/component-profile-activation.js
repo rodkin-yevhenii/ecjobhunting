@@ -20,7 +20,7 @@ export default class ComponentProfileActivation {
     $switcher.on('click', this.profileActivationToggle.bind(this))
     $(document).on('profile_drafted', () => {
       $switcher.removeClass('active')
-      $('.profile-activation__text').text('Private: Your profile is not publicly accessible. However, it is viewable as' +
+      $('.profile-activation__text').text('Private: Your profile is not publicly accessible. However, it is viewable as ' +
         'a part of your applications.')
     })
   }
