@@ -8,7 +8,7 @@ use EcJobHunting\Service\Payments\SubscriptionsPlans;
 use EcJobHunting\Service\User\UserService;
 
 if (! UserService::isEmployer()) {
-    wp_redirect(home_url());
+    wp_redirect(home_url('dashboard'));
 }
 
 $employer = UserService::getUser();

@@ -56,6 +56,7 @@ class Login
     {
         add_action('login_form_login', [$this, 'redirectToCustomLogin']);
         add_filter('authenticate', [$this, 'redirectToCustomLoginAfterAuthenticate'], 100, 1);
+        add_filter('login_redirect', [$this, 'redirectToDashboardAfterLogin'], 10, 3);
     }
 
     /**
@@ -104,5 +105,25 @@ class Login
         }
 
         return $user;
+    }
+
+    /**
+     * Redirect users to dashboard after login.
+     *
+     * @param string $redirect_to
+     * @param string $request
+     * @param WP_User|WP_Error $user
+     *
+     * @return string
+     */
+    public function redirectToDashboardAfterLogin(string $redirect_to, string $request, $user): string
+    {
+        if (!is_wp_error($user) && $user->has_cap('manage_options')) {
+            return '/wp-admin';
+        } elseif (UserService::isEmployer() || UserService::isCandidate()) {
+            return '/dashboard';
+        } else {
+            return home_url();
+        }
     }
 }
