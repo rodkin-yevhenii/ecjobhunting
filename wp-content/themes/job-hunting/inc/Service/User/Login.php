@@ -37,7 +37,8 @@ class Login
 
             case 'incorrect_password':
                 return __(
-                    'The password you entered wasn\'t quite right. <a href=\'' . wp_lostpassword_url() . '\'>Did you forget your password</a>?',
+                    'The password you entered wasn\'t quite right.
+                    <a href=\'' . wp_lostpassword_url() . '\'>Did you forget your password</a>?',
                     'ecjobhunting'
                 );
 
@@ -45,7 +46,7 @@ class Login
                 return __("Sorry, we don't accept empty passwords.", 'ecjobhunting');
 
             default:
-                return __( 'An unknown error occurred. Please try again later.', 'ecjobhunting' );
+                return __('An unknown error occurred. Please try again later.', 'ecjobhunting');
         }
     }
 
@@ -120,7 +121,7 @@ class Login
     {
         if (!is_wp_error($user) && $user->has_cap('manage_options')) {
             return '/wp-admin';
-        } elseif (UserService::isEmployer() || UserService::isCandidate()) {
+        } elseif (UserService::isEmployer($user->ID) || UserService::isCandidate($user->ID)) {
             return '/dashboard';
         } else {
             return home_url();
