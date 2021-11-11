@@ -188,12 +188,19 @@ $isOwner = $currentUserId === $candidate->getUserId();
         <div class="col-12 order-1 col-md-5 float-md-left col-xl-3 order-xl-2">
             <div class="profile-progress">
                 <div class="profile-progressbar">
-                    <span style="width: <?php echo CvService::calculateProgress(); ?>%;"></span>
+                    <span
+                        class="<?php echo CvService::calculateProgress() < 100 ?: 'complete'; ?>"
+                        style="width: <?php echo CvService::calculateProgress(); ?>%;"
+                    ></span>
                 </div>
-                <div class="profile-header">
-                    <h2 class="no-decor">Your Profile is Incomplete</h2>
-                </div>
-                <p>Finish your profile to unlock better job matching and stand out to hiring managers!</p>
+                <?php if (CvService::calculateProgress() < 100) : ?>
+                    <div class="profile-header">
+                        <h2 class="no-decor">Your Profile is Incomplete</h2>
+                    </div>
+                    <p>Finish your profile to unlock better job matching and stand out to hiring managers!</p>
+                <?php else : ?>
+                    <h2 class="no-decor">Your Profile is Complete</h2>
+                <?php endif; ?>
                 <ul>
                     <li>
                         <div class="icon-check active"></div>
