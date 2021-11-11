@@ -167,20 +167,18 @@ get_header(); ?>
                                 src="<?php echo IMG_URI . 'icons/register-icon-1.png'; ?>"
                                 alt="icon"></div>
                     <h3>Employer Account</h3>
-                    <p>We are a group of entrepreneurs brought together to provide a differentiated approach to the
-                        recruiting industry.</p><a class="btn btn-outline-secondary"
-                                                   href="<?php echo SIGNUP_URL . '?user=employer'; ?>">Register
-                        Account</a>
+                    <a class="btn btn-outline-secondary" href="<?php echo SIGNUP_URL . '?user=employer'; ?>">
+                        Register Account
+                    </a>
                 </div>
                 <div class="col-12 col-md-6 register-item">
                     <div class="register-item-icon d-none d-md-flex"><img
                                 src="<?php echo IMG_URI . 'icons/register-icon-2.png'; ?>"
                                 alt="icon"></div>
                     <h3>Candidates Account</h3>
-                    <p>We are a group of entrepreneurs brought together to provide differentiated approach. We are a
-                        group of entrepreneurs</p><a class="btn btn-outline-secondary"
-                                                     href="<?php echo SIGNUP_URL . '?user=candidate'; ?>">Register
-                        Account</a>
+                    <a class="btn btn-outline-secondary" href="<?php echo SIGNUP_URL . '?user=candidate'; ?>">
+                        Register Account
+                    </a>
                 </div>
             </div>
         </div>
