@@ -595,6 +595,7 @@ class JobService
 
         $this->response
             ->setStatus(200)
+            ->setMessage('applied')
             ->send();
     }
 }
