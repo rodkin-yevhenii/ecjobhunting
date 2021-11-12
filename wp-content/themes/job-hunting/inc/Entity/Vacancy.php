@@ -80,13 +80,54 @@ class Vacancy
                 $this->isCommissionIncluded = (bool)($fields['is_commission_included'] ?? false);
                 $this->agreementOptions = $fields['additional_options'] ?? [];
                 $this->benefits = isset($fields['benefits']) ? (array)$fields['benefits'] : [];
-                $this->visitors = !empty($fields['visitors']) ? $fields['visitors'] : [];
-                $this->candidates = !empty($fields['applied']) ? $fields['applied'] : [];
                 $this->currency = ucwords($fields['compensation_currency'] ?? 'USD');
                 $this->compensationPeriod = $fields['compensation_period'] ?? 'annualy';
 
                 $this->employmentType = wp_get_post_terms($id, 'type', ['fields' => 'names']);
                 $this->location = wp_get_post_terms($id, 'location', ['fields' => 'names']);
+                $candidates = !empty($fields['applied']) ? $fields['applied'] : [];
+
+                if (!empty($candidates) && is_array($candidates)) {
+                    $query = new \WP_Query(
+                        [
+                            'post_type' => 'cv',
+                            'posts_per_page' => -1,
+                            'post_status' => 'publish',
+                            'author__in' => $candidates,
+                        ]
+                    );
+
+                    if (!$query->have_posts()) {
+                        $this->candidates = [];
+                        return;
+                    }
+
+                    foreach ($query->posts as $post) {
+                        $this->candidates[] = $post->post_author;
+                    }
+                }
+
+                $visitors = !empty($fields['visitors']) ? $fields['visitors'] : [];
+
+                if (!empty($visitors) && is_array($visitors)) {
+                    $query = new \WP_Query(
+                        [
+                            'post_type' => 'cv',
+                            'posts_per_page' => -1,
+                            'post_status' => 'publish',
+                            'author__in' => $visitors,
+                        ]
+                    );
+
+                    if (!$query->have_posts()) {
+                        $this->visitors = [];
+                        return;
+                    }
+
+                    foreach ($query->posts as $post) {
+                        $this->visitors[] = $post->post_author;
+                    }
+                }
             }
         } else {
             $this->employer = UserService::getUser();
