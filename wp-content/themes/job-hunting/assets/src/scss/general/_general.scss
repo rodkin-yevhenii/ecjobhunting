@@ -1692,6 +1692,8 @@ form {
 
   &-controls {
     list-style: none;
+    overflow-y: auto;
+    max-height: 574px;
 
     li {
       padding: 20px 0;
