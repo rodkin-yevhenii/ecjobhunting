@@ -15,7 +15,7 @@ $(() => {
       action: 'send_chat_message',
       nonce: $form.attr('data-nonce'),
       chat: $form.attr('data-chat-id'),
-      message: $form.find('input').val()
+      message: $form.find('textarea').val()
     }
 
     if (!data.message.length) {
@@ -32,7 +32,7 @@ $(() => {
       success: function (response) {
         if (response.status === 200) {
           $(document).trigger('load_messages', [$form.attr('data-chat-id'), $('.js-messages').attr('data-nonce')])
-          $form.find('input').val('')
+          $form.find('textarea').val('')
         } else {
           console.error(response.message)
         }

@@ -456,8 +456,9 @@ class ChatService
         ?>
         <div class="messages-answer-item <?php
         echo get_current_user_id() === (int)$comment->user_id ? 'self' : ''; ?>">
-            <span><?php
-                echo $comment->comment_content; ?></span>
+            <span>
+                <?php echo str_replace("\n", '<br />', $comment->comment_content); ?>
+            </span>
         </div>
         <?php
         echo ob_get_clean();

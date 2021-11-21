@@ -47,7 +47,7 @@ get_header();
                             data-nonce="<?php echo wp_create_nonce('send_message'); ?>"
                         >
                             <label>
-                                <input class="field-text" type="text" placeholder="Type here...">
+                                <textarea class="field-textarea" placeholder="Type here..."></textarea>
                             </label>
                             <button class="btn btn-primary d-block" type="submit">send</button>
                         </form>
