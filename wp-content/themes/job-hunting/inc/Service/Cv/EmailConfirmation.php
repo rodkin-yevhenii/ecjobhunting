@@ -40,7 +40,7 @@ Please click on the following link to confirm your email address:
 ###ADMIN_URL###
 
 Sincerely yours,
-<a href="###SITEURL###" title="###SITENAME###">###SITENAME###</a>.
+###SITENAME###.
         <?php
         $content = apply_filters(
             'new_cv_verify_email_content',
@@ -60,7 +60,7 @@ Sincerely yours,
         if (
             !wp_mail(
                 $candidate->getNewEmail(),
-                sprintf(__('[%s] New Email Address'), get_site_option('site_name')),
+                '[EC Jobhunting] New Email Address',
                 $content
             )
         ) {
