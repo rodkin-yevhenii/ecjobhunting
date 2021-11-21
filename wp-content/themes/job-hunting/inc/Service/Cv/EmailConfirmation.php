@@ -60,7 +60,7 @@ Sincerely yours,
         if (
             !wp_mail(
                 $candidate->getNewEmail(),
-                '[EC Jobhunting] New Email Address',
+                'EC Jobhunting > New Email Address',
                 $content
             )
         ) {
