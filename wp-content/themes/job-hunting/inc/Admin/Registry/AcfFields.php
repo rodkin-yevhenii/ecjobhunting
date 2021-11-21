@@ -2411,7 +2411,7 @@ class AcfFields
                         'name' => 'help_email',
                         'type' => 'email',
                         'instructions' => '',
-                        'required' => 1,
+                        'required' => 0,
                         'conditional_logic' => 0,
                         'wrapper' => [
                             'width' => '40',
