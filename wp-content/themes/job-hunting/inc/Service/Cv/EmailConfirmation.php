@@ -33,25 +33,18 @@ class EmailConfirmation
 
         $hash = md5($candidate->getNewEmail() . time() . mt_rand());
         update_field('hash', $hash, $candidate->getCvId());
+        ob_start();
+        ?>
+Dear <?php echo $candidate->getName(); ?>,
+Please click on the following link to confirm your email address:
+###ADMIN_URL###
+
+Sincerely yours,
+<a href="###SITEURL###" title="###SITENAME###">###SITENAME###</a>.
+        <?php
         $content = apply_filters(
             'new_cv_verify_email_content',
-            __(
-                "Dear user,
-
-    You recently requested to have the email address on your account changed.
-    If this is correct, please click on the following link to change it:
-    ###ADMIN_URL###
-
-    You can safely ignore and delete this email if you do not want to
-    take this action.
-
-    This email has been sent to ###EMAIL###
-
-    Regards,
-    All at ###SITENAME###
-    ###SITEURL###",
-                'ecjobhunting'
-            ),
+            ob_get_clean(),
             $candidate
         );
 
@@ -61,7 +54,7 @@ class EmailConfirmation
             $content
         );
         $content = str_replace('###EMAIL###', $candidate->getNewEmail(), $content);
-        $content = str_replace('###SITENAME###', get_site_option('site_name'), $content);
+        $content = str_replace('###SITENAME###', 'EC Jobhunting', $content);
         $content = str_replace('###SITEURL###', home_url(), $content);
 
         if (
