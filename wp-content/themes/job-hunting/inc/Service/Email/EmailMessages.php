@@ -12,6 +12,7 @@ class EmailMessages
     private string $applyMessage = '';
     private string $newChatMessageForEmployer = '';
     private string $newChatMessageForEmployee = '';
+    private string $registrationMessage = '';
 
     public function __construct()
     {
@@ -138,5 +139,37 @@ EC Jobhunting.
         }
 
         return $this->newChatMessageForEmployee;
+    }
+
+    public function getRegistrationMessage(string $login): string
+    {
+        if (empty($this->registrationMessage)) {
+            ob_start();
+            ?>
+Dear {{{USERNAME}}},<br />
+<br />
+Thank you for choosing EC Jobhunting. Please <a href="{{{LOGIN_URL}}}">click here</a> to login to your profile.<br />
+<br />
+Sincerely yours,<br />
+EC Jobhunting.
+            <?php
+            $template = !empty(self::$fields['registration_message'])
+                ? self::$fields['registration_message']
+                : ob_get_clean();
+
+            $this->registrationMessage = str_replace(
+                [
+                    '{{{USERNAME}}}',
+                    '{{{LOGIN_URL}}}',
+                ],
+                [
+                    $login,
+                    wp_login_url(),
+                ],
+                $template
+            );
+        }
+
+        return $this->registrationMessage;
     }
 }

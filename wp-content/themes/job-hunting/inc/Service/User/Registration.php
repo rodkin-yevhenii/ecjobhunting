@@ -1,11 +1,12 @@
 <?php
 
-
 namespace EcJobHunting\Service\User;
 
-
+use EcJobHunting\Entity\Email;
 use EcJobHunting\Front\EcResponse;
 use EcJobHunting\Interfaces\AjaxResponse;
+use EcJobHunting\Service\Email\EmailMessages;
+use EcJobHunting\Service\Email\EmailService;
 
 class Registration
 {
@@ -33,7 +34,8 @@ class Registration
     /**
      * Check user registration information.
      */
-    private function checkUserRegistrationInfo() {
+    private function checkUserRegistrationInfo()
+    {
         require_once ABSPATH . WPINC . '/user.php';
 
         if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'sign_up')) {
@@ -89,6 +91,12 @@ class Registration
                 ->setMessage(__('User role is required', 'ecjobhunting'))
                 ->send();
         }
+
+        if (!in_array($_POST['role'], ['candidate', 'employer'])) {
+            $this->response->setStatus(204)
+                ->setMessage(__('User role isn\'t correct', 'ecjobhunting'))
+                ->send();
+        }
     }
 
     /**
@@ -114,12 +122,21 @@ class Registration
 
         if (is_wp_error($id)) {
             $this->response->setStatus(406)
-                ->setMessage(__('An error has occurred. Try again later or contact your administrator.', 'ecjobhunting'))
+                ->setMessage(
+                    __('An error has occurred. Try again later or contact your administrator.', 'ecjobhunting')
+                )
                 ->send();
         }
 
         $user = new \WP_User($id);
         $user->set_role($role);
+        $emailMessages = new EmailMessages();
+        $emailObj = new Email();
+        $emailObj
+            ->setSubject('EC jobhunting > Account registration')
+            ->setMessage($emailMessages->getRegistrationMessage($login))
+            ->setToEmail($email);
+        EmailService::sendEmail($emailObj);
 
         $this->response->setStatus(200)
             ->setMessage(__('User registered successfully', 'ecjobhunting'))
