@@ -58,7 +58,7 @@ get_header(); ?>
                         and we'll email you a link to reset your password.
                     </p>
                     <label class="field-label" for="account-password-new">Create Password</label>
-                    <input class="field-text js-new-pwp" type="password" id="account-password-new">
+                    <input class="field-text js-new-pwd" type="password" id="account-password-new">
                     <label class="field-label" for="account-password-new-confirm">Confirm Password</label>
                     <input class="field-text js-confirmation-pwd" type="password" id="account-password-new-confirm">
                     <button class="btn btn-primary" type="submit">Save Password</button>

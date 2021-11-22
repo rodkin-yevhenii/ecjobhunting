@@ -75,7 +75,7 @@ $(() => {
       success: function (response) {
         if (response.status === 200) {
           notification.success('Password updated')
-          document.location.href = '/login/'
+          document.location.href = '/login/?password=changed'
         } else {
           notification.error(response.message)
         }
