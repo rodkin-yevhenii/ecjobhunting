@@ -92,18 +92,17 @@ class Vacancy
                         [
                             'post_type' => 'cv',
                             'posts_per_page' => -1,
-                            'post_status' => 'publish',
+                            'post_status' => ['publish', 'draft'],
                             'author__in' => $candidates,
                         ]
                     );
 
                     if (!$query->have_posts()) {
                         $this->candidates = [];
-                        return;
-                    }
-
-                    foreach ($query->posts as $post) {
-                        $this->candidates[] = $post->post_author;
+                    } else {
+                        foreach ($query->posts as $post) {
+                            $this->candidates[] = $post->post_author;
+                        }
                     }
                 }
 
@@ -114,18 +113,17 @@ class Vacancy
                         [
                             'post_type' => 'cv',
                             'posts_per_page' => -1,
-                            'post_status' => 'publish',
+                            'post_status' => ['publish', 'draft'],
                             'author__in' => $visitors,
                         ]
                     );
 
                     if (!$query->have_posts()) {
                         $this->visitors = [];
-                        return;
-                    }
-
-                    foreach ($query->posts as $post) {
-                        $this->visitors[] = $post->post_author;
+                    } else {
+                        foreach ($query->posts as $post) {
+                            $this->visitors[] = $post->post_author;
+                        }
                     }
                 }
             }
