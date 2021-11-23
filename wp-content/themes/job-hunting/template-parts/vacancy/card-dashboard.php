@@ -110,14 +110,27 @@ if (!$vacancy || !$company) {
                                             <div class="col-6 col-md-12">
                                                 <ul class="vacancy-info">
                                                     <li>
-                                                        <strong class="color-dark text-large text-regular"><?php
-                                                            echo dateDiff($vacancy->getDatePosted()) ?></strong>
+                                                        <strong class="color-dark text-large text-regular">
+                                                            <?php echo dateDiff($vacancy->getDatePosted()) ?>
+                                                        </strong>
                                                         <span class="color-secondary text-usual">Days Posted</span>
                                                     </li>
                                                     <li>
-                                                        <strong class="color-dark text-large text-regular"><?php
-                                                            echo $vacancy->getVisitorsNumber(); ?></strong><span
-                                                                class="color-secondary text-usual">Visitors</span></li>
+                                                        <a href="
+                                                        <?php echo add_query_arg(
+                                                            [
+                                                                'type' => 'visitors',
+                                                                'vacancyId' => $vacancy->getId(),
+                                                            ],
+                                                            site_url() . '/dashboard/'
+                                                        ); ?>"
+                                                        >
+                                                            <strong class="color-dark text-large text-regular">
+                                                                <?php echo $vacancy->getVisitorsNumber(); ?>
+                                                            </strong>
+                                                        </a>
+                                                        <span class="color-secondary text-usual">Visitors</span>
+                                                    </li>
                                                     <li>
                                                         <a href="
                                                         <?php echo add_query_arg(
