@@ -7,8 +7,17 @@ $company = new Company(wp_get_current_user());
 if (!$company) {
     return;
 }
+
 global $post;
-$candidates = $company->getCandidatesData();
+
+$vacancyId = $_GET['vacancyId'] ?? null;
+
+if (!empty($vacancyId)) {
+    $currentVacancy = new Vacancy($vacancyId);
+    $candidates = $currentVacancy->getCandidatesData();
+} else {
+    $candidates = $company->getCandidatesData();
+}
 ?>
 
     <div class="page employer" data-nonce="<?php echo wp_create_nonce('load_employer_candidates'); ?>">
@@ -19,7 +28,9 @@ $candidates = $company->getCandidatesData();
                 <div class="row mb-5">
                     <div class="col-12 col-md-11 col-xl-7">
                         <div class="ys-select ys-select-bordered" data-select>
-                            <span data-select-value>Filter by job</span>
+                            <span data-select-value>
+                                <?php echo !empty($vacancyId) ? $currentVacancy->getTitle() : 'Filter by job'; ?>
+                            </span>
                             <ul class="vacancies-select js-vacancies-select">
                                 <li
                                     class="js-vacancies-list__item"

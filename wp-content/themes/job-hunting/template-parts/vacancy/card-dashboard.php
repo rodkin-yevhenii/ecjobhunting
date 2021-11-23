@@ -118,9 +118,19 @@ if (!$vacancy || !$company) {
                                                         <strong class="color-dark text-large text-regular"><?php
                                                             echo $vacancy->getVisitorsNumber(); ?></strong><span
                                                                 class="color-secondary text-usual">Visitors</span></li>
-                                                    <li><strong class="color-primary text-large text-regular"><?php
-                                                            echo $vacancy->getCandidatesNumber(); ?></strong><span
-                                                                class="color-secondary text-usual">Candidate</span></li>
+                                                    <li>
+                                                        <a href="
+                                                        <?php echo add_query_arg(
+                                                            ['vacancyId' => $vacancy->getId()],
+                                                            home_url() . '/my-candidates/'
+                                                        ); ?>"
+                                                        >
+                                                            <strong class="color-primary text-large text-regular">
+                                                                <?php echo $vacancy->getCandidatesNumber(); ?>
+                                                            </strong>
+                                                        </a>
+                                                        <span class="color-secondary text-usual">Candidate</span>
+                                                    </li>
                                                 </ul>
                                             </div>
                                             <div
