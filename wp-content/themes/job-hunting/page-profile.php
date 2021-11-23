@@ -140,7 +140,7 @@ endif;
                         >
                         <label for="notifications-5">Notifications when someone contacts you about a job.</label>
                     </fieldset>
-                    <button class="btn btn-primary" type="submit">Save Name</button>
+                    <button class="btn btn-primary" type="submit">Confirm</button>
                 </form>
             </div>
         </div>
