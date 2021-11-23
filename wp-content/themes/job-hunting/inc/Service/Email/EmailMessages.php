@@ -33,9 +33,10 @@ Please login to your account for more information <a href="{{{LOGIN_URL}}}">{{{L
 Sincerely yours,<br />
 EC Jobhunting.<br />
             <?php
+            $defaultTemplate = ob_get_clean();
             $template = !empty(self::$fields['apply_message'])
                 ? self::$fields['apply_message']
-                : ob_get_clean();
+                : $defaultTemplate;
 
             $this->applyMessage = str_replace(
                 [
@@ -85,9 +86,10 @@ Please login to your account for more information <a href="{{{LOGIN_URL}}}">{{{L
 Sincerely yours,<br />
 EC Jobhunting.
             <?php
+            $defaultTemplate = ob_get_clean();
             $template = !empty(self::$fields['new_chat_message_for_employer'])
                 ? self::$fields['new_chat_message_for_employer']
-                : ob_get_clean();
+                : $defaultTemplate;
 
             $this->newChatMessageForEmployer = str_replace(
                 [
@@ -121,9 +123,10 @@ Please login to your account for more information <a href="{{{LOGIN_URL}}}">{{{L
 Sincerely yours,<br />
 EC Jobhunting.
             <?php
+            $defaultTemplate = ob_get_clean();
             $template = !empty(self::$fields['new_chat_message_for_employee'])
                 ? self::$fields['new_chat_message_for_employee']
-                : ob_get_clean();
+                : $defaultTemplate;
 
             $this->newChatMessageForEmployee = str_replace(
                 [
@@ -153,9 +156,10 @@ Thank you for choosing EC Jobhunting. Please <a href="{{{LOGIN_URL}}}">click her
 Sincerely yours,<br />
 EC Jobhunting.
             <?php
+            $defaultTemplate = ob_get_clean();
             $template = !empty(self::$fields['registration_message'])
                 ? self::$fields['registration_message']
-                : ob_get_clean();
+                : $defaultTemplate;
 
             $this->registrationMessage = str_replace(
                 [
