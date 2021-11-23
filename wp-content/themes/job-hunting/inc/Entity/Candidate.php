@@ -62,6 +62,7 @@ class Candidate extends UserAbstract
                     'post_type' => 'cv',
                     'post_title' => $this->getName(),
                     'post_author' => $this->getUserId(),
+                    'post_status'   => 'publish',
                 ]
             );
 
