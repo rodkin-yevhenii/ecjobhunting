@@ -1,6 +1,7 @@
 <?php
 
 use EcJobHunting\Entity\EcJobUser;
+use EcJobHunting\Service\Helpers\Helpers;
 use EcJobHunting\Service\User\UserService;
 
 global $ec_site;
@@ -43,7 +44,7 @@ global $ec_site;
                         ]
                     ); ?>
                 <?php endif; ?>
-                <?php if (is_user_logged_in()) :
+                <?php if (Helpers::isUserLoggedIn()) :
                     $user = new EcJobUser(wp_get_current_user());
                     ?>
                     <div class="col d-none d-md-block col-md-4 col-xl-3 header-account-wrapper">
