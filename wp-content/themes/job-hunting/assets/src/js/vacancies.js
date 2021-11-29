@@ -115,10 +115,11 @@ $(() => {
         })
       }
 
-
-      job.options.forEach((item) => {
-        $('#' + item).attr('checked', 'checked')
-      })
+      if (job.hasOwnProperty('options') && Array.isArray(job.options) && job.options.length) {
+        job.options.forEach((item) => {
+          $('#' + item).attr('checked', 'checked')
+        })
+      }
 
       if (!!job.benefits && job.benefits.length) {
         job.benefits.forEach((item) => {
