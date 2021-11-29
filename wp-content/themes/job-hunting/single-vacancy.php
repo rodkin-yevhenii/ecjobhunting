@@ -19,7 +19,11 @@ $isNoResumeAllowed = in_array('accept-all', $vacancy->getAgreementOptions());
 
 if (UserService::isCandidate()) {
     // Update employer visitors.
-    $allEmployerVisitors = get_field('visitors', 'user_' . $vacancy->getAuthor()) ?? [];
+    $allEmployerVisitors = get_field('visitors', 'user_' . $vacancy->getAuthor());
+
+    if (empty($allEmployerVisitors)) {
+        $allEmployerVisitors = [];
+    }
 
     foreach ($allEmployerVisitors as $index => $row) {
         if ($row['visitor'] === $user->ID && $row['vacancy'] === $vacancy->getId()) {
