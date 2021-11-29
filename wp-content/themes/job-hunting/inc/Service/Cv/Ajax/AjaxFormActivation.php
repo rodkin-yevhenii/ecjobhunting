@@ -65,8 +65,7 @@ class AjaxFormActivation extends AjaxFormAbstract
             );
         else :
             $text = __(
-                'Private: Your profile is not publicly accessible. However, it is viewable as a part of your
-                    applications.',
+                'Private: Your profile is not publicly accessible.',
                 'ecjobhunting'
             );
         endif;

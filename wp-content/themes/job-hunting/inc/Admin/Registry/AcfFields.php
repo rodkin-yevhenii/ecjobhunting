@@ -1336,8 +1336,7 @@ class AcfFields
                         'label' => 'Let Employers Find You',
                         'name' => 'visibility',
                         'type' => 'true_false',
-                        'instructions' => 'Private: Your profile is not publicly accessible. However, it is viewable as
-                        a part of your applications.',
+                        'instructions' => 'Private: Your profile is not publicly accessible.',
                         'required' => 0,
                         'conditional_logic' => 0,
                         'wrapper' => [
