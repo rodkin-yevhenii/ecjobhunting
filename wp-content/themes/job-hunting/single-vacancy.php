@@ -110,7 +110,7 @@ get_header(); ?>
                                 endif; ?>
 
                                 <?php if ($vacancy->getReasonsToWork()) : ?>
-                                    <h4><?php _e('About The Penso Agency:', 'ecjobhunting')?></h4>
+                                    <h4>About the <?php echo $vacancy->getCompanyName(); ?>:</h4>
                                     <p class="mb-4"><?php echo $vacancy->getCompanyDescription(); ?></p>
                                 <?php endif; ?>
                             </article>
