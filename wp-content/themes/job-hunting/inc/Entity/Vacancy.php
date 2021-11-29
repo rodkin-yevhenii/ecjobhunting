@@ -92,7 +92,7 @@ class Vacancy
                         [
                             'post_type' => 'cv',
                             'posts_per_page' => -1,
-                            'post_status' => ['publish', 'draft'],
+                            'post_status' => ['publish'],
                             'author__in' => $candidates,
                         ]
                     );
@@ -113,7 +113,7 @@ class Vacancy
                         [
                             'post_type' => 'cv',
                             'posts_per_page' => -1,
-                            'post_status' => ['publish', 'draft'],
+                            'post_status' => ['publish'],
                             'author__in' => $visitors,
                         ]
                     );

@@ -293,6 +293,10 @@ class Company extends UserAbstract
 
                 $candidate = UserService::getUser($candidateData['employee']);
 
+                if ('publish' !== get_post_status($candidate->getCvId())) {
+                    continue;
+                }
+
                 $this->candidatesData[] = $candidateData;
             }
 
@@ -322,6 +326,10 @@ class Company extends UserAbstract
                 }
 
                 $candidate = UserService::getUser($candidateData['visitor']);
+
+                if ('publish' !== get_post_status($candidate->getCvId())) {
+                    continue;
+                }
 
                 $this->visitorsData[] = $candidateData;
             }
