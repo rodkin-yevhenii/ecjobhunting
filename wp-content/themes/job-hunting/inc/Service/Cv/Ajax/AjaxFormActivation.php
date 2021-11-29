@@ -40,7 +40,7 @@ class AjaxFormActivation extends AjaxFormAbstract
                 ->send();
         }
 
-        $candidate = UserService::getUser($_POST['userId']);
+        $candidate = UserService::getUser($_POST['user'] ?? null);
         $newCvStatus = $candidate->isPublished() ? 'draft' : 'publish';
 
         $result = wp_update_post(
