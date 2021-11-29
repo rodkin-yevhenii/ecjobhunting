@@ -2,6 +2,7 @@
 
 use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Entity\Chat;
+use EcJobHunting\Service\User\UserService;
 
 if (empty($args['chat'])) {
     return;
@@ -11,7 +12,7 @@ if (empty($args['chat'])) {
  * @var $chat Chat
  */
 $chat = $args['chat'];
-$user = $chat->getOpponent();
+$user = UserService::getUser($chat->getInterlocutor(get_current_user_id()));
 $activeChat = $_GET['chatId'] ?? $args['active_chat'] ?? null;
 ?>
 <li

@@ -325,7 +325,7 @@ class ChatService
                 ->send();
         }
 
-        $recipientId = $chat->getAuthorId() !== $user->ID ? $chat->getAuthorId() : $chat->getOpponent()->getUserId();
+        $recipientId = $chat->getAuthorId() !== $user->ID ? $chat->getAuthorId() : $chat->getOpponentId();
         $isChatNotificationEnabled = get_field('is_chat_notification_enabled', 'user_' . $recipientId);
 
         if ($isChatNotificationEnabled) {
@@ -534,7 +534,7 @@ class ChatService
          * @var $chat Chat
          */
         foreach ($userChats as $chat) {
-            if ($opponent->ID === $chat->getOpponent()->getUserId()) {
+            if ($opponent->ID === $chat->getOpponentId()) {
                 if ($vacancyId) {
                     update_field('vacancy', $vacancyId, $chat->getId());
                 }

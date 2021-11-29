@@ -25,7 +25,7 @@ class CronJobs
         if (UserService::isEmployer($recipientId)) {
             $candidateId = $chat->getAuthorId() !== $recipientId
                 ? $chat->getAuthorId()
-                : $chat->getOpponent()->getUserId();
+                : $chat->getOpponentId();
             $candidate = UserService::getUser($candidateId);
             $employer = UserService::getUser($recipientId);
             $email->setToEmail($employer->getEmail())
@@ -34,7 +34,7 @@ class CronJobs
         } else {
             $employerId = $chat->getAuthorId() !== $recipientId
                 ? $chat->getAuthorId()
-                : $chat->getOpponent()->getUserId();
+                : $chat->getOpponentId();
             $employer = UserService::getUser($employerId);
             $candidate = UserService::getUser($recipientId);
             $email->setToEmail($candidate->getEmail())

@@ -8,7 +8,7 @@ class Chat
 {
     private int $id;
     private int $authorId;
-    private UserAbstract $opponent;
+    private int $opponentId;
     private bool $isViewed;
     private bool $isHide;
     private bool $isClosed;
@@ -30,7 +30,7 @@ class Chat
             }
 
             if ($this->authorId !== $contact['user']) {
-                $this->opponent = UserService::getUser($contact['user']);
+                $this->opponentId = $contact['user'];
             }
         }
 
@@ -48,7 +48,7 @@ class Chat
     /**
      * @return int|string
      */
-    public function getAuthorId()
+    public function getAuthorId(): int
     {
         return $this->authorId;
     }
@@ -56,9 +56,9 @@ class Chat
     /**
      * @return int|mixed
      */
-    public function getOpponent()
+    public function getOpponentId(): int
     {
-        return $this->opponent;
+        return $this->opponentId;
     }
 
     /**
@@ -95,5 +95,15 @@ class Chat
     public function isClosed()
     {
         return $this->isClosed;
+    }
+
+    /**
+     * @param int $currentUserId
+     *
+     * @return int
+     */
+    public function getInterlocutor(int $currentUserId): int
+    {
+        return $this->authorId !== $currentUserId ? $this->authorId : $this->opponentId;
     }
 }
