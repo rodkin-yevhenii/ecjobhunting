@@ -43,7 +43,7 @@ if (UserService::isCandidate()) {
 
     if (!in_array($user->ID, $visitorsList) && UserService::isCandidate()) {
         $visitorsList[] = $user->ID;
-        update_field('visitors', $visitorsList, $vacancy->getId());
+        update_field('field_5ff2005d88a3e', $visitorsList, $vacancy->getId()); // Field "visitors"
     }
 }
 
