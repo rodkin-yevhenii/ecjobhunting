@@ -158,10 +158,14 @@ class JobService
 
             if (!empty($_POST['benefits'])) {
                 update_field('benefits', explode(',', $_POST['benefits']), $postId);
+            } else {
+                update_field('benefits', [], $postId);
             }
 
             if (!empty($_POST['agreements'])) {
                 update_field('additional_options', explode(',', $_POST['agreements']), $postId);
+            } else {
+                update_field('additional_options', [], $postId);
             }
 
             if (!empty($_POST['emails'])) {
