@@ -29,6 +29,8 @@ class Registration
             add_action('wp_ajax_register_user', [$this, 'createNewUser']);
             add_action('wp_ajax_nopriv_register_user', [$this, 'createNewUser']);
         }
+
+        add_filter('password_hint', [$this, 'changePasswordHint']);
     }
 
     /**
@@ -118,6 +120,19 @@ class Registration
                 ->send();
         }
 
+        if (!preg_match('/^[a-zA-Z_\d]{4,}$/', $login)) {
+            $this->response->setStatus(204)
+                ->setMessage('Incorrect user login. The login  should be at least four characters long. To make it
+                stronger, use upper and lower case letters, numbers, and _ symbol')
+                ->send();
+        }
+
+        if (!preg_match('/^[a-zA-Z_\-\!\"\?\$\%\^\&\)\(\d]{8,}$/', $password)) {
+            $this->response->setStatus(204)
+                ->setMessage(wp_get_password_hint())
+                ->send();
+        }
+
         $id = wp_create_user($login, $password, $email);
 
         if (is_wp_error($id)) {
@@ -141,5 +156,15 @@ class Registration
         $this->response->setStatus(200)
             ->setMessage(__('User registered successfully', 'ecjobhunting'))
             ->send();
+    }
+
+    /**
+     * @param string $hint
+     *
+     * @return string
+     */
+    public function changePasswordHint(string $hint): string
+    {
+        return str_replace(['twelve', '!'], ['eight', '_ - !'], $hint);
     }
 }
