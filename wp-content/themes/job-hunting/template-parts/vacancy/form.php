@@ -168,7 +168,7 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                     </div>
                 <?php endif; ?>
                 <?php if (!empty($period)) : ?>
-                    <div class="ys-select ys-select-bordered mt-3 mt-md-0 flex-md-grow-1 mr-lg-4 js-period" data-select>
+                    <div class="ys-select ys-select-bordered mt-3 mt-md-0 flex-md-grow-1 s-period" data-select>
                         <span data-select-value>Annualy</span>
                         <ul>
                             <?php foreach ($period as $key => $item) : ?>
@@ -178,10 +178,6 @@ $agreements = get_field_object('field_5fecd839c41cf')['choices']; // agreements 
                         <input class="d-none" type="text" id="period">
                     </div>
                 <?php endif; ?>
-                <div class="mt-3 mt-md-4 mt-lg-3">
-                    <input type="checkbox" name="post-job-commission" id="post-job-commission">
-                    <label for="post-job-commission">Plus commission</label>
-                </div>
             </div>
         </div>
     </div>
