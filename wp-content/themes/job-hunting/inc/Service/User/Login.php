@@ -59,7 +59,7 @@ class Login
         add_action('wp_logout', [$this, 'redirectToCustomLogin']);
         add_action('login_form_register', [$this, 'redirectToCustomSignUp']);
         add_filter('authenticate', [$this, 'redirectToCustomLoginAfterAuthenticate'], 100, 1);
-        add_filter('wp_login', [$this, 'redirectToDashboardAfterLogin'], 10, 3);
+        add_filter('wp_login', [$this, 'redirectToDashboardAfterLogin'], 10, 2);
     }
 
     /**
@@ -143,14 +143,17 @@ class Login
      *
      * @return string
      */
-    public function redirectToDashboardAfterLogin(string $login, WP_User $user): string
+    public function redirectToDashboardAfterLogin(string $login, WP_User $user): void
     {
         if (!is_wp_error($user) && $user->has_cap('manage_options')) {
-            return '/wp-admin';
+            wp_redirect(site_url('wp-admin'));
+            exit();
         } elseif (UserService::isEmployer($user->ID) || UserService::isCandidate($user->ID)) {
-            return '/dashboard';
+            wp_redirect(site_url('dashboard'));
+            exit();
         } else {
-            return home_url();
+            wp_redirect(home_url());
+            exit();
         }
     }
 }
