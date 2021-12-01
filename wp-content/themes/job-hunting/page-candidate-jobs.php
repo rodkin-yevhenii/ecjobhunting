@@ -8,6 +8,7 @@ use EcJobHunting\Service\User\UserService;
 
 if (!UserService::isCandidate()) {
     wp_redirect(home_url('dashboard'));
+    exit();
 }
 
 get_header();

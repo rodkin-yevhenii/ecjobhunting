@@ -9,6 +9,7 @@ use EcJobHunting\Service\User\UserService;
 
 if (! UserService::isEmployer()) {
     wp_redirect(home_url('dashboard'));
+    exit();
 }
 
 $employer = UserService::getUser();

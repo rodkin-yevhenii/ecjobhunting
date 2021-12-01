@@ -39,6 +39,7 @@ class ThemeSettings
                 function () {
                     if (is_admin()) {
                         wp_redirect(site_url('dashboard'), 301);
+                        exit();
                     }
                 }
             );
