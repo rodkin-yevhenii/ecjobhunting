@@ -62,7 +62,6 @@ class UserService
     {
         add_action('template_redirect', [$this, 'redirectIfLogin']);
         add_filter('edit_profile_url', [$this, 'editProfileUrl'], 10, 3);
-        add_filter('login_url', [$this, 'editLoginUrl'], 10, 3);
     }
 
     /**
@@ -84,11 +83,6 @@ class UserService
             return EMPLOYER_PROFILE_URL;
         }
         return $url;
-    }
-
-    public function editLoginUrl()
-    {
-        return site_url('/login/');
     }
 
     public static function getUser($id = null)

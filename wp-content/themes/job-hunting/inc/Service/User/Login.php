@@ -56,8 +56,10 @@ class Login
     public function __invoke()
     {
         add_action('login_form_login', [$this, 'redirectToCustomLogin']);
+        add_action('wp_logout', [$this, 'redirectToCustomLogin']);
+        add_action('login_form_register', [$this, 'redirectToCustomSignUp']);
         add_filter('authenticate', [$this, 'redirectToCustomLoginAfterAuthenticate'], 100, 1);
-        add_filter('login_redirect', [$this, 'redirectToDashboardAfterLogin'], 10, 3);
+        add_filter('wp_login', [$this, 'redirectToDashboardAfterLogin'], 10, 3);
     }
 
     /**
@@ -73,13 +75,38 @@ class Login
                 exit;
             }
 
-            // The rest are redirected to the login page
-            $login_url = home_url('login');
-            if (!empty($redirect_to)) {
-                $login_url = add_query_arg('redirect_to', $redirect_to, $login_url);
+            if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+                $login_url = home_url('login');
+                if (!empty($redirect_to)) {
+                    $login_url = add_query_arg('redirect_to', $redirect_to, $login_url);
+                }
+
+                wp_redirect($login_url);
+                exit;
+            }
+        }
+    }
+
+    /**
+     * Redirect user to login page.
+     */
+    public function redirectToCustomSignUp(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $redirect_to = $_REQUEST['redirect_to'] ?? null;
+
+            if (is_user_logged_in()) {
+                wp_redirect(home_url($redirect_to));
+                exit;
             }
 
-            wp_redirect($login_url);
+            // The rest are redirected to the signup page
+            $sign_up = home_url('signup');
+            if (!empty($redirect_to)) {
+                $sign_up = add_query_arg('redirect_to', $redirect_to, $sign_up);
+            }
+
+            wp_redirect($sign_up);
             exit;
         }
     }
@@ -111,13 +138,12 @@ class Login
     /**
      * Redirect users to dashboard after login.
      *
-     * @param string $redirect_to
-     * @param string $request
-     * @param WP_User|WP_Error $user
+     * @param string $login
+     * @param WP_User $user
      *
      * @return string
      */
-    public function redirectToDashboardAfterLogin(string $redirect_to, string $request, $user): string
+    public function redirectToDashboardAfterLogin(string $login, WP_User $user): string
     {
         if (!is_wp_error($user) && $user->has_cap('manage_options')) {
             return '/wp-admin';
