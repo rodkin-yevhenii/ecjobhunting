@@ -72,7 +72,7 @@ global $ec_site;
                     <div class="col d-none d-md-block col-md-3 col-xl-2 header-button-wrapper">
                         <a
                             class="btn btn-outline-white"
-                            href="<?php echo wp_login_url(); ?>"
+                            href="<?php echo site_url('login'); ?>"
                             title="<?php _e('Login / Sign Up', 'ecjobhunting'); ?>"
                         >
                             <?php _e('Login / Sign Up', 'ecjobhunting'); ?>
