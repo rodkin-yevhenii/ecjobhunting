@@ -121,9 +121,18 @@ get_header(); ?>
                             <?php if (UserService::isCandidate()) :
                                 $candidate = UserService::getUser(); ?>
                                 <div class="vacancy-footer">
-                                    <?php if (!empty($candidate->getResumeFile()) || $isNoResumeAllowed) : ?>
+                                    <?php
+                                    if (
+                                        $isApplied
+                                        || (
+                                            $candidate->isPublished()
+                                            && !empty($candidate->getResumeFile()) || $isNoResumeAllowed
+                                        )
+                                    ) :
+                                        ?>
                                         <button
-                                            class="btn btn-primary btn-lg <?php echo !$isApplied ? 'js-apply' : ''; ?>"
+                                            class="btn btn-primary btn-lg mr-md-4 <?php
+                                            echo !$isApplied ? 'js-apply' : ''; ?>"
                                             data-vacancy-id="<?php echo $vacancy->getId(); ?>"
                                             data-apply-text="<?php _e('Apply Now', 'ecjobhunting'); ?>"
                                             <?php echo $isApplied ? 'disabled' : ''; ?>
@@ -136,7 +145,7 @@ get_header(); ?>
                                     <?php endif; ?>
                                     <a
                                         href="#"
-                                        class="btn btn-primary btn-lg js-start-chat ml-md-4"
+                                        class="btn btn-primary btn-lg js-start-chat"
                                         data-user-id="<?php echo $vacancy->getAuthor(); ?>"
                                         data-vacancy-id="<?php echo $vacancy->getId(); ?>"
                                         data-nonce="<?php echo wp_create_nonce('create_chat'); ?>"

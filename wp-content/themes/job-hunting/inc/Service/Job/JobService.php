@@ -568,13 +568,35 @@ class JobService
 
         $candidates = $vacancy->getCandidates();
         $employer = $vacancy->getEmployer();
-        $employerCandidates = $employer->getCandidates();
+        $employerCandidatesData = $employer->getCandidatesData();
 
         if (!in_array($candidate->getUserId(), $candidates)) {
+            // Add candidate to vacancy
             $candidates[] = $candidate->getUserId();
             $this->response->setMessage('applied');
             update_field('applied', $candidates, $vacancy->getId());
 
+            // Add candidate to employer list
+            $isVacancyAlreadyApplied = false;
+
+            foreach ($employerCandidatesData as $data) {
+                if ($candidate->getUserId() === $data['employee'] && $vacancy->getId() === $data['vacancy']) {
+                    $isVacancyAlreadyApplied = true;
+                    break;
+                }
+            }
+
+            if (!$isVacancyAlreadyApplied) {
+                $row = [
+                    'date' => date('F j, Y'),
+                    'vacancy' => $vacancy->getId(),
+                    'employee' => $candidate->getUserId()
+                ];
+
+                add_row('candidates', $row, 'user_' . $employer->getUserId());
+            }
+
+            // Send email about applying to employer
             $emailTemplates = new EmailMessages();
             $message = $emailTemplates->getApplyMessage($employer, $candidate, $vacancy);
             $email = new Email();
@@ -582,18 +604,7 @@ class JobService
                 ->setMessage($message)
                 ->setToEmail($employer->getEmail());
 
-            $result = EmailService::sendEmail($email);
-        }
-
-        if (!array_key_exists($candidate->getUserId(), $employerCandidates)) {
-            $row = [
-                'date' => date('F j, Y'),
-                'vacancy' => $vacancy->getId(),
-                'employee' => $candidate->getUserId()
-            ];
-
-            add_row('candidates', $row, 'user_' . $employer->getUserId());
-            $a = 2;
+            EmailService::sendEmail($email);
         }
 
 
