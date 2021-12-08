@@ -45,6 +45,7 @@ async function deleteVacancy (id) {
 
 $(() => {
   const $modal = $('.ec-job-modal')
+  const $form = $modal.find('form')
 
   $(document).on('click', '.js-edit-job', (e) => {
     e.preventDefault()
@@ -132,7 +133,9 @@ $(() => {
       renderCustomSelect(job.currency, $('.js-currency'))
       renderCustomSelect(job.period, $('.js-period'))
 
-      $('#publish-job-form').attr('id', job.id)
+      console.log(job)
+
+      $form.attr('id', job.id)
       $('#post-job-title').val(job.title)
       $('#post-job-location').val(job.jobLocation.join(', '))
       $('#post-job-description').val(job.jobDescription)
