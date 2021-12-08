@@ -254,7 +254,7 @@ class JobService
 
             $this->response
                 ->setId($postId)
-                ->setPermalink(get_the_permalink($postId))
+                ->setPermalink(site_url('my-jobs'))
                 ->setMessage('Job was copied')
                 ->setStatus(201)
                 ->send();

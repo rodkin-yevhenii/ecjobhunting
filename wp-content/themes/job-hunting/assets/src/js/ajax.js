@@ -80,8 +80,9 @@ $(() => {
 
   // Duplicate vacancy
   $(document).on('click', '.js-duplicate-job', e => {
-    const id = $(e.currentTarget).closest('ul').attr('data-job-id')
-    const author = $(e.currentTarget).closest('ul').attr('data-author')
+    const menuDuplicateItem = $(e.currentTarget)
+    const id = menuDuplicateItem.closest('ul').attr('data-job-id')
+    const author = menuDuplicateItem.closest('ul').attr('data-author')
 
     $.ajax({
       type: 'POST',
@@ -92,12 +93,18 @@ $(() => {
         author: author || ''
       },
       dataType: 'json',
+      beforeSend: function () {
+        menuDuplicateItem.removeClass('js-duplicate-job')
+      },
       success: function (response) {
         if (response && response.status === 201) {
           window.location.replace(response.permalink)
         } else {
           console.error(response)
         }
+      },
+      always: function () {
+        menuDuplicateItem.addClass('js-duplicate-job')
       }
     })
   })
@@ -141,7 +148,7 @@ $(() => {
     })
   })
 
-  function postJobAjax (data, $submitBtn, button = '') {
+  function postJobAjax (data, $submitBtn) {
     $.ajax({
       type: 'POST',
       url: ajaxUrl,
@@ -537,7 +544,7 @@ $(() => {
     e.preventDefault()
     const $form = $(e.currentTarget)
     const isEmployer = 'register-employer-form' === $form.attr('id')
-    let rules = {}
+    let rules
 
     if (isEmployer) {
       rules = {
@@ -763,7 +770,7 @@ $(() => {
     })
   })
 
-  $(document).on('click', '.js-subscription-card input[name=submit]', function (event) {
+  $(document).on('click', '.js-subscription-card input[name=submit]', function () {
     if (isAjax) {
       return
     }
@@ -787,7 +794,7 @@ $(() => {
       beforeSend: function () {
         isAjax = true;
       },
-      success: function (response) {
+      success: function () {
         $card.find('form').remove();
         isAjax = false;
       }
