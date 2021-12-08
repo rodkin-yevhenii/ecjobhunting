@@ -141,7 +141,7 @@ $(() => {
     })
   })
 
-  function postJobAjax (data, $messageContainer) {
+  function postJobAjax (data, $submitBtn, button = '') {
     $.ajax({
       type: 'POST',
       url: ajaxUrl,
@@ -149,20 +149,26 @@ $(() => {
       processData: false,
       contentType: false,
       dataType: 'json',
+      beforeSend: function () {
+        $submitBtn.prop('disabled', true)
+      },
       success: function (response) {
         if (response && response.status === 201) {
-          $($messageContainer).removeClass('is-error')
-          $($messageContainer).html(response.message)
+          $($submitBtn).removeClass('is-error')
+          $($submitBtn).html(response.message)
           setTimeout(() => {
             window.location.replace(response.permalink)
           }, 3000)
         } else if (response.status === 404 || response.status === 401) {
-          $($messageContainer).html(response.message)
-          $($messageContainer).addClass('is-error')
+          $($submitBtn).html(response.message)
+          $($submitBtn).addClass('is-error')
         } else {
-          $($messageContainer).addClass('is-error')
-          $($messageContainer).html('Something went wrong, try again')
+          $($submitBtn).addClass('is-error')
+          $($submitBtn).html('Something went wrong, try again')
         }
+      },
+      always: function () {
+        $submitBtn.prop('disabled', false)
       }
     })
   }
