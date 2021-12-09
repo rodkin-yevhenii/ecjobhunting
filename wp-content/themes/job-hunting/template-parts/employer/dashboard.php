@@ -8,7 +8,8 @@ $company = new Company(wp_get_current_user());
 if (!$company) {
     return;
 }
-$candidates = $company->getCandidates();
+$candidatesData = $company->getCandidatesData();
+
 ?>
 <div class="page">
     <div class="container mt-4">
@@ -20,12 +21,23 @@ $candidates = $company->getCandidates();
                 <h3>Candidates</h3>
                 <div class="candidate-list">
                     <?php
-                    foreach ($candidates as $candidate):
-                        $post = $candidate->getCvId();
-                        setup_postdata($post);
-                        get_template_part('template-parts/candidate/card', 'featured', ['candidate' => $candidate]);
+                    $counter = 0;
+
+                    foreach ($candidatesData as $data) :
+                        if (10 <= $counter++) {
+                            break;
+                        }
+
+                        get_template_part(
+                            'template-parts/candidate/card',
+                            'featured',
+                            [
+                                'candidateData' => $data,
+                                'company' => $company,
+                            ]
+                        );
                     endforeach;
-                    wp_reset_postdata(); ?>
+                    ?>
                 </div>
             </div>
         </div>
@@ -39,55 +51,65 @@ $candidates = $company->getCandidates();
                     echo getActivateProfileIcon(); ?></div>
                 <strong class="color-primary text-regular text-large d-block">
                     <?php
-                    if ($company->isActivated()):
+                    if ($company->isActivated()) :
                         _e('Your profile is activated', 'ecjobhunting');
-                    else:
+                    else :
                         _e('Activate your Account', 'ecjobhunting');
                     endif; ?>
                 </strong>
                 <span><?php
                     _e('We\'re here to help.', 'ecjobhunting'); ?></span>
             </div>
-            <div class="col-12 col-md-3 mt-4 mt-md-0"><strong
-                        class="text-regular text-large d-block">Questions?</strong><span>Contact your Hiring Specialist.</span>
+            <div class="col-12 col-md-3 mt-4 mt-md-0">
+                <strong class="text-regular text-large d-block">Questions?</strong>
+                <span>Contact your Hiring Specialist.</span>
             </div>
-            <div class="col-12 col-md-3"><a
-                        class="btn btn-outline-secondary d-block mt-3 mt-md-0 d-xl-inline-block px-xl-5" href="<?php
-                echo $ec_site->getContactUsUrl(); ?>">Contact
-                    Now</a></div>
+            <div class="col-12 col-md-3">
+                <a class="btn btn-outline-secondary d-block mt-3 mt-md-0 d-xl-inline-block px-xl-5" href="
+                    <?php echo $ec_site->getContactUsUrl(); ?>"
+                >
+                    Contact Now
+                </a>
+            </div>
         </div>
         <div class="row dashboard-activity mt-5">
             <div class="col-12">
                 <h2>Account Activity</h2>
             </div>
-            <div class="col-6 col-md-3"><strong class="text-huge text-regular"><?php
-                    echo $company->getJobPosted(); ?></strong>
-                <p class="text-large my-2">Jobs posted</p><a class="color-primary" href="<?php
-                echo get_the_permalink() . '?type=jobs'; ?>">View report</a>
+            <div class="col-6 col-md-3">
+                <strong class="text-huge text-regular">
+                    <?php echo $company->getJobPosted(); ?>
+                </strong>
+                <p class="text-large my-2">Jobs posted</p>
+                <?php if ($company->getJobPosted() > 0 && $company->isActivated()) : ?>
+                    <a class="color-primary" href="<?php echo get_the_permalink() . '?type=jobs'; ?>">View report</a>
+                <?php endif; ?>
             </div>
             <div class="col-6 col-md-3"><strong class="text-huge text-regular"><?php
-                    echo $company->getJobVisitors(); ?></strong>
+                    echo $company->getVisitorsNumber(); ?></strong>
                 <p class="text-large my-2">Job visitors</p>
                 <?php
-                if ($company->isActivated()): ?>
+                if ($company->isActivated() && !empty($company->getVisitorsNumber())) : ?>
                     <a class="color-primary" href="<?php
                     echo get_the_permalink() . '?type=visitors'; ?>">View report</a>
-                <?php
-                endif; ?>
+                    <?php
+                endif;
+                ?>
             </div>
-            <div class="col-6 col-md-3 mt-4 mt-md-0"><strong class="text-huge text-regular"><?php
-                    echo count($company->getCandidates()); ?></strong>
-                <p class="text-large my-2">Candidates received</p><a class="color-primary" href="<?php
-                echo get_the_permalink() . '?type=candidates'; ?>">View report</a>
-            </div>
-            <div class="col-6 col-md-3 mt-4 mt-md-0"><strong class="text-huge text-regular">$0.00</strong>
-                <p class="text-large my-2">Avaible credits</p>
+            <div class="col-6 col-md-3 mt-4 mt-md-0">
+                <strong class="text-huge text-regular">
+                    <?php echo count($company->getCandidates()); ?>
+                </strong>
+                <p class="text-large my-2">Candidates received</p>
                 <?php
-                if ($company->isActivated()): ?>
-                    <a class="color-primary" href="<?php
-                    echo get_the_permalink() . '?type=credits'; ?>">View report</a>
-                <?php
-                endif; ?>
+                if (!empty($company->getCandidates() && $company->isActivated())) :
+                    ?>
+                    <a class="color-primary" href="<?php echo get_the_permalink() . '?type=candidates'; ?>">
+                        View report
+                    </a>
+                    <?php
+                endif;
+                ?>
             </div>
         </div>
     </div>

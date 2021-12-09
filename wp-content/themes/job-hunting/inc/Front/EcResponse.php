@@ -11,6 +11,7 @@ class EcResponse implements AjaxResponse
     protected ?int $paged = 1;
     protected ?bool $isEnd = false;
     protected ?string $body = '';
+    protected ?array $data = [];
     protected ?string $order = '';
     protected ?string $s = '';
     protected ?int $total = 0;
@@ -75,6 +76,12 @@ class EcResponse implements AjaxResponse
         return $this;
     }
 
+    public function setData(array $data)
+    {
+        $this->data = $data;
+        return $this;
+    }
+
     public function setOrder(string $order)
     {
         $this->order = $order;
@@ -111,6 +118,7 @@ class EcResponse implements AjaxResponse
             'paged' => $this->paged,
             'isEnd' => $this->isEnd,
             'html' => $this->body,
+            'data' => $this->data,
             'orderby' => $this->order,
             's' => $this->s,
             'total' => $this->total,

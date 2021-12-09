@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable PSR1.Files.SideEffects
 
 require_once get_stylesheet_directory() . "/vendor/autoload.php";
 /**
@@ -154,4 +155,39 @@ function getNotSureIcon()
 function getActivateProfileIcon()
 {
     return "<img src='" . IMG_URI . "icons/active.png' alt='activate Icon' />";
+}
+
+/**
+ * @param int $id   Candidate ID
+ * @param array $ratedCandidates    Employer rated candidates list
+ *
+ * @return string
+ */
+function renderRateButtons(int $id, array $ratedCandidates): void
+{
+    $rate = false;
+
+    if (array_key_exists($id, $ratedCandidates)) {
+        $rate = $ratedCandidates[$id];
+    }
+
+    ob_start();
+    ?>
+    <div
+        class="rate-buttons"
+        data-user="<?php echo $id; ?>"
+        data-nonce="<?php echo wp_create_nonce('rate_user') ?>"
+    >
+        <button class="rate-button <?php echo $rate === 'like' ? 'active' : ''; ?>" data-rate="like">
+            <?php echo getLikeIcon(); ?>
+        </button>
+        <button class="rate-button <?php echo $rate === 'normal' ? 'active' : ''; ?>" data-rate="normal">
+            <?php echo getNotSureIcon(); ?>
+        </button>
+        <button class="rate-button <?php echo $rate === 'dislike' ? 'active' : ''; ?>" data-rate="dislike">
+            <?php echo getDislikeIcon(); ?>
+        </button>
+    </div>
+    <?php
+    echo ob_get_clean();
 }

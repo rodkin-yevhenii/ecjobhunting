@@ -3,12 +3,19 @@
 namespace EcJobHunting;
 
 use EcJobHunting\Admin\AdminInit;
+use EcJobHunting\Admin\Registry\ThemeSettings;
 use EcJobHunting\Admin\Registry\UserRoles;
 use EcJobHunting\Front\FrontInit;
-use EcJobHunting\Front\SiteSettings;
-use EcJobHunting\Service\Job\Job;
+use EcJobHunting\Service\Ajax\Ajax;
+use EcJobHunting\Service\Chat\ChatService;
+use EcJobHunting\Service\Cv\CvService;
+use EcJobHunting\Service\Email\EmailService;
 use EcJobHunting\Service\Job\JobService;
+use EcJobHunting\Service\Payments\PaymentService;
+use EcJobHunting\Service\User\ChangePassword;
+use EcJobHunting\Service\User\Login;
 use EcJobHunting\Service\User\Registration;
+use EcJobHunting\Service\User\RetrievePassword;
 use EcJobHunting\Service\Widget\WidgetInit;
 use EcJobHunting\Service\User\UserService;
 
@@ -24,6 +31,10 @@ final class ThemeInit
         $this->afterThemeSetup();
         $this->registerUserRoles();
         $this->registerUserServices();
+        $this->registerAjaxCallbacks();
+        $this->registerChatServices();
+        $this->registerEmailServices();
+        $this->registerPayments();
         add_action('rest_api_init', [$this, 'registerRestApiField']);
     }
 
@@ -37,15 +48,21 @@ final class ThemeInit
 
     private function registerAdminHooks()
     {
-        add_action('init', new AdminInit());
-        add_action('acf/init', ['EcJobHunting\Admin\Registry\ThemeSettings', 'init']);
+        ThemeSettings::init();
+        AdminInit::init();
+//        add_action('init', [AdminInit::class, 'init']);
+//        add_action('acf/init', ['EcJobHunting\Admin\Registry\ThemeSettings', 'init']);
     }
 
     private function registerFrontHooks()
     {
         add_action('init', new FrontInit());
         add_action('init', new JobService());
+        add_action('init', new Login());
         add_action('init', new Registration());
+        add_action('init', new RetrievePassword());
+        add_action('init', new ChangePassword());
+        add_action('init', new CvService());
     }
 
     private function registerWidgets()
@@ -68,6 +85,26 @@ final class ThemeInit
     private function registerUserServices()
     {
         add_action('init', new UserService());
+    }
+
+    private function registerChatServices()
+    {
+        add_action('init', new ChatService());
+    }
+
+    private function registerEmailServices()
+    {
+        add_action('init', new EmailService());
+    }
+
+    private function registerPayments(): void
+    {
+        new PaymentService();
+    }
+
+    private function registerAjaxCallbacks(): void
+    {
+        new Ajax();
     }
 
     public function createBasicPages()
@@ -101,7 +138,8 @@ final class ThemeInit
                     add_action(
                         'admin_notices',
                         function () {
-                            $message = "Can't create basic page. Please set page templates for pages: 'signup', 'candidate', 'employer'";
+                            $message = "Can't create basic page. Please set page templates for pages: 'signup',
+                            'candidate', 'employer'";
                             echo '<div class="notice notice-error is-dismissible"> <p>' . $message . '</p></div>';
                         }
                     );
@@ -165,9 +203,54 @@ final class ThemeInit
 
         register_rest_field(
             'vacancy',
+            'company',
+            [
+                'get_callback' => [$this, 'retrieveJobCompany'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
             'skills',
             [
                 'get_callback' => [$this, 'retrieveJobSkills'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
+            'jobCategory',
+            [
+                'get_callback' => [$this, 'retrieveJobCategory'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
+            'isCommissionIncluded',
+            [
+                'get_callback' => [$this, 'retrieveCommissionStatus'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
+            'isInformEmployer',
+            [
+                'get_callback' => [$this, 'retrieveInformEmployerStatus'],
+                'schema' => null,
+            ]
+        );
+
+        register_rest_field(
+            'vacancy',
+            'additionalEmailsToInform',
+            [
+                'get_callback' => [$this, 'retrieveAdditionalEmailsList'],
                 'schema' => null,
             ]
         );
@@ -200,16 +283,41 @@ final class ThemeInit
 
     public function retrieveJobLocation($object)
     {
-        return wp_get_post_terms($object['id'], 'location', ['fields'=> 'names']);
+        return wp_get_post_terms($object['id'], 'location', ['fields' => 'names']);
+    }
+
+    public function retrieveJobCompany($object)
+    {
+        return wp_get_post_terms($object['id'], 'company', ['fields' => 'names']);
     }
 
     public function retrieveJobSkills($object)
     {
-        return wp_get_post_terms($object['id'], 'skill', ['fields'=> 'names']);
+        return wp_get_post_terms($object['id'], 'skill', ['fields' => 'names']);
+    }
+
+    public function retrieveJobCategory($object)
+    {
+        return wp_get_post_terms($object['id'], 'job-category', ['fields' => 'names']);
     }
 
     public function retrieveJobEmploymentType($object)
     {
-        return wp_get_post_terms($object['id'], 'type', ['fields'=> 'names']);
+        return wp_get_post_terms($object['id'], 'type', ['fields' => 'names']);
+    }
+
+    public function retrieveCommissionStatus($object)
+    {
+        return get_field('is_commission_included', $object['id']);
+    }
+
+    public function retrieveInformEmployerStatus($object)
+    {
+        return get_field('emails_to_inform', $object['id']);
+    }
+
+    public function retrieveAdditionalEmailsList($object)
+    {
+        return get_field('additional_employer_emails', $object['id']);
     }
 }

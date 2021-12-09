@@ -470,6 +470,27 @@ input[type="radio"] {
     text-decoration: none;
   }
 
+  &.btn-delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $color-white;
+    background-color: #b3b3b3;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+
+    &:hover,
+    &:focus {
+      background-color: #e60909;
+      transition: all .5s ease-out;
+    }
+
+    &--circle {
+      border-radius: 50%;
+    }
+  }
+
   &.btn-outline-primary {
     color: $color-primary;
     border-color: $color-primary;
@@ -702,6 +723,10 @@ form {
     border-radius: $br;
     font-size: 16px;
     line-height: 50px;
+
+    &::placeholder {
+      color: $color-grey-dark;
+    }
   }
 
   &-textarea {
@@ -769,73 +794,6 @@ form {
 
   }
 
-  &-skills {
-
-    &-list {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      align-content: flex-start;
-      flex-wrap: wrap;
-      list-style: none;
-
-      li {
-        margin: 5px 10px 5px 0;
-        padding: 3px 45px 3px 20px;
-        background-color: $color-grey-light;
-        border-radius: 3px;
-        position: relative;
-
-        &:last-child {
-          margin: 5px 0;
-        }
-
-      }
-
-    }
-
-    &-close {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      margin: auto;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      right: 15px;
-
-      &:before,
-      &:after {
-        content: '';
-        display: block;
-        width: 16px;
-        height: 1px;
-        margin: auto;
-        background-color: $color-black;
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        transform-origin: center center;
-        z-index: 1;
-      }
-
-      &:before {
-        transform: rotate(45deg);
-      }
-
-      &:after {
-        transform: rotate(-45deg);
-      }
-
-    }
-
-    &-panel {
-
-    }
-
-  }
-
   &-footer {
     border-top: 1px solid $color-grey;
 
@@ -885,6 +843,77 @@ form {
       }
 
     }
+
+  }
+
+}
+
+.custom-list {
+  &__items {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    list-style: none;
+
+    &--vertical {
+      flex-direction: column;
+      align-items: start;
+    }
+
+    li {
+      margin: 5px 10px 5px 0;
+      padding: 3px 45px 3px 20px;
+      background-color: $color-grey-light;
+      border-radius: 3px;
+      position: relative;
+
+      &:last-child {
+        margin: 5px 0;
+      }
+
+    }
+
+  }
+
+  &__item-close {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 15px;
+
+    &:before,
+    &:after {
+      content: '';
+      display: block;
+      width: 16px;
+      height: 1px;
+      margin: auto;
+      background-color: $color-black;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      transform-origin: center center;
+      z-index: 1;
+    }
+
+    &:before {
+      transform: rotate(45deg);
+    }
+
+    &:after {
+      transform: rotate(-45deg);
+    }
+
+  }
+
+  &-panel {
 
   }
 
@@ -1295,7 +1324,6 @@ form {
 
         &:last-child a {
           margin: 0 0 0 30px;
-          color: $color-primary;
         }
 
       }
@@ -1461,6 +1489,10 @@ form {
     background-color: $color-white;
     border: none;
 
+    &.active {
+      background-color: $color-grey;
+    }
+
     &:last-of-type {
       margin: 0;
     }
@@ -1620,10 +1652,14 @@ form {
     padding: 20px 300px 20px 90px;
     position: relative;
 
-    a {
+    a, form {
       position: absolute;
       right: 100px;
       top: 22px;
+    }
+
+    form {
+      top: calc(50% - 11px);
     }
 
   }
@@ -1655,6 +1691,8 @@ form {
 
   &-controls {
     list-style: none;
+    overflow-y: auto;
+    max-height: 574px;
 
     li {
       padding: 20px 0;
@@ -1691,6 +1729,8 @@ form {
   }
 
   &-answer {
+    overflow-y: auto;
+    max-height: 640px;
     margin: 30px 0 0;
     padding: 25px 30px;
     border: 1px solid $color-grey-light;
@@ -1718,8 +1758,19 @@ form {
 
     }
 
-    &-item:nth-of-type(2n) {
-      padding: 0 0 0 30px;
+    &-item {
+      display: flex;
+      justify-content: flex-start;
+
+      &.self {
+        justify-content: flex-end;
+      }
+
+      span {
+        max-width: 80%;
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
     }
 
   }
@@ -1792,8 +1843,10 @@ form {
 
     &-answer {
 
-      &-item:nth-of-type(2n) {
-        padding: 0 0 0 160px;
+      &-item {
+        span {
+          max-width: 70%;
+        }
       }
 
     }

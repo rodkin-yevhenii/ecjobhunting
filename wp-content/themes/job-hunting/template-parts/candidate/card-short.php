@@ -20,11 +20,26 @@ if (!$cv) {
                                                 alt="<?php echo $cv->getName(); ?>"></div>
             </div>
             <div class="col-12 col-md-10 col-xl-9 d-flex flex-wrap">
-                <h4 class="color-primary"><a href="<?php echo $cv->getProfileUrl(); ?>"> <?php echo $cv->getName(
-                        ); ?></a></h4><span
-                        class="results-country color-secondary"><?php echo $cv->getLocation(); ?></span>
+                <h4 class="color-primary">
+                    <a href="<?php echo get_permalink($cv->getCvId()); ?>">
+                        <?php echo $cv->getName(); ?>
+                    </a>
+                </h4>
+                <span class="results-country color-secondary"><?php echo $cv->getLocation(); ?></span>
                 <ul>
-                    <li><span class="color-secondary"><?php echo $cv->getSalaryExpectation(); ?></span></li>
+                    <?php if (!empty($cv->getSalaryExpectation())) : ?>
+                        <li><span class="color-secondary">$<?php echo $cv->getSalaryExpectation(); ?></span></li>
+                    <?php endif;
+
+                    if (!empty($cv->getLastActivity())) : ?>
+                        <li>
+                            <span class="color-secondary">Last activity: <?php echo $cv->getLastActivity(); ?></span>
+                        </li>
+                    <?php endif;
+
+                    if (!empty($cv->getCategory())) : ?>
+                        <li><span class="color-secondary"><?php echo $cv->getCategory(); ?></span></li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

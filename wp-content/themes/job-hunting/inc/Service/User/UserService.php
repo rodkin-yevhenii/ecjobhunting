@@ -5,6 +5,8 @@ namespace EcJobHunting\Service\User;
 use EcJobHunting\Entity\Candidate;
 use EcJobHunting\Entity\Company;
 use EcJobHunting\Entity\EcJobUser;
+use Exception;
+use WP_User;
 
 class UserService
 {
@@ -16,29 +18,34 @@ class UserService
         $this->hooks();
     }
 
-    private static function getCurrentUserRole()
+    private static function getUserRole(int $id = 0)
     {
-        if (!is_user_logged_in()) {
+        if (!$id && !is_user_logged_in()) {
             return false;
         }
-        $user = wp_get_current_user();
-        return ( array )$user->roles;
+        if (!$id) {
+            $user = wp_get_current_user();
+        } else {
+            $user = get_user_by('id', $id);
+        }
+
+        return (array) $user->roles;
     }
 
-    public static function isCandidate()
+    public static function isCandidate(int $id = 0)
     {
-        if (!is_user_logged_in()) {
+        if (!$id && !is_user_logged_in()) {
             return false;
         }
-        return in_array(static::$candidateRoleName, self::getCurrentUserRole()) ?? false;
+        return in_array(static::$candidateRoleName, self::getUserRole($id)) ?? false;
     }
 
-    public static function isEmployer()
+    public static function isEmployer(int $id = 0)
     {
-        if (!is_user_logged_in()) {
+        if (!$id && !is_user_logged_in()) {
             return false;
         }
-        return in_array(static::$employerRoleName, self::getCurrentUserRole()) ?? false;
+        return in_array(static::$employerRoleName, self::getUserRole($id)) ?? false;
     }
 
     public static function getPhotoUrl($userId = null)
@@ -55,7 +62,6 @@ class UserService
     {
         add_action('template_redirect', [$this, 'redirectIfLogin']);
         add_filter('edit_profile_url', [$this, 'editProfileUrl'], 10, 3);
-        add_filter('login_url', [$this, 'editLoginUrl'], 10, 3);
     }
 
     /**
@@ -79,11 +85,6 @@ class UserService
         return $url;
     }
 
-    public function editLoginUrl()
-    {
-        return site_url('/login/');
-    }
-
     public static function getUser($id = null)
     {
         if (!$id) {
@@ -97,5 +98,27 @@ class UserService
             return new Company($user);
         }
         return new EcJobUser($user);
+    }
+
+    /**
+     * Reset user password.
+     *
+     * @param WP_User $user
+     * @param string $pwd
+     * @param string $pwdConfirmation
+     *
+     * @throws Exception    Passwords empty or it are different.
+     */
+    public static function resetPassword(WP_User $user, string $pwd, string $pwdConfirmation): void
+    {
+        if (empty($pwd)) {
+            throw new Exception('password_reset_empty');
+        }
+
+        if ($pwd !== $pwdConfirmation) {
+            throw new Exception('password_reset_mismatch');
+        }
+
+        reset_password($user, $pwd);
     }
 }

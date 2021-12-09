@@ -53,6 +53,11 @@
     bottom: 0;
   }
 
+  input[type="file"] {
+    height: auto;
+    border: none;
+  }
+
   button[type="submit"] {
     margin: 30px 0 0;
   }

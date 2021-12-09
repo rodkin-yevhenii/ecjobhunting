@@ -14,17 +14,18 @@ $latestJobs = new WP_Query($args);
 $args['post_type'] = 'cv';
 $latestResume = new WP_Query($args);
 
-$latestCompanies = get_users(
-    [
-        'role' => 'employer',
-        'orderby' => 'registered',
-        'order' => 'DESC',
-        'number' => 5,
-    ]
+$latestCompanies = get_terms(
+    ['taxonomy' => 'company', 'hide_empty' => true, 'orderby' => 'name', 'order' => 'ASC']
 );
 $counts = count_users();
 get_header(); ?>
-    <form class="hero" role="search" method="get" id="searchform" class="searchform" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+    <form
+        role="search"
+        method="get"
+        id="searchform"
+        class="hero searchform"
+        action="/jobs/"
+    >
         <div class="container">
             <div class="row d-flex justify-content-xl-center">
                 <div class="col-12">
@@ -32,12 +33,19 @@ get_header(); ?>
                 </div>
                 <div class="col-12 col-md-5 col-xl-4">
                     <label class="my-2">
-                        <input class="field-text" type="text" placeholder="Job Title" name="s" id="s">
+                        <input class="field-text" type="text" placeholder="Job Title" name="search" id="s">
                     </label>
                 </div>
                 <div class="col-12 col-md-5 col-xl-4">
                     <label class="my-2">
-                        <input class="field-text" type="text" placeholder="Location" name="location" id="location">
+                        <input
+                            class="field-text js-auto-complete"
+                            type="text"
+                            placeholder="Location"
+                            name="location"
+                            id="location"
+                            autocomplete="off"
+                        >
                     </label>
                 </div>
                 <div class="col-12 col-md-2">
@@ -45,10 +53,18 @@ get_header(); ?>
                 </div>
             </div>
             <div class="row">
-                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $latestJobs->found_posts; ?></strong><span>Jobs</span></div>
-                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $counts['total_users']; ?></strong><span>Members</span></div>
-                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $latestResume->found_posts; ?></strong><span>Resumes</span></div>
-                <div class="col-6 col-md-3 hero-numbers"><strong><?php echo $counts['avail_roles']['employer']; ?></strong><span>Companies</span></div>
+                <div class="col-6 col-md-3 hero-numbers">
+                    <strong><?php echo $latestJobs->found_posts; ?></strong><span>Jobs</span>
+                </div>
+                <div class="col-6 col-md-3 hero-numbers">
+                    <strong><?php echo $counts['total_users']; ?></strong><span>Members</span>
+                </div>
+                <div class="col-6 col-md-3 hero-numbers">
+                    <strong><?php echo $latestResume->found_posts; ?></strong><span>Resumes</span>
+                </div>
+                <div class="col-6 col-md-3 hero-numbers">
+                    <strong><?php echo count($latestCompanies); ?></strong><span>Companies</span>
+                </div>
             </div>
         </div>
     </form>
@@ -61,16 +77,18 @@ get_header(); ?>
             </div>
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-xl-12">
-                    <?php if ($jobCategories): ?>
+                    <?php if ($jobCategories) : ?>
                         <ul>
-                            <?php foreach ($jobCategories as $term): ?>
-                                <li><a href="<?php echo get_term_link($term->term_id); ?>"
-                                       class="btn btn-outline-secondary" data-abc="true"><?php echo $term->name; ?></a>
+                            <?php foreach ($jobCategories as $term) : ?>
+                                <li><a href="/jobs/?category=<?php echo $term->term_id; ?>"
+                                       class="btn btn-outline-secondary" data-abc="true"
+                                    >
+                                        <?php echo $term->name; ?>
+                                    </a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
                     <?php endif; ?>
-
                 </div>
             </div>
         </div>
@@ -94,7 +112,7 @@ get_header(); ?>
                         </li>
                         <li data-tab-item="companies" data-tab-message="<?php printf(
                             __('We have founds %d companies for you', 'ecjobhunting'),
-                            $counts['avail_roles']['employer']
+                            count($latestCompanies)
                         ); ?>">Latest Companies
                         </li>
                     </ul>
@@ -121,8 +139,12 @@ get_header(); ?>
                         <?php endif;
                         if ($latestCompanies) : ?>
                             <li data-tab-content="companies">
-                                <?php foreach ($latestCompanies as $user) :
-                                    get_template_part('template-parts/employer/card', 'default', ['user' => $user]);
+                                <?php foreach ($latestCompanies as $company) :
+                                    get_template_part(
+                                        'template-parts/employer/card',
+                                        'default',
+                                        ['company' => $company]
+                                    );
                                 endforeach; ?>
                             </li>
                         <?php endif; ?>
@@ -131,9 +153,12 @@ get_header(); ?>
             </div>
         </div>
     </section>
-<?php if (have_posts()): the_post(); ?>
-    <?php the_content(); ?>
-<?php endif; ?>
+    <?php
+    if (have_posts()) :
+        the_post();
+        the_content();
+    endif;
+    ?>
     <section class="register">
         <div class="container">
             <div class="row">
@@ -142,20 +167,18 @@ get_header(); ?>
                                 src="<?php echo IMG_URI . 'icons/register-icon-1.png'; ?>"
                                 alt="icon"></div>
                     <h3>Employer Account</h3>
-                    <p>We are a group of entrepreneurs brought together to provide a differentiated approach to the
-                        recruiting industry.</p><a class="btn btn-outline-secondary"
-                                                   href="<?php echo SIGNUP_URL . '?user=employer'; ?>">Register
-                        Account</a>
+                    <a class="btn btn-outline-secondary" href="<?php echo SIGNUP_URL . '?user=employer'; ?>">
+                        Register Account
+                    </a>
                 </div>
                 <div class="col-12 col-md-6 register-item">
                     <div class="register-item-icon d-none d-md-flex"><img
                                 src="<?php echo IMG_URI . 'icons/register-icon-2.png'; ?>"
                                 alt="icon"></div>
                     <h3>Candidates Account</h3>
-                    <p>We are a group of entrepreneurs brought together to provide differentiated approach. We are a
-                        group of entrepreneurs</p><a class="btn btn-outline-secondary"
-                                                     href="<?php echo SIGNUP_URL . '?user=candidate'; ?>">Register
-                        Account</a>
+                    <a class="btn btn-outline-secondary" href="<?php echo SIGNUP_URL . '?user=candidate'; ?>">
+                        Register Account
+                    </a>
                 </div>
             </div>
         </div>

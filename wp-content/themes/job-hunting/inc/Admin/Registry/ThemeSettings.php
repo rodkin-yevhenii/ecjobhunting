@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EcJobHunting\Admin\Registry;
-
 
 class ThemeSettings
 {
@@ -15,6 +13,7 @@ class ThemeSettings
         static::registerMenu();
         //Disable Admin panel for non admin users
         static::disableAdminBar();
+        static::registerImageSizes();
     }
 
     private static function registerMenu()
@@ -24,6 +23,9 @@ class ThemeSettings
                 'top' => 'Top Bar',
                 'employer' => 'Employer',
                 'candidate' => 'Job Seeker',
+                'footer-left' => 'Footer left',
+                'footer-center' => 'Footer center',
+                'footer-right' => 'Footer right',
             ]
         );
     }
@@ -36,11 +38,19 @@ class ThemeSettings
                 'admin_init',
                 function () {
                     if (is_admin()) {
-                        wp_redirect(site_url(), 301);
+                        wp_redirect(site_url('dashboard'), 301);
+                        exit();
                     }
                 }
             );
         }
+    }
+
+    private static function registerImageSizes(): void
+    {
+        add_image_size('card-vacancy-logo', 9999, 40, false);
+        add_image_size('single-vacancy-logo', 255, 255, false);
+        add_image_size('results-image', 65, 65, false);
     }
 
     public static function init()

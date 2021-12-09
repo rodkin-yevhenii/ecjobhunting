@@ -1,5 +1,11 @@
+import Autocomplete from "./components/autocomplate/autocomplete";
+import CustomList from "./components/custom-list";
+
 $(() => {
+  new CustomList()
+
   const wrapper = $('.wrapper'),
+    autocomplete = $('.js-auto-complete'),
     body = $('body'),
     headerButtonWrapper = $('.header-button-wrapper'),
     headerAccountWrapper = headerButtonWrapper.length ?
@@ -11,6 +17,13 @@ $(() => {
   setTimeout(function () {
     wrapper.animate({ opacity: 1 }, 500)
   }, 500)
+
+  // Init autocomplete
+  if (autocomplete.length) {
+    for (const item of autocomplete) {
+      new Autocomplete($(item), item.name)
+    }
+  }
 
   pageRepaint()
   $('.candidate-list').slick({
@@ -117,11 +130,32 @@ $(() => {
     if (!$(this).hasClass('active')) {
       $(this).siblings().removeClass('active')
       $(this).addClass('active')
-      const value = $(this).html()
+      let value = $(this).attr('data-select-item-value')
+      const label = $(this).html()
+      if (undefined === typeof value) {
+        value = label
+      }
       select.find($('input')).val(value)
-      select.children('[data-select-value]').html(value)
+      select.children('[data-select-value]').html(label)
       select.removeClass('active')
     }
+  })
+
+  $(document).ready(() => {
+    const $select = $('div[data-select]')
+    window.test = $select
+    $select.map((i, item) => {
+      const currentSelect = $(item)
+      let value = currentSelect.find('li.active').attr('data-select-item-value')
+      const label = currentSelect.find('li.active').html()
+
+      if (undefined === typeof value) {
+        value = label
+      }
+
+      currentSelect.find('input').val(value)
+      currentSelect.children('[data-select-value]').html(label)
+    })
   })
 
   $(document).on('click', '.custom-handler div', function () {
@@ -185,30 +219,30 @@ $(() => {
     parent.find(`[data-tab-content]`).removeClass('active')
   })
 
-  $(document).on('click', '.field-skills-close', function () {
-    $(this).parents('li').detach()
-  })
-
-  $(document).on('click', '.field-skills-panel button', function () {
-    addSkill($(this).parents('.field-skills'))
-  })
-
-  $(document).on('keydown', '.field-skills-panel input', function (event) {
-    if (event.keyCode === 13) {
-      event.preventDefault()
-      addSkill($(this).parents('.field-skills'))
-    }
-  })
-
-  function addSkill (skills) {
-    const input = $(skills).find('input:not([type="hidden"])'),
-      value = input.val(),
-      list = $(skills).find('ul')
-    if (value && value.length) {
-      $(`<li data-key="${value}"><span>${value}</span><span class="field-skills-close"></span></li>`).appendTo(list)
-      input.val('')
-    }
-  }
+  // $(document).on('click', '.js-custom-list-item-close', function () {
+  //   $(this).parents('li').detach()
+  // })
+  //
+  // $(document).on('click', '.js-custom-list-add-button', function () {
+  //   addCustomListItem($(this).parents('.js-custom-list-component'))
+  // })
+  //
+  // $(document).on('keydown', '.js-custom-list-input', function (event) {
+  //   if (event.keyCode === 13) {
+  //     event.preventDefault()
+  //     addCustomListItem($(this).parents('.js-custom-list-component'))
+  //   }
+  // })
+  //
+  // function addCustomListItem (component) {
+  //   const input = $(component).find('input:not([type="hidden"])'),
+  //     value = input.val(),
+  //     list = $(component).find('ul')
+  //   if (value && value.length) {
+  //     $(`<li data-key="${value}"><span>${value}</span><span class="field-skills-close"></span></li>`).appendTo(list)
+  //     input.val('')
+  //   }
+  // }
 
   function repaintTablet () {
     headerAccount.appendTo(headerAccountWrapper)

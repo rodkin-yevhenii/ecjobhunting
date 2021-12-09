@@ -2,7 +2,6 @@
 
 namespace EcJobHunting\Entity;
 
-use EcJobHunting\Front\SiteSettings;
 use EcJobHunting\Service\User\UserService;
 
 class Vacancy
@@ -21,16 +20,17 @@ class Vacancy
     private string $compensationPeriod = 'annualy';
     private bool $isCommissionIncluded = false;
     private string $status = 'draft';
+    private int $logoId = 0;
 
     //Taxonomies
     private array $location = []; // taxonomy Location
     private array $employmentType = []; //taxonomy types
     private array $skills = []; //taxonomy Skills
+    private ?\WP_Term $company; //taxonomy Company
 
     //employer info
     private $employer;
     private string $streetAddress = '';
-    private string $companyName = '';
     private string $reasonsToWork = '';
     private string $companyDescription = '';
     private bool $notifyEmployer = true;
@@ -39,8 +39,7 @@ class Vacancy
 
     //statistic
     private array $candidates = [];
-    private int $candidatesNumber = 0;
-    private int $visitors = 0;
+    private array $visitors = [];
 
     //
     private $fieldsObject;
@@ -50,6 +49,7 @@ class Vacancy
         $vacancy = get_post($id);
         if ($vacancy) {
             // Basic Data
+            $this->id = $id;
             $this->title = $vacancy->post_title;
             $this->description = strip_tags($vacancy->post_content);
             $this->author = $vacancy->post_author;
@@ -61,29 +61,91 @@ class Vacancy
             //Meta Data
             $fields = get_fields($id);
             if ($fields) {
-                $this->compensationFrom = floatval(!empty($fields['compensation_range']['from']) ? $fields['compensation_range']['from'] : 0);
-                $this->compensationTo = floatval(!empty($fields['compensation_range']['to']) ? $fields['compensation_range']['to'] : 0);
-                $this->compensationRange = !empty($fields['compensation_range']) ? $fields['compensation_range'] : $this->compensationRange;
+                $this->compensationFrom = floatval(
+                    !empty($fields['compensation_range']['from']) ? $fields['compensation_range']['from'] : 0
+                );
+                $this->compensationTo = floatval(
+                    !empty($fields['compensation_range']['to']) ? $fields['compensation_range']['to'] : 0
+                );
+                $this->compensationRange = !empty($fields['compensation_range'])
+                    ? $fields['compensation_range']
+                    : $this->compensationRange;
                 $this->streetAddress = !empty($fields['street_address']) ? $fields['street_address'] : '';
-
-                $this->companyName = $fields['hiring_company'] ?? $this->employer->getName();
+                $this->logoId = $fields['company_logo'] ?? 0;
+                $companies = wp_get_post_terms($id, 'company');
+                $this->company = $companies[0] ?? null;
                 $this->reasonsToWork = $fields['why_work_at_this_company'] ?? '';
                 $this->companyDescription = $fields['hiring_company_description'] ?? '';
-                $this->notifyEmployer = (bool)$fields['emails_to_inform'];
-                $this->isCommissionIncluded = (bool)$fields['is_commission_included'];
+                $this->notifyEmployer = (bool)($fields['emails_to_inform'] ?? true);
+                $this->isCommissionIncluded = (bool)($fields['is_commission_included'] ?? false);
                 $this->agreementOptions = $fields['additional_options'] ?? [];
-                $this->benefits = (array)$fields['benefits'] ?? [];
-                $this->visitors = (int)$fields['visitors'] ?? 0;
-                $this->candidates = (array)$fields['applied'] ?? [];
+                $this->benefits = isset($fields['benefits']) ? (array)$fields['benefits'] : [];
                 $this->currency = ucwords($fields['compensation_currency'] ?? 'USD');
                 $this->compensationPeriod = $fields['compensation_period'] ?? 'annualy';
 
                 $this->employmentType = wp_get_post_terms($id, 'type', ['fields' => 'names']);
                 $this->location = wp_get_post_terms($id, 'location', ['fields' => 'names']);
+                $candidates = !empty($fields['applied']) ? $fields['applied'] : [];
+
+                if (!empty($candidates) && is_array($candidates)) {
+                    $query = new \WP_Query(
+                        [
+                            'post_type' => 'cv',
+                            'posts_per_page' => -1,
+                            'post_status' => ['publish'],
+                            'author__in' => $candidates,
+                        ]
+                    );
+
+                    if (!$query->have_posts()) {
+                        $this->candidates = [];
+                    } else {
+                        foreach ($query->posts as $post) {
+                            $this->candidates[] = $post->post_author;
+                        }
+                    }
+                }
+
+                $visitors = !empty($fields['visitors']) ? $fields['visitors'] : [];
+
+                if (!empty($visitors) && is_array($visitors)) {
+                    $query = new \WP_Query(
+                        [
+                            'post_type' => 'cv',
+                            'posts_per_page' => -1,
+                            'post_status' => ['publish'],
+                            'author__in' => $visitors,
+                        ]
+                    );
+
+                    if (!$query->have_posts()) {
+                        $this->visitors = [];
+                    } else {
+                        foreach ($query->posts as $post) {
+                            $this->visitors[] = $post->post_author;
+                        }
+                    }
+                }
             }
         } else {
             $this->employer = UserService::getUser();
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCommissionIncluded(): bool
+    {
+        return $this->isCommissionIncluded;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotifyEmployer(): bool
+    {
+        return $this->notifyEmployer;
     }
 
     public function getStatus()
@@ -94,9 +156,17 @@ class Vacancy
     /**
      * @return int|mixed
      */
-    public function getVisitors()
+    public function getVisitors(): array
     {
         return $this->visitors;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVisitorsNumber(): int
+    {
+        return count($this->visitors);
     }
 
     /**
@@ -132,11 +202,27 @@ class Vacancy
     }
 
     /**
-     * @return mixed|string
+     * @return null|string
      */
     public function getCompanyName()
     {
-        return $this->companyName;
+        if (empty($this->company)) {
+            return '';
+        }
+
+        return $this->company->name;
+    }
+
+    /**
+     * @return null|int
+     */
+    public function getCompanyId()
+    {
+        if (empty($this->company)) {
+            return null;
+        }
+
+        return $this->company->term_id;
     }
 
     /**
@@ -152,15 +238,16 @@ class Vacancy
      */
     public function getBenefits()
     {
-        if (!empty($this->fieldsObject['value']['benefits']) && is_array(
-                $this->fieldsObject['value']['benefits']
-            )) {
-            $columns = array_column($this->fieldsObject['value']['benefits'], 'key');
+        if (
+            !empty($this->fieldsObject['value']['benefits_options'])
+            && is_array($this->fieldsObject['value']['benefits_options'])
+        ) {
+            $columns = array_column($this->fieldsObject['value']['benefits_options'], 'key');
             $values = [];
             foreach ($this->benefits as $benefit) {
                 $key = array_search($benefit, $columns);
                 if ($key !== false) {
-                    array_push($values, $this->fieldsObject['value']['benefits'][$key]['name']);
+                    array_push($values, $this->fieldsObject['value']['benefits_options'][$key]['name']);
                 }
             }
             return $values;
@@ -211,9 +298,189 @@ class Vacancy
     /**
      * @return array|mixed
      */
-    public function getCandidates()
+    public function getCandidates(): array
     {
         return $this->candidates;
+    }
+
+    public function getCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
+    public function getVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
+    }
+
+    public function getGreatMatchedCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getGreatMatchedCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
+    public function getGreatMatchedVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getGreatMatchedVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
+    }
+
+    public function getInterestedCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getInterestedCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
+    public function getInterestedVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getInterestedVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
+    }
+
+    public function getUnratedCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getUnratedCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
+    public function getUnratedVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getUnratedVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
+    }
+
+    public function getNewCandidatesData(): array
+    {
+        $company = $this->getEmployer();
+        $candidates = [];
+
+        foreach ($company->getNewCandidatesData() as $data) {
+            $id = $data['employee'];
+
+            if (!in_array($id, $this->getCandidates()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $candidates[] = $data;
+        }
+
+        return $candidates;
+    }
+
+    public function getNewVisitorsData(): array
+    {
+        $company = $this->getEmployer();
+        $visitors = [];
+
+        foreach ($company->getNewVisitorsData() as $data) {
+            $id = $data['visitor'];
+
+            if (!in_array($id, $this->getVisitors()) || $data['vacancy'] !== $this->getId()) {
+                continue;
+            }
+
+            $visitors[] = $data;
+        }
+
+        return $visitors;
     }
 
     /**
@@ -221,7 +488,7 @@ class Vacancy
      */
     public function getCandidatesNumber(): int
     {
-        return $this->candidatesNumber;
+        return count($this->candidates);
     }
 
     /**
@@ -229,7 +496,9 @@ class Vacancy
      */
     public function getCompensationTo()
     {
-        return is_numeric($this->compensationTo) ? number_format($this->compensationTo, 2, '.', '') : 0.00;
+        return is_numeric($this->compensationTo)
+            ? number_format($this->compensationTo, 0, '.', ',')
+            : 0.00;
     }
 
     /**
@@ -237,7 +506,9 @@ class Vacancy
      */
     public function getCompensationFrom()
     {
-        return is_numeric($this->compensationFrom) ? number_format($this->compensationFrom, 2, '.', '') : 0.00;
+        return is_numeric($this->compensationFrom)
+                ? number_format($this->compensationFrom, 0, '.', ',')
+                : 0.00;
     }
 
     /**
@@ -245,9 +516,10 @@ class Vacancy
      */
     public function getCompensationPeriodName(): string
     {
-        if (!empty($this->fieldsObject['value']['compensation_period']) && is_array(
-                $this->fieldsObject['value']['compensation_period']
-            )) {
+        if (
+            !empty($this->fieldsObject['value']['compensation_period'])
+            && is_array($this->fieldsObject['value']['compensation_period'])
+        ) {
             $key = array_search(
                 $this->compensationPeriod,
                 array_column($this->fieldsObject['value']['compensation_period'], 'key')
@@ -311,5 +583,13 @@ class Vacancy
     public function getPermalink()
     {
         return $this->permalink;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLogoId(): int
+    {
+        return $this->logoId;
     }
 }

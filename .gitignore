@@ -19,3 +19,6 @@ node_modules/
 *.sqlite
 *.idea/
 /package-lock.json
+/wp-config.php
+/wp-content/themes/job-hunting/vendor/
+/wp-content/themes/job-hunting/composer.lock
