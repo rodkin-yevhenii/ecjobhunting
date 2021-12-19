@@ -38,7 +38,7 @@ get_header(); ?>
                                 </p>
                             <?php endforeach;
                         endif; ?>
-                        <form action="<?php echo site_url('wp-login.php'); ?>" name="loginform" method="post">
+                        <form action="<?php echo site_url('ecjmanager'); ?>" name="loginform" method="post">
                             <label class="field-label" for="user_login"><?php _e(
                                     'Username or Email Address',
                                     'ecjobhunting'
