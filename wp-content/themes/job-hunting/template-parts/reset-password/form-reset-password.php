@@ -10,7 +10,7 @@ $errors = $args['errors'] ?? [];
 <?php endforeach; ?>
 <form name="resetpassform"
       id="resetpassform"
-      action="<?php echo site_url( 'wp-login.php?action=resetpass' ); ?>"
+      action="<?php echo site_url( 'ecjmanager?action=resetpass' ); ?>"
       method="post"
       autocomplete="off"
 >
