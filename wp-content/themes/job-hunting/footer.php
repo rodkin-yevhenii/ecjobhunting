@@ -82,25 +82,41 @@ $siteProfiles = get_field('site_social_profiles', 'option');
                         'walker'          => '',
                     ]
                 ); ?>
-                <?php if (!empty($siteProfiles)) : ?>
-                    <div class="social">
+                <div class="footer-buttons">
+                    <?php if (!empty($siteProfiles)) : ?>
+                        <div class="social">
+                            <ul>
+                                <?php foreach ($siteProfiles as $profile) :
+                                    $networkName = trim($profile['site_social_network_name']);
+                                    $networkName = strtolower($networkName); ?>
+                                    <li>
+                                        <a
+                                                href="<?php echo $profile['site_social_profile_url'] ?>"
+                                                target="_blank"
+                                                rel="nofollow noopener noreferrer"
+                                        >
+                                            <i class="fa fa-<?php echo $networkName; ?>"></i>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+                    <div class="apps-links">
                         <ul>
-                            <?php foreach ($siteProfiles as $profile) :
-                                $networkName = trim($profile['site_social_network_name']);
-                                $networkName = strtolower($networkName); ?>
-                                <li>
-                                    <a
-                                            href="<?php echo $profile['site_social_profile_url'] ?>"
-                                            target="_blank"
-                                            rel="nofollow noopener noreferrer"
-                                    >
-                                        <i class="fa fa-<?php echo $networkName; ?>"></i>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
+                            <li>
+                                <a href="https://play.google.com/store/apps/details?id=com.app.ecjobhuntingo&amp;pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
+                                    <img src="/wp-content/themes/job-hunting/assets/public/images/google-play.png" alt="Get it on Google Play" />
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://apps.apple.com/us/app/ec-job-hunting-sr/id1602294300?itsct=apps_box_badge&amp;amp;itscg=30200">
+                                    <img src="/wp-content/themes/job-hunting/assets/public/images/apple-play.png" alt="Download on the App Store" />
+                                </a>
+                            </li>
                         </ul>
                     </div>
-                <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
