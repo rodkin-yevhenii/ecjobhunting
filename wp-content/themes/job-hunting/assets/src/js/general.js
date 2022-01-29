@@ -79,6 +79,18 @@ $(() => {
     $('li.profile-menu.active-item').attr('data-select-value', 'true')
   })
 
+  $(document).ready(() => {
+    const dataSelect = $('ul[data-select]')
+    const activeMenuItems = dataSelect.find('li.profile-menu.active-item')
+
+    if (activeMenuItems.length) {
+      return
+    }
+
+    dataSelect.find('li.profile-menu:first-child').attr('data-select-value', 'true')
+
+  })
+
   $(window).on('resize', function () {
     pageRepaint()
   })
