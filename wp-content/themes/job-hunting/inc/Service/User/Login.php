@@ -23,6 +23,9 @@ class Login
     public static function getErrorMessage(string $errorCode): string
     {
         switch ($errorCode) {
+            case 'gglcptch_error':
+                return __('The CAPTCHA answer is wrong.', 'ecjobhunting');
+
             case 'empty_username':
                 return __('Do you have an email address, right?', 'ecjobhunting');
 
