@@ -191,3 +191,14 @@ function renderRateButtons(int $id, array $ratedCandidates): void
     <?php
     echo ob_get_clean();
 }
+
+function add_custom_recaptcha_forms($forms)
+{
+    $forms['ecj_login_form'] = ["form_name" => "Custom Login Form"];
+    $forms['ecj_register_candidate_form'] = ["form_name" => "Candidate Sign Up Form"];
+    $forms['ecj_register_employer_form'] = ["form_name" => "Employer Sign Up Form"];
+    $forms['ecj_lost_password_form'] = ["form_name" => "Forgot Password Form"];
+    return $forms;
+}
+
+add_filter('gglcptch_add_custom_form', 'add_custom_recaptcha_forms');

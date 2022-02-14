@@ -12,6 +12,8 @@ if (!empty($_REQUEST['errors'])) {
     $errors = explode(',', $_REQUEST['errors']);
 }
 
+$username = filter_input(INPUT_GET, 'username', FILTER_UNSAFE_RAW, FILTER_NULL_ON_FAILURE) ?? '';
+
 get_header(); ?>
     <section class="account mt-3">
         <div class="container">
@@ -52,7 +54,13 @@ get_header(); ?>
                                     'ecjobhunting'
                                 ); ?>
                             </label>
-                            <input class="field-text" type="text" name="log" id="user_login">
+                            <input
+                                class="field-text"
+                                type="text"
+                                name="log"
+                                id="user_login"
+                                value="<?php echo $username; ?>"
+                            >
                             <label class="field-label" for="user_pass">Password</label>
                             <input class="field-text" type="password" name="pwd" id="user_pass">
                             <?php

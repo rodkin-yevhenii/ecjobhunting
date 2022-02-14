@@ -540,87 +540,87 @@ $(() => {
     filterLoadMore($vacancyHolder, $filterLoadMoreBtn)
   })
 
-  $(document).on('submit', '#register-candidate-form, #register-employer-form', (e) => {
-    e.preventDefault()
-    const $form = $(e.currentTarget)
-    const isEmployer = 'register-employer-form' === $form.attr('id')
-    let rules
-
-    if (isEmployer) {
-      rules = {
-        email: "required",
-        password: "required",
-        employer_pwd_confirmation: {
-          equalTo: ".employer_pwd"
-        }
-      }
-    } else {
-      rules = {
-        email: "required",
-        password: "required",
-        candidate_pwd_confirmation: {
-          equalTo: ".candidate_pwd"
-        }
-      }
-    }
-
-    console.log(rules)
-
-    const validator = $form.validate({
-      rules: rules,
-      highlight: function (element) {
-        $(element).parent().addClass('form-invalid')
-      },
-      unhighlight: function (element) {
-        $(element).parent().removeClass('form-invalid')
-      },
-      messages: {
-        password: "Incorrect password",
-        pwd_confirmation: "<small>Password doesn't match</small>"
-      }
-    });
-
-    if (!validator.form()) {
-      return
-    }
-
-    const data = {
-      action: 'register_user',
-      email: $form.find("input[name='email']").val(),
-      username: $form.find("input[name='username']").val(),
-      password: isEmployer ?
-        $form.find("input[name='employer_pwd']").val() :
-        $form.find("input[name='candidate_pwd']").val(),
-      pwd_confirmation: isEmployer ?
-        $form.find("input[name='employer_pwd_confirmation']").val() :
-        $form.find("input[name='candidate_pwd_confirmation']").val(),
-      role: $form.find("input[name='role']").val(),
-      nonce: $form.find("input[name='nonce']").val()
-    }
-
-    $.ajax({
-      type: 'POST',
-      url: ajaxUrl,
-      data: data,
-      dataType: 'json',
-      success: function (response) {
-        const $message = $('.results-content__message')
-        $message.html(response.message)
-
-        if (response.status === 200) {
-          $message.removeClass('alert-danger d-none')
-          $message.addClass('alert-success d-block')
-
-          setTimeout(() => {
-            window.location.href = '/login/'
-          }, 3000)
-        } else {
-          $message.removeClass('alert-success d-none')
-          $message.addClass('alert-danger d-block')
-        }
-      }
-    })
-  })
+  // $(document).on('submit', '#register-candidate-form, #register-employer-form', (e) => {
+  //   e.preventDefault()
+  //   const $form = $(e.currentTarget)
+  //   const isEmployer = 'register-employer-form' === $form.attr('id')
+  //   let rules
+  //
+  //   if (isEmployer) {
+  //     rules = {
+  //       email: "required",
+  //       password: "required",
+  //       employer_pwd_confirmation: {
+  //         equalTo: ".employer_pwd"
+  //       }
+  //     }
+  //   } else {
+  //     rules = {
+  //       email: "required",
+  //       password: "required",
+  //       candidate_pwd_confirmation: {
+  //         equalTo: ".candidate_pwd"
+  //       }
+  //     }
+  //   }
+  //
+  //   console.log(rules)
+  //
+  //   const validator = $form.validate({
+  //     rules: rules,
+  //     highlight: function (element) {
+  //       $(element).parent().addClass('form-invalid')
+  //     },
+  //     unhighlight: function (element) {
+  //       $(element).parent().removeClass('form-invalid')
+  //     },
+  //     messages: {
+  //       password: "Incorrect password",
+  //       pwd_confirmation: "<small>Password doesn't match</small>"
+  //     }
+  //   });
+  //
+  //   if (!validator.form()) {
+  //     return
+  //   }
+  //
+  //   const data = {
+  //     action: 'register_user',
+  //     email: $form.find("input[name='email']").val(),
+  //     username: $form.find("input[name='username']").val(),
+  //     password: isEmployer ?
+  //       $form.find("input[name='employer_pwd']").val() :
+  //       $form.find("input[name='candidate_pwd']").val(),
+  //     pwd_confirmation: isEmployer ?
+  //       $form.find("input[name='employer_pwd_confirmation']").val() :
+  //       $form.find("input[name='candidate_pwd_confirmation']").val(),
+  //     role: $form.find("input[name='role']").val(),
+  //     nonce: $form.find("input[name='nonce']").val()
+  //   }
+  //
+  //   $.ajax({
+  //     type: 'POST',
+  //     url: ajaxUrl,
+  //     data: data,
+  //     dataType: 'json',
+  //     success: function (response) {
+  //       const $message = $('.results-content__message')
+  //       $message.html(response.message)
+  //
+  //       if (response.status === 200) {
+  //         $message.removeClass('alert-danger d-none')
+  //         $message.addClass('alert-success d-block')
+  //
+  //         setTimeout(() => {
+  //           window.location.href = '/login/'
+  //         }, 3000)
+  //       } else {
+  //         $message.removeClass('alert-success d-none')
+  //         $message.addClass('alert-danger d-block')
+  //       }
+  //     }
+  //   })
+  // })
 
   $(document).on('click', '.rate-button', event => {
     event.preventDefault()

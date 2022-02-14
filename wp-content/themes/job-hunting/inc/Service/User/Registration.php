@@ -8,154 +8,307 @@ use EcJobHunting\Interfaces\AjaxResponse;
 use EcJobHunting\Service\Email\EmailMessages;
 use EcJobHunting\Service\Email\EmailService;
 
+use function Aws\map;
+
 class Registration
 {
-    private AjaxResponse $response;
+    /**
+     * New user email.
+     *
+     * @var string
+     */
+    private string $email = '';
+
+    /**
+     * New user login.
+     *
+     * @var string
+     */
+    private string $username = '';
+
+    /**
+     * New user password.
+     *
+     * @var string
+     */
+    private string $password;
+
+    /**
+     * New user password confirmation.
+     *
+     * @var string
+     */
+    private string $passwordConfirmation;
+
+    /**
+     * New user role.
+     * Valid values: candidate or employer.
+     *
+     * @var string
+     */
+    private string $role;
+
+    /**
+     * Store of errors codes.
+     *
+     * @var array
+     */
+    private array $errorsCodes;
 
     /**
      * Registration constructor.
      */
     public function __construct()
     {
-        $this->response = new EcResponse();
+        $this->errorsCodes = [];
     }
 
-    /**
-     * Register hooks & actions
-     */
     public function __invoke()
     {
-        if (wp_doing_ajax()) {
-            add_action('wp_ajax_register_user', [$this, 'createNewUser']);
-            add_action('wp_ajax_nopriv_register_user', [$this, 'createNewUser']);
-        }
-
         add_filter('password_hint', [$this, 'changePasswordHint']);
     }
 
     /**
-     * Check user registration information.
+     * Get user data from $_POST array and write to userData property.
+     *
+     * @return array
      */
-    private function checkUserRegistrationInfo()
+    private function getUserData(): array
     {
-        require_once ABSPATH . WPINC . '/user.php';
+        $args = [
+            'email' => [
+                'filter' => FILTER_VALIDATE_EMAIL,
+                'flags' => FILTER_NULL_ON_FAILURE,
+            ],
+            'username' => [
+                FILTER_CALLBACK,
+                [
+                    'options' => function ($value): ?string {
+                        if (validate_username($value)) {
+                            return $value;
+                        }
 
-        if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'sign_up')) {
-            $this->response->setStatus(403)
-                ->setMessage(__('Authentication failed', 'ecjobhunting'))
-                ->send();
+                        return null;
+                    }
+                ]
+            ],
+            'candidate_pwd' => [
+                FILTER_CALLBACK,
+                [
+                    'options' => [$this, 'validatePassword']
+                ]
+            ],
+            'employer_pwd' => [
+                FILTER_CALLBACK,
+                [
+                    'options' => [$this, 'validatePassword']
+                ]
+            ],
+            'candidate_pwd_confirmation' => [
+                FILTER_CALLBACK,
+                [
+                    'options' => [$this, 'validatePassword']
+                ]
+            ],
+            'employer_pwd_confirmation' => [
+                FILTER_CALLBACK,
+                [
+                    'options' => [$this, 'validatePassword']
+                ]
+            ],
+            'role' => [
+                FILTER_CALLBACK,
+                [
+                    'options' => function ($value): ?string {
+                        if (in_array($value, ['candidate', 'employer'])) {
+                            return $value;
+                        }
+
+                        return null;
+                    }
+                ]
+            ]
+        ];
+
+        $userData = filter_input_array(INPUT_POST, $args);
+        $userData['password'] = $userData['candidate_pwd']
+            ?? $userData['employer_pwd'];
+        $userData['password_confirmation']  = $userData['candidate_pwd_confirmation']
+            ?? $userData['employer_pwd_confirmation'];
+
+        unset(
+            $userData['candidate_pwd'],
+            $userData['employer_pwd'],
+            $userData['candidate_pwd_confirmation'],
+            $userData['employer_pwd_confirmation'],
+        );
+
+        return $userData;
+    }
+
+    public function isUserDataValid(): bool
+    {
+        $userData = $this->getUserData();
+
+        if (! $userData['email']) {
+            $this->errorsCodes[] = 'ecj_invalid_user_email';
         }
 
-        if (empty($_POST['email'])) {
-            $this->response->setStatus(204)
-                ->setMessage(__('Email is required', 'ecjobhunting'))
-                ->send();
+        if (get_user_by('email', $userData['email'])) {
+            $this->errorsCodes[] = 'ecj_email_already_taken';
         }
 
-        if (email_exists($_POST['email'])) {
-            $this->response->setStatus(204)
-                ->setMessage(__('The email has already taken', 'ecjobhunting'))
-                ->send();
+        if (! $userData['username']) {
+            $this->errorsCodes[] = 'ecj_invalid_username';
         }
 
-        if (empty($_POST['username'])) {
-            $this->response->setStatus(204)
-                ->setMessage(__('Username is required', 'ecjobhunting'))
-                ->send();
+        if (get_user_by('login', $userData['username'])) {
+            $this->errorsCodes[] = 'ecj_username_already_taken';
         }
 
-        if (username_exists($_POST['username'])) {
-            $this->response->setStatus(204)
-                ->setMessage(__('Username has already taken', 'ecjobhunting'))
-                ->send();
+        if (! $userData['password']) {
+            $this->errorsCodes[] = 'ecj_invalid_user_pwd';
         }
 
-        if (empty($_POST['password'])) {
-            $this->response->setStatus(204)
-                ->setMessage(__('Password is required', 'ecjobhunting'))
-                ->send();
+        if ($userData['password'] !== $userData['password_confirmation']) {
+            $this->errorsCodes[] = 'ecj_different_pwds';
         }
 
-        if (empty($_POST['pwd_confirmation'])) {
-            $this->response->setStatus(204)
-                ->setMessage(__('Confirm password is required', 'ecjobhunting'))
-                ->send();
+        if (! $userData['role']) {
+            $this->errorsCodes[] = 'ecj_invalid_user_role';
         }
 
-        if ($_POST['password'] !== $_POST['pwd_confirmation']) {
-            $this->response->setStatus(204)
-                ->setMessage(__('Password are different', 'ecjobhunting'))
-                ->send();
+        if (! wp_verify_nonce(filter_input(INPUT_POST, 'nonce'), 'sign_up')) {
+            $this->errorsCodes[] = 'ecj_invalid_access';
         }
 
-        if (empty($_POST['role'])) {
-            $this->response->setStatus(204)
-                ->setMessage(__('User role is required', 'ecjobhunting'))
-                ->send();
+        $captchaResult = apply_filters(
+            'gglcptch_verify_recaptcha',
+            true,
+            false,
+            'ecj_register_' . $userData['role'] . '_form'
+        );
+
+        if (! $captchaResult) {
+            $this->errorsCodes[] = 'gglcptch_error';
         }
 
-        if (!in_array($_POST['role'], ['candidate', 'employer'])) {
-            $this->response->setStatus(204)
-                ->setMessage(__('User role isn\'t correct', 'ecjobhunting'))
-                ->send();
+        return empty($this->errorsCodes);
+    }
+
+    public function getErrors(): array
+    {
+        return array_map(
+            function ($code) {
+                return $this->getErrorMessage($code);
+            },
+            $this->errorsCodes
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function setUserData(): void
+    {
+        $data = $this->getUserData();
+
+        $this->email = $data['email'] ?? '';
+        $this->username = $data['username'] ?? '';
+        $this->password = $data['password'] ?? '';
+        $this->role = $data['role'] ?? '';
+    }
+
+    /**
+     * Get error message by error code.
+     *
+     * @param string $errorCode
+     *
+     * @return string
+     */
+    public function getErrorMessage(string $errorCode): string
+    {
+        switch ($errorCode) {
+            case 'gglcptch_error':
+                return __('The CAPTCHA answer is wrong.', 'ecjobhunting');
+
+            case 'ecj_invalid_user_email':
+                return __('Please, use correct email address.', 'ecjobhunting');
+
+            case 'ecj_email_already_taken':
+                return __(
+                    'This email already taken',
+                    'ecjobhunting'
+                );
+
+            case 'ecj_invalid_username':
+                return __(
+                    'Incorrect user login. The login  should be at least four characters long. To make it
+                    stronger, use upper and lower case letters, numbers, and _ symbol',
+                    'ecjobhunting'
+                );
+
+            case 'ecj_username_already_taken':
+                return __(
+                    'This username already taken',
+                    'ecjobhunting'
+                );
+
+            case 'ecj_invalid_user_pwd':
+                return wp_get_password_hint();
+
+            case 'ecj_different_pwds':
+                return __("Passwords are different.", 'ecjobhunting');
+
+            case 'ecj_invalid_user_role':
+                return __("Invalid user role. Please use candidate or employer", 'ecjobhunting');
+
+            case 'ecj_invalid_access':
+                return __("Access denied", 'ecjobhunting');
+
+            default:
+                return __('An unknown error occurred. Please try again later', 'ecjobhunting');
         }
     }
 
     /**
      * Register new user.
      */
-    public function createNewUser()
+    public function registerNewUser()
     {
-        $this->checkUserRegistrationInfo();
-
-        $roles = wp_roles();
-        $email = $_POST['email'];
-        $login = $_POST['username'];
-        $password = $_POST['password'];
-        $role = $_POST['role'];
-
-        if (!array_key_exists(strtolower($role), $roles->role_names)) {
-            $this->response->setStatus(204)
-                ->setMessage(__('Incorrect user role', 'ecjobhunting'))
-                ->send();
-        }
-
-        if (!preg_match('/^[a-zA-Z_\d]{4,}$/', $login)) {
-            $this->response->setStatus(204)
-                ->setMessage('Incorrect user login. The login  should be at least four characters long. To make it
-                stronger, use upper and lower case letters, numbers, and _ symbol')
-                ->send();
-        }
-
-        if (!preg_match('/^[a-zA-Z_\-\!\"\?\$\%\^\&\)\(\d]{8,}$/', $password)) {
-            $this->response->setStatus(204)
-                ->setMessage(wp_get_password_hint())
-                ->send();
-        }
-
-        $id = wp_create_user($login, $password, $email);
+        $id = wp_create_user($this->username, $this->password, $this->email);
 
         if (is_wp_error($id)) {
-            $this->response->setStatus(406)
-                ->setMessage(
-                    __('An error has occurred. Try again later or contact your administrator.', 'ecjobhunting')
-                )
-                ->send();
+            throw new \Exception('An unknown error occurred. Please try again later');
         }
 
         $user = new \WP_User($id);
-        $user->set_role($role);
+        $user->set_role($this->role);
         $emailMessages = new EmailMessages();
         $emailObj = new Email();
         $emailObj
             ->setSubject('EC jobhunting > Account registration')
-            ->setMessage($emailMessages->getRegistrationMessage($login))
-            ->setToEmail($email);
+            ->setMessage($emailMessages->getRegistrationMessage($this->username))
+            ->setToEmail($this->email);
         EmailService::sendEmail($emailObj);
 
-        $this->response->setStatus(200)
-            ->setMessage(__('User registered successfully', 'ecjobhunting'))
-            ->send();
+        wp_redirect(add_query_arg(['username' => $this->username], site_url('login')));
+    }
+
+    /**
+     * Validate new user password.
+     *
+     * @param string $password  New user password.
+     *
+     * @return null|string
+     */
+    private function validatePassword(string $password): ?string
+    {
+        if (!preg_match('/^[a-zA-Z_\-\!\"\?\$\%\^\&\)\(\d]{8,}$/', $password)) {
+            return $password;
+        }
+
+        return null;
     }
 
     /**
@@ -166,5 +319,31 @@ class Registration
     public function changePasswordHint(string $hint): string
     {
         return str_replace(['twelve', '!'], ['eight', '_ - !'], $hint);
+    }
+
+    /**
+     * Checking the availability of data for user registration.
+     *
+     * @return bool
+     */
+    public function isDoingRegistration(): bool
+    {
+        return ! empty($_POST);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
     }
 }

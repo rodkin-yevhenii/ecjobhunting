@@ -3,39 +3,92 @@
 /***
  * Template Name: Registration
  */
+
+use EcJobHunting\Service\User\Registration;
+
+$errors = [];
+$registrationService = new Registration();
+
+if ($registrationService->isDoingRegistration()) {
+    $registrationService->setUserData();
+
+    if ($registrationService->isUserDataValid()) {
+        try {
+            $registrationService->registerNewUser();
+        } catch (Exception $ex) {
+            $errors[] = $ex->getMessage();
+        }
+    } else {
+        $errors = $registrationService->getErrors();
+    }
+}
 $tab = $_GET['user'] ?? 'candidate';
+
 get_header(); ?>
     <div class="results page">
     <div class="container">
         <div class="row">
             <div class="col-12" data-tab>
                 <ul class="results-header results-header-large">
-                    <li class="d-md-none" data-tab-value><span><?php _e(
+                    <li class="d-md-none" data-tab-value>
+                        <span>
+                            <?php _e(
                                 'Sign Up as Candidate',
                                 'ecjobhunting'
-                            ); ?></span></li>
-                    <li <?php echo $tab === 'candidate' ? 'class="active"' : ''; ?> data-tab-item="candidate"><?php _e(
+                            ); ?>
+                        </span>
+                    </li>
+                    <li <?php echo $tab === 'candidate' ? 'class="active"' : ''; ?> data-tab-item="candidate">
+                        <?php _e(
                             'Sign Up as Candidate',
                             'ecjobhunting'
-                        ); ?></li>
-                    <li <?php echo $tab === 'employer' ? 'class="active"' : ''; ?> data-tab-item="employer"><?php _e(
+                        ); ?>
+                    </li>
+                    <li <?php echo $tab === 'employer' ? 'class="active"' : ''; ?> data-tab-item="employer">
+                        <?php _e(
                             'Sign Up as Employer',
                             'ecjobhunting'
-                        ); ?></li>
+                        ); ?>
+                    </li>
                 </ul>
                 <div class="results-content">
-                    <div class="col-12 mb-2 py-2 text-center d-none results-content__message">The email has already taken</div>
+                    <?php
+                    foreach ($errors as $error) : ?>
+                        <div class="col-12 mb-2 py-2 text-center alert-danger results-content__message">
+                            <?php echo $error; ?>
+                        </div>
+                        <?php
+                    endforeach;
+                    ?>
                     <div data-tab-content="candidate" <?php echo $tab === 'candidate' ? 'class="active"' : ''; ?>>
-                        <form class="registerform" id="register-candidate-form" method="post" autocomplete="off">
+                        <form
+                            action="<?php echo add_query_arg(['user' => 'candidate'], site_url('signup')); ?>"
+                            name="sign-up-candidate"
+                            class="registerform"
+                            id="register-candidate-form"
+                            method="post"
+                            autocomplete="off"
+                        >
                             <label class="field-label" for="email">
                                 <?php _e('Email', 'ecjobhunting'); ?>
-                                <input class="field-text" type="email" name="email" required>
+                                <input
+                                    class="field-text"
+                                    type="email"
+                                    name="email"
+                                    value="<?php echo $registrationService->getEmail() ?? ''; ?>"
+                                    required
+                                />
                             </label>
-                            <label class="field-label" for="username"><?php _e(
-                                    'Username',
-                                    'ecjobhunting'
-                                ); ?>
-                                <input class="field-text" type="text" name="username" required></label>
+                            <label class="field-label" for="username">
+                                <?php _e('Username', 'ecjobhunting'); ?>
+                                <input
+                                    class="field-text"
+                                    type="text"
+                                    name="username"
+                                    value="<?php echo $registrationService->getUsername() ?? ''; ?>"
+                                    required
+                                />
+                            </label>
                             <label class="field-label" for="candidate_pwd">Password
                                 <input
                                     class="field-text password candidate_pwd"
@@ -52,6 +105,9 @@ get_header(); ?>
                                     required>
                             </label>
                             <p class="description"><?php echo wp_get_password_hint(); ?></p>
+                            <?php
+                            echo apply_filters('gglcptch_display_recaptcha', '', 'ecj_register_candidate_form');
+                            ?>
                             <input type="submit" name="wp-submit"
                                    class="btn btn-primary" value="<?php _e('Sign Up', 'ecjobhunting'); ?>">
                             <input type="hidden" name="role" value="candidate"/>
@@ -59,18 +115,30 @@ get_header(); ?>
                         </form>
                     </div>
                     <div data-tab-content="employer" <?php echo $tab === 'employer' ? 'class="active"' : ''; ?>>
-                        <form class="registerform" id="register-employer-form" method="post" autocomplete="off">
-                            <label class="field-label" for="email"><?php _e(
-                                    'Email',
-                                    'ecjobhunting'
-                                ); ?>
-                                <input class="field-text" type="email" name="email" required></label>
+                        <form
+                            action="<?php echo add_query_arg(['user' => 'employer'], site_url('signup')); ?>"
+                            class="registerform"
+                            id="register-employer-form"
+                            method="post"
+                            autocomplete="off"
+                        >
+                            <label class="field-label" for="email">
+                                <?php _e('Email', 'ecjobhunting'); ?>
+                                <input
+                                    class="field-text"
+                                    type="email"
+                                    name="email"
+                                    value="<?php echo $registrationService->getEmail() ?? ''; ?>"
+                                    required
+                                />
+                            </label>
                             <label class="field-label" for="username">
                                 <?php _e('Username', 'ecjobhunting'); ?>
                                 <input
                                     class="field-text"
                                     type="text"
                                     name="username"
+                                    value="<?php echo $registrationService->getUsername() ?? ''; ?>"
                                     required
                                 />
                             </label>
@@ -91,6 +159,9 @@ get_header(); ?>
                                 />
                             </label>
                             <p class="description"><?php echo wp_get_password_hint(); ?></p>
+                            <?php
+                            echo apply_filters('gglcptch_display_recaptcha', '', 'ecj_register_employer_form');
+                            ?>
                             <input type="submit" name="wp-submit"
                                    class="btn btn-primary" value="<?php _e('Sign Up', 'ecjobhunting'); ?>">
                             <input type="hidden" name="role" value="employer"/>
