@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Template Name: Lost password
  * Template Post Type: page
@@ -10,8 +11,13 @@ $errors = [];
 if (isset($_REQUEST['errors'])) {
     $errorCodes = explode(',', $_REQUEST['errors']);
 
-    foreach ($errorCodes as $code) {
-        $errors[] = RetrievePassword::getErrorMessage($code);
+
+    if (in_array('gglcptch_error', $errorCodes)) {
+        $errors[] = RetrievePassword::getErrorMessage('gglcptch_error');
+    } else {
+        foreach ($errorCodes as $code) {
+            $errors[] = RetrievePassword::getErrorMessage($code);
+        }
     }
 }
 

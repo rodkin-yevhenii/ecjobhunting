@@ -13,6 +13,9 @@ $errors = $args['errors'] ?? [];
     </label>
     <input class="field-text" type="email" name="user_login" id="user_login">
     <br />
+    <?php
+    echo apply_filters('gglcptch_display_recaptcha', '', 'ecj_lost_password_form');
+    ?>
     <input type="submit" name="wp-submit" id="wp-submit"
            class="btn btn-primary" value="<?php _e('Reset Password', 'ecjobhunting'); ?>">
 </form>
