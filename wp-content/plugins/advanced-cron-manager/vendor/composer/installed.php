@@ -1,42 +1,41 @@
-<?php return array (
-  'root' => 
-  array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
-    'aliases' => 
-    array (
+<?php return array(
+    'root' => array(
+        'pretty_version' => '2.4.2',
+        'version' => '2.4.2.0',
+        'type' => 'wordpress-plugin',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'reference' => '91ab5044307671467cc960d1fb51e0c9ddf4cc65',
+        'name' => 'bracketspace/advanced-cron-manager',
+        'dev' => false,
     ),
-    'reference' => NULL,
-    'name' => 'bracketspace/advanced-cron-manager',
-  ),
-  'versions' => 
-  array (
-    'bracketspace/advanced-cron-manager' => 
-    array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => NULL,
+    'versions' => array(
+        'bracketspace/advanced-cron-manager' => array(
+            'pretty_version' => '2.4.2',
+            'version' => '2.4.2.0',
+            'type' => 'wordpress-plugin',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => '91ab5044307671467cc960d1fb51e0c9ddf4cc65',
+            'dev_requirement' => false,
+        ),
+        'underdev/requirements' => array(
+            'pretty_version' => '1.3.3',
+            'version' => '1.3.3.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../underdev/requirements',
+            'aliases' => array(),
+            'reference' => '20272e8cd6c73b058d9032816195d34c298d9c07',
+            'dev_requirement' => false,
+        ),
+        'underdev/utils' => array(
+            'pretty_version' => '1.1.3',
+            'version' => '1.1.3.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../underdev/utils',
+            'aliases' => array(),
+            'reference' => '7b731ae48a408acaab3ba478d6acc12894ff4a9e',
+            'dev_requirement' => false,
+        ),
     ),
-    'underdev/requirements' => 
-    array (
-      'pretty_version' => '1.3.3',
-      'version' => '1.3.3.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '20272e8cd6c73b058d9032816195d34c298d9c07',
-    ),
-    'underdev/utils' => 
-    array (
-      'pretty_version' => '1.1.3',
-      'version' => '1.1.3.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '7b731ae48a408acaab3ba478d6acc12894ff4a9e',
-    ),
-  ),
 );
