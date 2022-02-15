@@ -23,3 +23,4 @@ node_modules/
 /wp-content/themes/job-hunting/vendor/
 /wp-content/themes/job-hunting/composer.lock
 /wp-content/plugins/query-monitor/
+/.htaccess
